@@ -130,6 +130,33 @@
             cursor: pointer;
         }
 
+        .source-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2px 0;
+        }
+
+        .delete-source-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .source-option:hover .delete-source-btn {
+            opacity: 1;
+        }
+
+        .delete-source-btn:hover {
+            background: #b91c1c;
+        }
+
         .source-dropdown:focus {
             outline: none;
             border-color: #666;
@@ -340,31 +367,6 @@
             font-weight: 600;
             color: #666;
             margin-bottom: 8px;
-            position: relative;
-        }
-
-        .quote-speaker .bulk-edit-btn {
-            position: absolute;
-            right: 0;
-            top: 0;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            background: #f0f0f0;
-            border: 1px solid #d1d1d1;
-            border-radius: 3px;
-            padding: 2px 6px;
-            font-size: 10px;
-            cursor: pointer;
-            color: #666;
-        }
-
-        .quote-card:hover .quote-speaker .bulk-edit-btn {
-            opacity: 1;
-        }
-
-        .bulk-edit-btn:hover {
-            background: #e0e0e0;
-            color: #333;
         }
 
         .quote-source {
@@ -375,24 +377,6 @@
             padding: 4px 8px;
             border-radius: 4px;
             display: inline-block;
-            position: relative;
-        }
-
-        .quote-source .bulk-edit-btn {
-            margin-left: 8px;
-            background: #e8e8e8;
-            border: 1px solid #d1d1d1;
-            border-radius: 3px;
-            padding: 2px 6px;
-            font-size: 10px;
-            cursor: pointer;
-            color: #666;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-        }
-
-        .quote-card:hover .quote-source .bulk-edit-btn {
-            opacity: 1;
         }
 
         .quote-tags {
@@ -625,6 +609,7 @@
                             </select>
                             <button type="button" class="add-source-btn" onclick="showAddSourceModal()">+ Add</button>
                         </div>
+                        <div id="sourcesList" style="margin-top: 10px;"></div>
                     </div>
 
                     <div class="form-group">
@@ -713,121 +698,22 @@
         </div>
     </div>
 
-    <!-- Citation Edit Options Modal -->
-    <div class="modal" id="speakerEditOptionsModal">
+    <!-- Delete Source Confirmation Modal -->
+    <div class="modal" id="deleteSourceModal">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title">Edit Citation Options</div>
+                <div class="modal-title">Delete Source</div>
             </div>
             <div class="modal-body">
-                <p>How would you like to edit this citation?</p>
-                <div style="margin: 20px 0;">
-                    <strong>Current Citation:</strong> <span id="currentSpeakerPreview"></span>
-                </div>
-                
-                <div style="display: flex; flex-direction: column; gap: 15px; margin: 20px 0;">
-                    <button class="modal-btn primary" onclick="editSingleSpeaker()" style="text-align: left; padding: 15px;">
-                        <strong>Edit only this quote</strong><br>
-                        <small style="opacity: 0.8;">Change citation for this quote only</small>
-                    </button>
-                    
-                    <button class="modal-btn primary" onclick="editAllSpeakersWithSameName()" style="text-align: left; padding: 15px;">
-                        <strong>Edit all quotes with this citation</strong><br>
-                        <small style="opacity: 0.8;">Change citation for <span id="sameNameCount">0</span> quotes with identical citation</small>
-                    </button>
-                    
-                    <button class="modal-btn primary" onclick="editAllSpeakersFromSameSource()" style="text-align: left; padding: 15px;" id="sameSourceOption">
-                        <strong>Edit all quotes from the same source</strong><br>
-                        <small style="opacity: 0.8;">Change citation for <span id="sameSourceCount">0</span> quotes from "<span id="currentSourceName"></span>"</small>
-                    </button>
-                </div>
+                <p>Are you sure you want to delete "<span id="deleteSourceName"></span>"?</p>
+                <p style="margin-top: 10px; color: #666; font-size: 0.9rem;">
+                    <strong id="deleteSourceQuoteCount">0</strong> quotes are using this source. 
+                    They will remain but won't be linked to any source.
+                </p>
             </div>
             <div class="modal-actions">
-                <button class="modal-btn secondary" onclick="closeSpeakerEditOptionsModal()">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Enhanced Citation Edit Modal -->
-    <div class="modal" id="enhancedSpeakerEditModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title" id="speakerEditTitle">Edit Citation</div>
-            </div>
-            <div class="modal-body">
-                <p id="speakerEditDescription">This will update the citation text while preserving any embedded links.</p>
-                
-                <div class="input-group">
-                    <label class="input-label">Current Citation (with links)</label>
-                    <div id="currentSpeakerWithLinks" style="background: #f8f8f8; padding: 10px; border-radius: 4px; border: 1px solid #e0e0e0; margin-bottom: 10px;"></div>
-                </div>
-                
-                <div class="input-group">
-                    <label class="input-label">New Citation Text *</label>
-                    <input type="text" class="modal-input" id="newSpeakerText" placeholder="Enter new citation text">
-                </div>
-                
-                <div class="input-group" id="linkHandlingGroup" style="display: none;">
-                    <label class="input-label">Link Handling</label>
-                    <div style="margin: 8px 0;">
-                        <label style="display: flex; align-items: center; margin-bottom: 8px; font-weight: normal;">
-                            <input type="radio" name="linkHandling" value="preserve" checked style="margin-right: 8px;">
-                            Preserve all links (append to end)
-                        </label>
-                        <label style="display: flex; align-items: center; margin-bottom: 8px; font-weight: normal;">
-                            <input type="radio" name="linkHandling" value="remove" style="margin-right: 8px;">
-                            Remove all links (text only)
-                        </label>
-                        <label style="display: flex; align-items: center; font-weight: normal;">
-                            <input type="radio" name="linkHandling" value="smart" style="margin-right: 8px;">
-                            Smart replacement (preserve if text matches)
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="input-group">
-                    <label class="input-label">Preview</label>
-                    <div id="speakerPreview" style="background: #f0f8ff; padding: 10px; border-radius: 4px; border: 1px solid #b3d9ff; font-style: italic; min-height: 40px;"></div>
-                </div>
-            </div>
-            <div class="modal-actions">
-                <button class="modal-btn secondary" onclick="closeEnhancedSpeakerEditModal()">Cancel</button>
-                <button class="modal-btn primary" onclick="executeEnhancedSpeakerEdit()">Update Citation(s)</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Source Modal -->
-    <div class="modal" id="editSourceModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">Edit Source</div>
-            </div>
-            <div class="modal-body">
-                <p>This will update the source for <strong id="sourceQuoteCount">0</strong> quotes.</p>
-                <div class="input-group">
-                    <label class="input-label">Source Title *</label>
-                    <input type="text" class="modal-input" id="editSourceTitle">
-                </div>
-                <div class="input-group">
-                    <label class="input-label">URL (optional)</label>
-                    <input type="url" class="modal-input" id="editSourceUrl">
-                </div>
-                <div class="input-group">
-                    <label class="input-label">Type</label>
-                    <select class="modal-input" id="editSourceType">
-                        <option value="web">Web</option>
-                        <option value="youtube">YouTube</option>
-                        <option value="document">Document</option>
-                        <option value="book">Book</option>
-                        <option value="podcast">Podcast</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-            </div>
-            <div class="modal-actions">
-                <button class="modal-btn secondary" onclick="closeEditSourceModal()">Cancel</button>
-                <button class="modal-btn primary" onclick="updateSource()">Update Source</button>
+                <button class="modal-btn secondary" onclick="closeDeleteSourceModal()">Cancel</button>
+                <button class="modal-btn primary" style="background: #dc2626;" onclick="confirmDeleteSource()">Delete</button>
             </div>
         </div>
     </div>
@@ -849,10 +735,7 @@
         let activeEditor = null;
         let currentSelection = null;
         let editingQuoteId = null;
-        let currentEditingSpeaker = null;
-        let currentEditingSourceId = null;
-        let currentEditingQuoteForSpeaker = null;
-        let speakerEditMode = null;
+        let deletingSourceId = null;
 
         // DOM elements
         const quoteForm = document.getElementById('quoteForm');
@@ -866,14 +749,14 @@
         const speakerEditor = document.getElementById('speaker');
         const sourceSelect = document.getElementById('sourceSelect');
 
-        // Initialize with safer integer handling
+        // Initialize
         document.addEventListener('DOMContentLoaded', async function() {
             await initializeDatabase();
             setupEventListeners();
             await loadData();
         });
 
-        // Database connection with proper integer handling
+        // Database connection
         async function initializeDatabase() {
             try {
                 showMessage('🔄 Connecting...', 'info');
@@ -883,7 +766,6 @@
                     neo4j.auth.basic(NEO4J_USER, NEO4J_PASSWORD),
                     { 
                         disableLosslessIntegers: true,
-                        // Force integers to be returned as JavaScript numbers
                         config: {
                             trust: 'TRUST_ALL_CERTIFICATES'
                         }
@@ -915,14 +797,15 @@
             }
         }
 
-        // Setup event listeners for live preview updates
+        // Setup event listeners
         function setupEventListeners() {
             quoteForm.addEventListener('submit', handleSubmit);
             searchBox.addEventListener('input', handleSearch);
             tagInput.addEventListener('keydown', handleTagInput);
 
-            // Keyboard shortcuts
+            // Keyboard shortcuts with proper handling
             document.addEventListener('keydown', (e) => {
+                // Check for Cmd+K or Ctrl+K
                 if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
                     e.preventDefault();
                     if (activeEditor) {
@@ -930,12 +813,11 @@
                     }
                 }
 
+                // Escape key handling
                 if (e.key === 'Escape') {
                     closeLinkModal();
                     closeAddSourceModal();
-                    closeSpeakerEditOptionsModal();
-                    closeEnhancedSpeakerEditModal();
-                    closeEditSourceModal();
+                    closeDeleteSourceModal();
                     if (editingQuoteId) {
                         cancelEdit();
                     }
@@ -946,24 +828,20 @@
             quoteTextEditor.addEventListener('focus', () => activeEditor = quoteTextEditor);
             speakerEditor.addEventListener('focus', () => activeEditor = speakerEditor);
             
-            // Live preview for speaker editing
-            document.addEventListener('input', (e) => {
-                if (e.target.id === 'newSpeakerText') {
-                    updateSpeakerPreview();
-                }
+            quoteTextEditor.addEventListener('blur', () => {
+                setTimeout(() => {
+                    if (activeEditor === quoteTextEditor && !document.activeElement.closest('.modal')) {
+                        activeEditor = null;
+                    }
+                }, 100);
             });
             
-            // Live preview for link handling radio buttons
-            document.addEventListener('change', (e) => {
-                if (e.target.name === 'linkHandling') {
-                    updateSpeakerPreview();
-                }
-            });
-            
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.editable-content')) {
-                    activeEditor = null;
-                }
+            speakerEditor.addEventListener('blur', () => {
+                setTimeout(() => {
+                    if (activeEditor === speakerEditor && !document.activeElement.closest('.modal')) {
+                        activeEditor = null;
+                    }
+                }, 100);
             });
 
             // Modal events
@@ -1028,6 +906,31 @@
             if (currentValue) {
                 sourceSelect.value = currentValue;
             }
+            
+            // Also render the sources list with delete buttons
+            renderSourcesList();
+        }
+
+        function renderSourcesList() {
+            const sourcesList = document.getElementById('sourcesList');
+            if (!sourcesList) return;
+            
+            if (sources.length === 0) {
+                sourcesList.innerHTML = '';
+                return;
+            }
+            
+            sourcesList.innerHTML = `
+                <div style="font-size: 0.85rem; color: #666; margin-bottom: 8px;">Manage Sources:</div>
+                <div style="max-height: 150px; overflow-y: auto; border: 1px solid #e5e5e5; border-radius: 4px; padding: 8px;">
+                    ${sources.map(source => `
+                        <div class="source-option">
+                            <span style="font-size: 0.9rem;">${escapeHtml(source.title)}</span>
+                            <button class="delete-source-btn" onclick="showDeleteSourceModal('${source.id}')">Delete</button>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
         }
 
         async function saveSource(sourceData) {
@@ -1489,7 +1392,6 @@
 
             quotesList.innerHTML = quotesToRender.map(quote => {
                 const quoteId = escapeHtml(quote.id);
-                const sourceId = quote.sourceId ? escapeHtml(quote.sourceId) : '';
                 const quoteTextHtml = quote.textHtml || quote.text || '';
                 const speakerHtml = quote.speakerHtml || quote.speaker || '';
                 const sourceTitle = quote.sourceTitle ? escapeHtml(quote.sourceTitle) : '';
@@ -1503,12 +1405,10 @@
                         <div class="quote-text quote-clickable" onclick="handleTextClick(event, '${quoteId}')">"${quoteTextHtml}"</div>
                         <div class="quote-speaker quote-clickable" onclick="handleTextClick(event, '${quoteId}')">
                             — ${speakerHtml}
-                            <button class="bulk-edit-btn" onclick="event.stopPropagation(); showSpeakerEditOptions('${quoteId}')">Edit</button>
                         </div>
                         ${quote.sourceTitle ? `
                             <div class="quote-source">
                                 📚 ${sourceTitle}
-                                <button class="bulk-edit-btn" onclick="event.stopPropagation(); showEditSource('${sourceId}')">Edit Source</button>
                             </div>
                         ` : ''}
                         ${quote.tags && quote.tags.length > 0 ? `
@@ -1582,6 +1482,90 @@
             renderQuotes(filteredQuotes);
         }
 
+        // Delete source functions
+        function showDeleteSourceModal(sourceId) {
+            const source = sources.find(s => s.id === sourceId);
+            if (!source) return;
+            
+            deletingSourceId = sourceId;
+            
+            // Count quotes using this source
+            const quotesUsingSource = quotes.filter(q => q.sourceId === sourceId).length;
+            
+            document.getElementById('deleteSourceName').textContent = source.title;
+            document.getElementById('deleteSourceQuoteCount').textContent = quotesUsingSource;
+            document.getElementById('deleteSourceModal').classList.add('show');
+        }
+
+        function closeDeleteSourceModal() {
+            document.getElementById('deleteSourceModal').classList.remove('show');
+            deletingSourceId = null;
+        }
+
+        async function confirmDeleteSource() {
+            if (!deletingSourceId) return;
+            
+            try {
+                await deleteSource(deletingSourceId);
+                
+                // Remove from local array
+                sources = sources.filter(s => s.id !== deletingSourceId);
+                
+                // Update UI
+                renderSourceOptions();
+                await loadQuotes(); // Reload quotes to update their source display
+                
+                closeDeleteSourceModal();
+                showMessage('✅ Source deleted', 'success');
+                
+            } catch (error) {
+                console.error('Error deleting source:', error);
+                showMessage('❌ Error deleting source', 'error');
+            }
+        }
+
+        async function deleteSource(sourceId) {
+            if (!isConnected) {
+                return deleteSourceLocally(sourceId);
+            }
+
+            const session = driver.session();
+            try {
+                // First remove all relationships to this source
+                await session.run(`
+                    MATCH (q:Quote)-[r:CITES_SOURCE]->(s:Source {id: $sourceId})
+                    DELETE r
+                `, { sourceId });
+                
+                // Then delete the source
+                await session.run(`
+                    MATCH (s:Source {id: $sourceId})
+                    DELETE s
+                `, { sourceId });
+                
+            } catch (error) {
+                throw new Error('Error deleting source from database: ' + error.message);
+            } finally {
+                await session.close();
+            }
+        }
+
+        function deleteSourceLocally(sourceId) {
+            // Update localStorage
+            let savedSources = JSON.parse(localStorage.getItem('rsrch_sources') || '[]');
+            savedSources = savedSources.filter(s => s.id !== sourceId);
+            localStorage.setItem('rsrch_sources', JSON.stringify(savedSources));
+            
+            // Also update quotes to remove source references
+            let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
+            savedQuotes.forEach(quote => {
+                if (quote.sourceId === sourceId) {
+                    quote.sourceId = null;
+                }
+            });
+            localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
+        }
+
         // Link modal functions
         function showLinkModal() {
             if (!activeEditor) return;
@@ -1639,819 +1623,6 @@
             closeLinkModal();
         }
 
-        // Enhanced Speaker Edit Functions - FIXED
-        function showSpeakerEditOptions(quoteId) {
-            console.log('showSpeakerEditOptions called with quoteId:', quoteId);
-            
-            const quote = quotes.find(q => q.id === quoteId);
-            if (!quote) {
-                console.error('Quote not found:', quoteId);
-                console.log('Available quotes:', quotes.map(q => ({ id: q.id, speaker: q.speaker })));
-                alert('Error: Quote not found');
-                return;
-            }
-            
-            console.log('Found quote:', quote);
-            currentEditingQuoteForSpeaker = quote;
-            console.log('Set currentEditingQuoteForSpeaker to:', currentEditingQuoteForSpeaker);
-            
-            // Safe access to speaker properties
-            const speakerHtml = quote.speakerHtml || quote.speaker || '';
-            const speakerText = stripHtml(speakerHtml);
-            
-            console.log('Speaker HTML:', speakerHtml);
-            console.log('Speaker text:', speakerText);
-            
-            // Count quotes with same speaker name
-            const quotesWithSameSpeaker = quotes.filter(q => {
-                const qSpeakerHtml = q.speakerHtml || q.speaker || '';
-                const qSpeakerText = stripHtml(qSpeakerHtml);
-                return qSpeakerText === speakerText;
-            });
-            
-            // Count quotes from same source
-            const quotesFromSameSource = quote.sourceId ? 
-                quotes.filter(q => q.sourceId === quote.sourceId) : [];
-            
-            console.log('Quotes with same speaker:', quotesWithSameSpeaker.length);
-            console.log('Quotes from same source:', quotesFromSameSource.length);
-            
-            // Update modal content - with null checks
-            const previewElement = document.getElementById('currentSpeakerPreview');
-            const sameNameElement = document.getElementById('sameNameCount');
-            const sameSourceElement = document.getElementById('sameSourceCount');
-            const sourceNameElement = document.getElementById('currentSourceName');
-            const sameSourceOption = document.getElementById('sameSourceOption');
-            
-            if (previewElement) previewElement.innerHTML = speakerHtml;
-            if (sameNameElement) sameNameElement.textContent = quotesWithSameSpeaker.length;
-            if (sameSourceElement) sameSourceElement.textContent = quotesFromSameSource.length;
-            if (sourceNameElement) sourceNameElement.textContent = quote.sourceTitle || 'this source';
-            
-            // Hide source option if no source
-            if (sameSourceOption) {
-                if (!quote.sourceId) {
-                    sameSourceOption.style.display = 'none';
-                } else {
-                    sameSourceOption.style.display = 'block';
-                }
-            }
-            
-            console.log('About to show modal');
-            document.getElementById('speakerEditOptionsModal').classList.add('show');
-        }
-
-        function closeSpeakerEditOptionsModal() {
-            console.log('closeSpeakerEditOptionsModal called');
-            console.log('currentEditingQuoteForSpeaker before closing:', currentEditingQuoteForSpeaker);
-            
-            document.getElementById('speakerEditOptionsModal').classList.remove('show');
-            // DON'T reset currentEditingQuoteForSpeaker here - we need it for the next modal
-            // currentEditingQuoteForSpeaker = null;
-        }
-
-        function editSingleSpeaker() {
-            console.log('editSingleSpeaker called');
-            console.log('currentEditingQuoteForSpeaker before setting mode:', currentEditingQuoteForSpeaker);
-            
-            if (!currentEditingQuoteForSpeaker) {
-                console.error('No quote selected in editSingleSpeaker');
-                alert('Error: No quote selected. Please try again.');
-                return;
-            }
-            
-            speakerEditMode = 'single';
-            console.log('Set speakerEditMode to:', speakerEditMode);
-            
-            showEnhancedSpeakerEdit('Edit Citation for This Quote', 'This will update the citation for this quote only.');
-            closeSpeakerEditOptionsModal();
-        }
-
-        function editAllSpeakersWithSameName() {
-            console.log('editAllSpeakersWithSameName called');
-            console.log('currentEditingQuoteForSpeaker before setting mode:', currentEditingQuoteForSpeaker);
-            
-            if (!currentEditingQuoteForSpeaker) {
-                console.error('No quote selected in editAllSpeakersWithSameName');
-                alert('Error: No quote selected. Please try again.');
-                return;
-            }
-            
-            speakerEditMode = 'sameName';
-            console.log('Set speakerEditMode to:', speakerEditMode);
-            
-            const speakerHtml = currentEditingQuoteForSpeaker.speakerHtml || currentEditingQuoteForSpeaker.speaker || '';
-            const speakerText = stripHtml(speakerHtml);
-            
-            const count = quotes.filter(q => {
-                const qSpeakerHtml = q.speakerHtml || q.speaker || '';
-                const qSpeakerText = stripHtml(qSpeakerHtml);
-                return qSpeakerText === speakerText;
-            }).length;
-            
-            showEnhancedSpeakerEdit(
-                'Edit Citation for All Quotes with Same Citation', 
-                `This will update the citation for ${count} quotes with the same citation text.`
-            );
-            closeSpeakerEditOptionsModal();
-        }
-
-        function editAllSpeakersFromSameSource() {
-            console.log('editAllSpeakersFromSameSource called');
-            console.log('currentEditingQuoteForSpeaker before setting mode:', currentEditingQuoteForSpeaker);
-            
-            if (!currentEditingQuoteForSpeaker) {
-                console.error('No quote selected in editAllSpeakersFromSameSource');
-                alert('Error: No quote selected. Please try again.');
-                return;
-            }
-            
-            speakerEditMode = 'sameSource';
-            console.log('Set speakerEditMode to:', speakerEditMode);
-            
-            const count = quotes.filter(q => q.sourceId === currentEditingQuoteForSpeaker.sourceId).length;
-            showEnhancedSpeakerEdit(
-                'Edit Citation for All Quotes from Same Source', 
-                `This will update the citation for ${count} quotes from "${currentEditingQuoteForSpeaker.sourceTitle || 'this source'}".`
-            );
-            closeSpeakerEditOptionsModal();
-        }
-
-        function showEnhancedSpeakerEdit(title, description) {
-            if (!currentEditingQuoteForSpeaker) {
-                console.error('No quote selected for enhanced editing');
-                return;
-            }
-            
-            const quote = currentEditingQuoteForSpeaker;
-            
-            // Safe access with fallbacks
-            const currentSpeakerHtml = quote.speakerHtml || quote.speaker || '';
-            const currentSpeakerText = stripHtml(currentSpeakerHtml);
-            const hasLinks = currentSpeakerHtml.includes('<a');
-            
-            console.log('showEnhancedSpeakerEdit - Original HTML:', currentSpeakerHtml);
-            console.log('showEnhancedSpeakerEdit - Stripped text:', currentSpeakerText);
-            console.log('showEnhancedSpeakerEdit - Has links:', hasLinks);
-            
-            // Update modal elements with null checks
-            const titleElement = document.getElementById('speakerEditTitle');
-            const descElement = document.getElementById('speakerEditDescription');
-            const linksElement = document.getElementById('currentSpeakerWithLinks');
-            const textInput = document.getElementById('newSpeakerText');
-            const linkHandlingGroup = document.getElementById('linkHandlingGroup');
-            
-            if (titleElement) titleElement.textContent = title;
-            if (descElement) {
-                if (hasLinks) {
-                    descElement.textContent = 'This citation contains links. Choose how to handle them below.';
-                } else {
-                    descElement.textContent = 'This will update the citation text.';
-                }
-            }
-            if (linksElement) {
-                linksElement.innerHTML = currentSpeakerHtml;
-                console.log('Set current speaker with links display');
-            }
-            if (textInput) {
-                textInput.value = currentSpeakerText;
-                console.log('Set input field with stripped text');
-            }
-            
-            // Show/hide link handling options
-            if (linkHandlingGroup) {
-                if (hasLinks) {
-                    linkHandlingGroup.style.display = 'block';
-                } else {
-                    linkHandlingGroup.style.display = 'none';
-                }
-            }
-            
-            // Show the modal
-            document.getElementById('enhancedSpeakerEditModal').classList.add('show');
-            
-            // Update preview and focus
-            updateSpeakerPreview();
-            
-            setTimeout(() => {
-                if (textInput) {
-                    textInput.focus();
-                    textInput.select();
-                }
-            }, 100);
-        }
-
-        function closeEnhancedSpeakerEditModal() {
-            console.log('closeEnhancedSpeakerEditModal called');
-            console.log('Resetting currentEditingQuoteForSpeaker and speakerEditMode');
-            
-            document.getElementById('enhancedSpeakerEditModal').classList.remove('show');
-            speakerEditMode = null;
-            currentEditingQuoteForSpeaker = null; // Reset here, after the edit is complete
-        }
-
-        function updateSpeakerPreview() {
-            if (!currentEditingQuoteForSpeaker) return;
-            
-            const newTextInput = document.getElementById('newSpeakerText');
-            const previewElement = document.getElementById('speakerPreview');
-            
-            if (!newTextInput || !previewElement) return;
-            
-            const newText = newTextInput.value;
-            const originalHtml = currentEditingQuoteForSpeaker.speakerHtml || currentEditingQuoteForSpeaker.speaker || '';
-            
-            console.log('updateSpeakerPreview - New text:', newText);
-            console.log('updateSpeakerPreview - Original HTML:', originalHtml);
-            
-            // Get selected link handling option
-            const linkHandlingRadios = document.getElementsByName('linkHandling');
-            let linkHandling = 'preserve'; // default
-            
-            for (const radio of linkHandlingRadios) {
-                if (radio.checked) {
-                    linkHandling = radio.value;
-                    break;
-                }
-            }
-            
-            console.log('Link handling mode:', linkHandling);
-            
-            let previewHtml = newText;
-            
-            if (originalHtml.includes('<a')) {
-                switch (linkHandling) {
-                    case 'preserve':
-                        previewHtml = replaceTextPreserveLinks(originalHtml, newText);
-                        break;
-                    case 'remove':
-                        previewHtml = newText; // Just the plain text
-                        break;
-                    case 'smart':
-                        previewHtml = replaceTextSmartLinks(originalHtml, newText);
-                        break;
-                }
-            }
-            
-            console.log('updateSpeakerPreview - Preview HTML:', previewHtml);
-            
-            previewElement.innerHTML = previewHtml || newText;
-            
-            // Add visual indication
-            const hasLinksInPreview = previewHtml.includes('<a');
-            const hasLinksInOriginal = originalHtml.includes('<a');
-            
-            if (hasLinksInPreview && hasLinksInOriginal) {
-                previewElement.style.border = '1px solid #4CAF50';
-                previewElement.title = 'Links preserved ✅';
-            } else if (hasLinksInOriginal && !hasLinksInPreview) {
-                previewElement.style.border = '1px solid #FF9800';
-                previewElement.title = 'Links will be removed ⚠️';
-            } else {
-                previewElement.style.border = '1px solid #b3d9ff';
-                previewElement.title = '';
-            }
-        }
-
-        function replaceTextSmartLinks(originalHtml, newText) {
-            console.log('replaceTextSmartLinks called');
-            
-            if (!originalHtml || !originalHtml.includes('<a')) {
-                return newText;
-            }
-            
-            // Create a temp div to parse HTML safely
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = originalHtml;
-            
-            // Extract all links
-            const links = [];
-            const linkElements = tempDiv.querySelectorAll('a');
-            
-            linkElements.forEach(linkEl => {
-                links.push({
-                    text: linkEl.textContent,
-                    href: linkEl.href,
-                    target: linkEl.target || '_blank',
-                    rel: linkEl.rel || 'noopener noreferrer'
-                });
-            });
-            
-            let result = newText;
-            
-            // Try to replace link text in the new text
-            links.forEach(link => {
-                const linkText = link.text;
-                if (result.includes(linkText)) {
-                    // Escape quotes to prevent HTML breaking
-                    const escapedHref = link.href.replace(/"/g, '&quot;');
-                    const escapedText = escapeHtml(linkText);
-                    const escapedTarget = link.target.replace(/"/g, '&quot;');
-                    const escapedRel = link.rel.replace(/"/g, '&quot;');
-                    
-                    const linkHtml = `<a href="${escapedHref}" target="${escapedTarget}" rel="${escapedRel}">${escapedText}</a>`;
-                    result = result.replace(new RegExp(escapeRegExp(linkText), 'g'), linkHtml);
-                    console.log('Smart replacement successful for:', linkText);
-                }
-            });
-            
-            return result;
-        }
-
-        function escapeRegExp(string) {
-            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        }
-
-        function replaceTextPreserveLinks(originalHtml, newText) {
-            console.log('replaceTextPreserveLinks called with:', { originalHtml, newText });
-            
-            if (!originalHtml || !originalHtml.includes('<a')) {
-                console.log('No HTML or no links found, returning plain text');
-                return newText;
-            }
-            
-            // Create a temp div to parse HTML safely
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = originalHtml;
-            
-            // Extract all links with their information
-            const links = [];
-            const linkElements = tempDiv.querySelectorAll('a');
-            
-            linkElements.forEach(linkEl => {
-                links.push({
-                    text: linkEl.textContent,
-                    href: linkEl.href,
-                    target: linkEl.target || '_blank',
-                    rel: linkEl.rel || 'noopener noreferrer',
-                    outerHTML: linkEl.outerHTML
-                });
-            });
-            
-            console.log('Extracted links:', links);
-            
-            if (links.length === 0) {
-                console.log('No links found after parsing');
-                return newText;
-            }
-            
-            // STRATEGY: Always preserve all links by appending them to the new text
-            // This ensures no links are ever lost, regardless of text changes
-            
-            let result = newText.trim();
-            
-            // Add all links at the end with proper formatting
-            links.forEach((link, index) => {
-                const linkHtml = `<a href="${link.href}" target="${link.target}" rel="${link.rel}">${link.text}</a>`;
-                
-                if (index === 0) {
-                    // Add a space before the first link if the text doesn't end with punctuation
-                    const lastChar = result.slice(-1);
-                    if (!/[.!?:;,]/.test(lastChar)) {
-                        result += ' ';
-                    } else {
-                        result += ' ';
-                    }
-                } else {
-                    // Add comma separation for multiple links
-                    result += ', ';
-                }
-                
-                result += linkHtml;
-            });
-            
-            console.log('Final result with preserved links:', result);
-            return result;
-        }
-
-        async function executeEnhancedSpeakerEdit() {
-            console.log('Starting executeEnhancedSpeakerEdit');
-            
-            const newTextInput = document.getElementById('newSpeakerText');
-            if (!newTextInput) {
-                console.error('New speaker text input not found');
-                alert('Error: Input field not found');
-                return;
-            }
-            
-            const newText = newTextInput.value.trim();
-            console.log('New text value:', newText);
-            
-            if (!newText) {
-                alert('Please enter citation text');
-                return;
-            }
-
-            if (!currentEditingQuoteForSpeaker) {
-                console.error('No quote selected for editing');
-                alert('Error: No quote selected');
-                return;
-            }
-
-            if (!speakerEditMode) {
-                console.error('No edit mode selected');
-                alert('Error: No edit mode selected');
-                return;
-            }
-
-            // Get link handling preference
-            const linkHandlingRadios = document.getElementsByName('linkHandling');
-            let linkHandling = 'preserve'; // default
-            
-            for (const radio of linkHandlingRadios) {
-                if (radio.checked) {
-                    linkHandling = radio.value;
-                    break;
-                }
-            }
-            
-            console.log('Link handling mode:', linkHandling);
-
-            // Disable the button to prevent double-clicks
-            const updateBtn = document.querySelector('#enhancedSpeakerEditModal .modal-btn.primary');
-            if (updateBtn) {
-                updateBtn.disabled = true;
-                updateBtn.textContent = 'Updating...';
-            }
-
-            try {
-                const originalHtml = currentEditingQuoteForSpeaker.speakerHtml || currentEditingQuoteForSpeaker.speaker || '';
-                let newHtml = newText;
-                
-                // Apply link handling based on user choice
-                if (originalHtml.includes('<a')) {
-                    switch (linkHandling) {
-                        case 'preserve':
-                            newHtml = replaceTextPreserveLinks(originalHtml, newText);
-                            break;
-                        case 'remove':
-                            newHtml = newText; // Just plain text
-                            break;
-                        case 'smart':
-                            newHtml = replaceTextSmartLinks(originalHtml, newText);
-                            break;
-                    }
-                }
-                
-                console.log('Updating speaker with mode:', speakerEditMode);
-                console.log('Current quote:', currentEditingQuoteForSpeaker);
-                console.log('Original HTML:', originalHtml);
-                console.log('New text:', newText);
-                console.log('New HTML:', newHtml);
-                console.log('Link handling:', linkHandling);
-                
-                switch (speakerEditMode) {
-                    case 'single':
-                        console.log('Executing single quote update');
-                        await updateSingleQuoteSpeaker(currentEditingQuoteForSpeaker.id, newText, newHtml);
-                        break;
-                    case 'sameName':
-                        console.log('Executing same name update');
-                        const oldText = stripHtml(originalHtml);
-                        console.log('Old text for matching:', oldText);
-                        await updateSpeakerBySameName(oldText, newText, newHtml);
-                        break;
-                    case 'sameSource':
-                        console.log('Executing same source update');
-                        if (!currentEditingQuoteForSpeaker.sourceId) {
-                            throw new Error('No source ID available for this quote');
-                        }
-                        await updateSpeakerBySameSource(currentEditingQuoteForSpeaker.sourceId, newText, newHtml);
-                        break;
-                    default:
-                        throw new Error('Invalid speaker edit mode: ' + speakerEditMode);
-                }
-                
-                console.log('Update completed, closing modal and reloading');
-                closeEnhancedSpeakerEditModal();
-                await loadQuotes();
-                showMessage('✅ Citation updated successfully', 'success');
-                
-            } catch (error) {
-                console.error('Error updating citation:', error);
-                showMessage('❌ Error updating citation: ' + error.message, 'error');
-            } finally {
-                // Re-enable the button
-                if (updateBtn) {
-                    updateBtn.disabled = false;
-                    updateBtn.textContent = 'Update Citation(s)';
-                }
-            }
-        }
-
-        async function updateSingleQuoteSpeaker(quoteId, newText, newHtml) {
-            console.log('updateSingleQuoteSpeaker called with:', { quoteId, newText, newHtml });
-            
-            if (!quoteId) {
-                throw new Error('Quote ID is required');
-            }
-            
-            if (!isConnected) {
-                console.log('Not connected to Neo4j, updating locally');
-                updateSingleQuoteSpeakerLocally(quoteId, newText, newHtml);
-                return;
-            }
-
-            const session = driver.session();
-            try {
-                console.log('Executing Neo4j update for single quote');
-                const result = await session.run(`
-                    MATCH (q:Quote {id: $quoteId})
-                    SET q.speaker = $newText,
-                        q.speakerHtml = $newHtml,
-                        q.author = $newText,
-                        q.lastModified = datetime()
-                    RETURN q.id as updatedId
-                `, { 
-                    quoteId: quoteId, 
-                    newText: newText, 
-                    newHtml: newHtml 
-                });
-                
-                const updatedId = result.records[0]?.get('updatedId');
-                if (updatedId) {
-                    console.log('Single quote updated successfully in Neo4j:', updatedId);
-                } else {
-                    console.warn('No quote was updated - quote might not exist');
-                }
-            } catch (error) {
-                console.error('Neo4j error updating single quote:', error);
-                throw new Error('Failed to update citation in database: ' + error.message);
-            } finally {
-                await session.close();
-            }
-        }
-
-        async function updateSpeakerBySameName(oldSpeakerText, newText, newHtml) {
-            console.log('Updating by same name:', oldSpeakerText, '->', newText);
-            
-            if (!isConnected) {
-                updateSpeakerBySameNameLocally(oldSpeakerText, newText, newHtml);
-                return;
-            }
-
-            const session = driver.session();
-            try {
-                const result = await session.run(`
-                    MATCH (q:Quote)
-                    WHERE q.speaker = $oldSpeakerText OR q.author = $oldSpeakerText
-                    SET q.speaker = $newText,
-                        q.speakerHtml = $newHtml,
-                        q.author = $newText,
-                        q.lastModified = datetime()
-                    RETURN count(q) as updated
-                `, { 
-                    oldSpeakerText: oldSpeakerText, 
-                    newText: newText, 
-                    newHtml: newHtml 
-                });
-                
-                // Handle different Neo4j integer types
-                let updatedCount = 0;
-                if (result.records.length > 0) {
-                    const countValue = result.records[0].get('updated');
-                    if (typeof countValue === 'number') {
-                        updatedCount = countValue;
-                    } else if (countValue && typeof countValue.toNumber === 'function') {
-                        updatedCount = countValue.toNumber();
-                    } else if (countValue && typeof countValue.low === 'number') {
-                        updatedCount = countValue.low;
-                    } else {
-                        updatedCount = parseInt(countValue) || 0;
-                    }
-                }
-                console.log('Updated quotes by same name:', updatedCount);
-            } catch (error) {
-                console.error('Neo4j error updating by same name:', error);
-                throw new Error('Failed to update citations in database: ' + error.message);
-            } finally {
-                await session.close();
-            }
-        }
-
-        async function updateSpeakerBySameSource(sourceId, newText, newHtml) {
-            console.log('Updating by same source:', sourceId, '->', newText);
-            
-            if (!sourceId) {
-                throw new Error('No source ID provided for update');
-            }
-            
-            if (!isConnected) {
-                updateSpeakerBySameSourceLocally(sourceId, newText, newHtml);
-                return;
-            }
-
-            const session = driver.session();
-            try {
-                const result = await session.run(`
-                    MATCH (q:Quote)-[:CITES_SOURCE]->(s:Source {id: $sourceId})
-                    SET q.speaker = $newText,
-                        q.speakerHtml = $newHtml,
-                        q.author = $newText,
-                        q.lastModified = datetime()
-                    RETURN count(q) as updated
-                `, { 
-                    sourceId: sourceId, 
-                    newText: newText, 
-                    newHtml: newHtml 
-                });
-                
-                // Handle different Neo4j integer types
-                let updatedCount = 0;
-                if (result.records.length > 0) {
-                    const countValue = result.records[0].get('updated');
-                    if (typeof countValue === 'number') {
-                        updatedCount = countValue;
-                    } else if (countValue && typeof countValue.toNumber === 'function') {
-                        updatedCount = countValue.toNumber();
-                    } else if (countValue && typeof countValue.low === 'number') {
-                        updatedCount = countValue.low;
-                    } else {
-                        updatedCount = parseInt(countValue) || 0;
-                    }
-                }
-                console.log('Updated quotes by same source:', updatedCount);
-            } catch (error) {
-                console.error('Neo4j error updating by same source:', error);
-                throw new Error('Failed to update citations in database: ' + error.message);
-            } finally {
-                await session.close();
-            }
-        }
-
-        // Local storage versions with better error handling
-        function updateSingleQuoteSpeakerLocally(quoteId, newText, newHtml) {
-            console.log('updateSingleQuoteSpeakerLocally called with:', { quoteId, newText, newHtml });
-            
-            try {
-                let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
-                console.log('Loaded quotes from localStorage:', savedQuotes.length);
-                
-                const quoteIndex = savedQuotes.findIndex(q => q.id === quoteId);
-                console.log('Found quote at index:', quoteIndex);
-                
-                if (quoteIndex !== -1) {
-                    const originalQuote = { ...savedQuotes[quoteIndex] };
-                    savedQuotes[quoteIndex].speaker = newText;
-                    savedQuotes[quoteIndex].speakerHtml = newHtml;
-                    savedQuotes[quoteIndex].lastModified = new Date().toISOString();
-                    
-                    localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
-                    console.log('Quote updated locally:', {
-                        before: originalQuote.speaker,
-                        after: savedQuotes[quoteIndex].speaker
-                    });
-                    
-                    // Also update the quotes array in memory
-                    const memoryIndex = quotes.findIndex(q => q.id === quoteId);
-                    if (memoryIndex !== -1) {
-                        quotes[memoryIndex].speaker = newText;
-                        quotes[memoryIndex].speakerHtml = newHtml;
-                        console.log('Memory array also updated');
-                    }
-                } else {
-                    console.error('Quote not found in localStorage with ID:', quoteId);
-                    console.log('Available quote IDs:', savedQuotes.map(q => q.id));
-                    throw new Error('Quote not found in local storage');
-                }
-            } catch (error) {
-                console.error('Local storage error:', error);
-                throw new Error('Failed to update citation locally: ' + error.message);
-            }
-        }
-
-        function updateSpeakerBySameNameLocally(oldSpeakerText, newText, newHtml) {
-            try {
-                let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
-                let updatedCount = 0;
-                savedQuotes.forEach(quote => {
-                    if (quote.speaker === oldSpeakerText) {
-                        quote.speaker = newText;
-                        quote.speakerHtml = newHtml;
-                        quote.lastModified = new Date().toISOString();
-                        updatedCount++;
-                    }
-                });
-                localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
-                console.log('Updated quotes by same name locally:', updatedCount);
-            } catch (error) {
-                console.error('Local storage error:', error);
-                throw new Error('Failed to update citations locally: ' + error.message);
-            }
-        }
-
-        function updateSpeakerBySameSourceLocally(sourceId, newText, newHtml) {
-            try {
-                let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
-                let updatedCount = 0;
-                savedQuotes.forEach(quote => {
-                    if (quote.sourceId === sourceId) {
-                        quote.speaker = newText;
-                        quote.speakerHtml = newHtml;
-                        quote.lastModified = new Date().toISOString();
-                        updatedCount++;
-                    }
-                });
-                localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
-                console.log('Updated quotes by same source locally:', updatedCount);
-            } catch (error) {
-                console.error('Local storage error:', error);
-                throw new Error('Failed to update citations locally: ' + error.message);
-            }
-        }
-
-        // Source edit functions
-        function showEditSource(sourceId) {
-            currentEditingSourceId = sourceId;
-            const source = sources.find(s => s.id === sourceId);
-            
-            if (!source) return;
-            
-            // Count quotes with this source
-            const quotesWithSource = quotes.filter(q => q.sourceId === sourceId);
-            
-            document.getElementById('editSourceTitle').value = source.title;
-            document.getElementById('editSourceUrl').value = source.url || '';
-            document.getElementById('editSourceType').value = source.type || 'web';
-            document.getElementById('sourceQuoteCount').textContent = quotesWithSource.length;
-            document.getElementById('editSourceModal').classList.add('show');
-            
-            setTimeout(() => {
-                document.getElementById('editSourceTitle').focus();
-            }, 100);
-        }
-
-        function closeEditSourceModal() {
-            document.getElementById('editSourceModal').classList.remove('show');
-            currentEditingSourceId = null;
-        }
-
-        async function updateSource() {
-            const title = document.getElementById('editSourceTitle').value.trim();
-            const url = document.getElementById('editSourceUrl').value.trim();
-            const type = document.getElementById('editSourceType').value;
-            
-            if (!title) {
-                alert('Please enter a source title');
-                return;
-            }
-
-            try {
-                if (!isConnected) {
-                    updateSourceLocally(currentEditingSourceId, { title, url, type });
-                } else {
-                    await updateSourceInNeo4j(currentEditingSourceId, { title, url, type });
-                }
-                
-                // Update local sources array
-                const sourceIndex = sources.findIndex(s => s.id === currentEditingSourceId);
-                if (sourceIndex !== -1) {
-                    sources[sourceIndex] = { ...sources[sourceIndex], title, url, type };
-                }
-                
-                closeEditSourceModal();
-                await loadData(); // Reload both sources and quotes
-                showMessage('✅ Source updated', 'success');
-                
-            } catch (error) {
-                console.error('Error updating source:', error);
-                showMessage('❌ Error updating source', 'error');
-            }
-        }
-
-        async function updateSourceInNeo4j(sourceId, sourceData) {
-            const session = driver.session();
-            try {
-                await session.run(`
-                    MATCH (s:Source {id: $id})
-                    SET s.title = $title,
-                        s.url = $url,
-                        s.type = $type,
-                        s.lastModified = datetime()
-                `, {
-                    id: sourceId,
-                    title: sourceData.title,
-                    url: sourceData.url,
-                    type: sourceData.type
-                });
-            } finally {
-                await session.close();
-            }
-        }
-
-        function updateSourceLocally(sourceId, sourceData) {
-            let savedSources = JSON.parse(localStorage.getItem('rsrch_sources') || '[]');
-            const sourceIndex = savedSources.findIndex(s => s.id === sourceId);
-            if (sourceIndex !== -1) {
-                savedSources[sourceIndex] = { 
-                    ...savedSources[sourceIndex], 
-                    ...sourceData,
-                    lastModified: new Date().toISOString() 
-                };
-                localStorage.setItem('rsrch_sources', JSON.stringify(savedSources));
-            }
-        }
-
         function updateQuotesCount() {
             quotesCount.textContent = quotes.length;
         }
@@ -2486,20 +1657,9 @@
         window.addNewSource = addNewSource;
         window.closeLinkModal = closeLinkModal;
         window.insertLink = insertLink;
-        
-        // Enhanced speaker edit functions
-        window.showSpeakerEditOptions = showSpeakerEditOptions;
-        window.closeSpeakerEditOptionsModal = closeSpeakerEditOptionsModal;
-        window.editSingleSpeaker = editSingleSpeaker;
-        window.editAllSpeakersWithSameName = editAllSpeakersWithSameName;
-        window.editAllSpeakersFromSameSource = editAllSpeakersFromSameSource;
-        window.closeEnhancedSpeakerEditModal = closeEnhancedSpeakerEditModal;
-        window.executeEnhancedSpeakerEdit = executeEnhancedSpeakerEdit;
-        
-        // Source edit functions
-        window.showEditSource = showEditSource;
-        window.closeEditSourceModal = closeEditSourceModal;
-        window.updateSource = updateSource;
+        window.showDeleteSourceModal = showDeleteSourceModal;
+        window.closeDeleteSourceModal = closeDeleteSourceModal;
+        window.confirmDeleteSource = confirmDeleteSource;
     </script>
 </body>
 </html>
