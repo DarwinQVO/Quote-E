@@ -1406,7 +1406,7 @@
 
                                 <div class="form-group">
                                     <label for="sourceDate">Date</label>
-                                    <input type="date" id="sourceDate">
+                                    <input type="text" id="sourceDate" placeholder="YYYY-MM-DD or any date format...">
                                 </div>
                             </div>
 
@@ -1570,8 +1570,8 @@
         const sourceSearchBox = document.getElementById('sourceSearchBox');
         const tagInput = document.getElementById('tagInput');
         const sourceTagInput = document.getElementById('sourceTagInput');
-        const tagsContainer = tagInput.parentElement;
-        const sourceTagsContainer = sourceTagInput.parentElement;
+        const tagsContainer = tagInput ? tagInput.parentElement : null;
+        const sourceTagsContainer = sourceTagInput ? sourceTagInput.parentElement : null;
         const statusMessage = document.getElementById('statusMessage');
         const sourceStatusMessage = document.getElementById('sourceStatusMessage');
         const quoteTextEditor = document.getElementById('quoteText');
@@ -1653,14 +1653,14 @@
 
         // Setup event listeners
         function setupEventListeners() {
-            quoteForm.addEventListener('submit', handleQuoteSubmit);
-            sourceForm.addEventListener('submit', handleSourceSubmit);
+            if (quoteForm) quoteForm.addEventListener('submit', handleQuoteSubmit);
+            if (sourceForm) sourceForm.addEventListener('submit', handleSourceSubmit);
             
-            searchBox.addEventListener('input', handleQuoteSearch);
-            sourceSearchBox.addEventListener('input', handleSourceSearch);
+            if (searchBox) searchBox.addEventListener('input', handleQuoteSearch);
+            if (sourceSearchBox) sourceSearchBox.addEventListener('input', handleSourceSearch);
             
-            tagInput.addEventListener('keydown', (e) => handleTagInput(e, quoteTags, renderQuoteTags));
-            sourceTagInput.addEventListener('keydown', (e) => handleTagInput(e, sourceTags, renderSourceTags));
+            if (tagInput) tagInput.addEventListener('keydown', (e) => handleTagInput(e, quoteTags, renderQuoteTags));
+            if (sourceTagInput) sourceTagInput.addEventListener('keydown', (e) => handleTagInput(e, sourceTags, renderSourceTags));
 
             document.querySelectorAll('.nav-tab').forEach(tab => {
                 tab.addEventListener('click', () => {
@@ -1681,6 +1681,7 @@
                     closeLinkModal();
                     closeDeleteModal();
                     closeTagManager();
+                    closeQuoteTagManager();
                     if (editingQuoteId) {
                         cancelQuoteEdit();
                     }
@@ -1690,24 +1691,27 @@
                 }
             });
 
-            quoteTextEditor.addEventListener('focus', () => activeEditor = quoteTextEditor);
-            speakerEditor.addEventListener('focus', () => activeEditor = speakerEditor);
+            if (quoteTextEditor) {
+                quoteTextEditor.addEventListener('focus', () => activeEditor = quoteTextEditor);
+                quoteTextEditor.addEventListener('blur', () => {
+                    setTimeout(() => {
+                        if (activeEditor === quoteTextEditor && !document.activeElement.closest('.modal')) {
+                            activeEditor = null;
+                        }
+                    }, 100);
+                });
+            }
             
-            quoteTextEditor.addEventListener('blur', () => {
-                setTimeout(() => {
-                    if (activeEditor === quoteTextEditor && !document.activeElement.closest('.modal')) {
-                        activeEditor = null;
-                    }
-                }, 100);
-            });
-            
-            speakerEditor.addEventListener('blur', () => {
-                setTimeout(() => {
-                    if (activeEditor === speakerEditor && !document.activeElement.closest('.modal')) {
-                        activeEditor = null;
-                    }
-                }, 100);
-            });
+            if (speakerEditor) {
+                speakerEditor.addEventListener('focus', () => activeEditor = speakerEditor);
+                speakerEditor.addEventListener('blur', () => {
+                    setTimeout(() => {
+                        if (activeEditor === speakerEditor && !document.activeElement.closest('.modal')) {
+                            activeEditor = null;
+                        }
+                    }, 100);
+                });
+            }
 
             document.querySelectorAll('.modal').forEach(modal => {
                 modal.addEventListener('click', (e) => {
@@ -1737,6 +1741,8 @@
 
         // URL Metadata Extraction
         async function fetchUrlMetadata() {
+            if (!urlInput) return;
+            
             const url = urlInput.value.trim();
             if (!url) {
                 showUrlError('Please enter a URL first');
@@ -1869,6 +1875,8 @@
         }
 
         function displayUrlPreview(metadata) {
+            if (!urlPreview) return;
+            
             const favicon = metadata.favicon || '🌐';
             
             urlPreview.innerHTML = `
@@ -1907,71 +1915,80 @@
         }
 
         function populateFormFromMetadata(metadata) {
-            if (metadata.title && !document.getElementById('sourceTitle').value) {
-                document.getElementById('sourceTitle').value = metadata.title;
+            const titleInput = document.getElementById('sourceTitle');
+            const descriptionInput = document.getElementById('sourceDescription');
+            const typeSelect = document.getElementById('sourceType');
+            const dateInput = document.getElementById('sourceDate');
+            
+            if (metadata.title && titleInput && !titleInput.value) {
+                titleInput.value = metadata.title;
             }
             
-            if (metadata.description && !document.getElementById('sourceDescription').value) {
-                document.getElementById('sourceDescription').value = metadata.description;
+            if (metadata.description && descriptionInput && !descriptionInput.value) {
+                descriptionInput.value = metadata.description;
             }
             
-            if (metadata.type) {
-                const typeSelect = document.getElementById('sourceType');
+            if (metadata.type && typeSelect) {
                 if ([...typeSelect.options].some(opt => opt.value === metadata.type)) {
                     typeSelect.value = metadata.type;
                 }
             }
             
-            if (metadata.publishDate && !document.getElementById('sourceDate').value) {
+            if (metadata.publishDate && dateInput && !dateInput.value) {
                 try {
                     const date = new Date(metadata.publishDate);
-                    document.getElementById('sourceDate').value = date.toISOString().split('T')[0];
+                    dateInput.value = date.toISOString().split('T')[0];
                 } catch (e) {
-                    // Invalid date format
+                    // If date parsing fails, just put the raw date
+                    dateInput.value = metadata.publishDate;
                 }
             }
         }
 
         function showUrlPreview() {
-            urlPreview.classList.add('show');
+            if (urlPreview) urlPreview.classList.add('show');
         }
 
         function hideUrlPreview() {
-            urlPreview.classList.remove('show');
+            if (urlPreview) urlPreview.classList.remove('show');
         }
 
         function showMetadataLoading() {
-            metadataLoading.classList.add('show');
+            if (metadataLoading) metadataLoading.classList.add('show');
         }
 
         function hideMetadataLoading() {
-            metadataLoading.classList.remove('show');
+            if (metadataLoading) metadataLoading.classList.remove('show');
         }
 
         function showUrlError(message) {
-            urlError.textContent = message;
-            urlError.classList.add('show');
+            if (urlError) {
+                urlError.textContent = message;
+                urlError.classList.add('show');
+            }
         }
 
         function hideUrlError() {
-            urlError.classList.remove('show');
+            if (urlError) urlError.classList.remove('show');
         }
 
         let urlFetchTimeout;
         function setupUrlAutoFetch() {
-            urlInput.addEventListener('input', () => {
-                hideUrlError();
-                hideUrlPreview();
-                
-                clearTimeout(urlFetchTimeout);
-                const url = urlInput.value.trim();
-                
-                if (url && isValidUrl(url)) {
-                    urlFetchTimeout = setTimeout(() => {
-                        fetchUrlMetadata();
-                    }, 1000);
-                }
-            });
+            if (urlInput) {
+                urlInput.addEventListener('input', () => {
+                    hideUrlError();
+                    hideUrlPreview();
+                    
+                    clearTimeout(urlFetchTimeout);
+                    const url = urlInput.value.trim();
+                    
+                    if (url && isValidUrl(url)) {
+                        urlFetchTimeout = setTimeout(() => {
+                            fetchUrlMetadata();
+                        }, 1000);
+                    }
+                });
+            }
         }
 
         // Sources management
@@ -2021,22 +2038,26 @@
         }
 
         function renderSourceOptions() {
-            const currentValue = sourceSelect.value;
-            sourceSelect.innerHTML = '<option value="">Select source...</option>';
-            
-            sources.forEach(source => {
-                const option = document.createElement('option');
-                option.value = source.id;
-                option.textContent = source.title;
-                sourceSelect.appendChild(option);
-            });
-            
-            if (currentValue) {
-                sourceSelect.value = currentValue;
+            const currentValue = sourceSelect ? sourceSelect.value : '';
+            if (sourceSelect) {
+                sourceSelect.innerHTML = '<option value="">Select source...</option>';
+                
+                sources.forEach(source => {
+                    const option = document.createElement('option');
+                    option.value = source.id;
+                    option.textContent = source.title;
+                    sourceSelect.appendChild(option);
+                });
+                
+                if (currentValue) {
+                    sourceSelect.value = currentValue;
+                }
             }
         }
 
         function renderSources(sourcesToRender) {
+            if (!sourcesList) return;
+            
             if (sourcesToRender.length === 0) {
                 sourcesList.innerHTML = `
                     <div class="empty-state">
@@ -2211,25 +2232,35 @@
             e.preventDefault();
             
             const submitBtn = e.target.querySelector('.submit-btn');
+            if (!submitBtn) return;
+            
             const originalText = submitBtn.textContent;
             
             submitBtn.disabled = true;
             submitBtn.textContent = 'Saving...';
 
             try {
-                const title = document.getElementById('sourceTitle').value.trim();
+                const titleInput = document.getElementById('sourceTitle');
+                const urlInput = document.getElementById('sourceUrl');
+                const typeInput = document.getElementById('sourceType');
+                const dateInput = document.getElementById('sourceDate');
+                const dateNoteInput = document.getElementById('sourceDateNote');
+                const noteInput = document.getElementById('sourceNote');
+                const descriptionInput = document.getElementById('sourceDescription');
+
+                const title = titleInput ? titleInput.value.trim() : '';
                 if (!title) {
                     throw new Error('Title is required');
                 }
 
                 const sourceData = {
                     title,
-                    url: document.getElementById('sourceUrl').value.trim(),
-                    type: document.getElementById('sourceType').value,
-                    date: document.getElementById('sourceDate').value,
-                    dateNote: document.getElementById('sourceDateNote').value.trim(),
-                    note: document.getElementById('sourceNote').value.trim(),
-                    description: document.getElementById('sourceDescription').value.trim(),
+                    url: urlInput ? urlInput.value.trim() : '',
+                    type: typeInput ? typeInput.value : 'web',
+                    date: dateInput ? dateInput.value : '',
+                    dateNote: dateNoteInput ? dateNoteInput.value.trim() : '',
+                    note: noteInput ? noteInput.value.trim() : '',
+                    description: descriptionInput ? descriptionInput.value.trim() : '',
                     favicon: lastFetchedMetadata?.favicon || '',
                     tags: [...sourceTags]
                 };
@@ -2268,13 +2299,21 @@
 
             editingSourceId = sourceId;
             
-            document.getElementById('sourceTitle').value = source.title || '';
-            document.getElementById('sourceUrl').value = source.url || '';
-            document.getElementById('sourceType').value = source.type || 'web';
-            document.getElementById('sourceDate').value = source.date || '';
-            document.getElementById('sourceDateNote').value = source.dateNote || '';
-            document.getElementById('sourceNote').value = source.note || '';
-            document.getElementById('sourceDescription').value = source.description || '';
+            const titleInput = document.getElementById('sourceTitle');
+            const urlInput = document.getElementById('sourceUrl');
+            const typeInput = document.getElementById('sourceType');
+            const dateInput = document.getElementById('sourceDate');
+            const dateNoteInput = document.getElementById('sourceDateNote');
+            const noteInput = document.getElementById('sourceNote');
+            const descriptionInput = document.getElementById('sourceDescription');
+
+            if (titleInput) titleInput.value = source.title || '';
+            if (urlInput) urlInput.value = source.url || '';
+            if (typeInput) typeInput.value = source.type || 'web';
+            if (dateInput) dateInput.value = source.date || '';
+            if (dateNoteInput) dateNoteInput.value = source.dateNote || '';
+            if (noteInput) noteInput.value = source.note || '';
+            if (descriptionInput) descriptionInput.value = source.description || '';
             
             sourceTags = [...(source.tags || [])];
             renderSourceTags();
@@ -2292,7 +2331,8 @@
                 lastFetchedMetadata = metadata;
             }
             
-            document.querySelector('#sourceForm .submit-btn').textContent = 'Update Source';
+            const submitBtn = document.querySelector('#sourceForm .submit-btn');
+            if (submitBtn) submitBtn.textContent = 'Update Source';
             
             document.querySelectorAll('.source-card').forEach(card => {
                 card.classList.remove('editing');
@@ -2307,26 +2347,37 @@
                 targetCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
             
-            document.querySelector('.sources-form-section').scrollIntoView({ behavior: 'smooth' });
+            const formSection = document.querySelector('.sources-form-section');
+            if (formSection) formSection.scrollIntoView({ behavior: 'smooth' });
         }
 
         function cancelSourceEdit() {
             editingSourceId = null;
             clearSourceForm();
-            document.querySelector('#sourceForm .submit-btn').textContent = 'Save Source';
+            const submitBtn = document.querySelector('#sourceForm .submit-btn');
+            if (submitBtn) submitBtn.textContent = 'Save Source';
             document.querySelectorAll('.source-card').forEach(card => {
                 card.classList.remove('editing');
             });
         }
 
         function clearSourceForm() {
-            document.getElementById('sourceTitle').value = '';
-            document.getElementById('sourceUrl').value = '';
-            document.getElementById('sourceType').value = 'web';
-            document.getElementById('sourceDate').value = '';
-            document.getElementById('sourceDateNote').value = '';
-            document.getElementById('sourceNote').value = '';
-            document.getElementById('sourceDescription').value = '';
+            const titleInput = document.getElementById('sourceTitle');
+            const urlInput = document.getElementById('sourceUrl');
+            const typeInput = document.getElementById('sourceType');
+            const dateInput = document.getElementById('sourceDate');
+            const dateNoteInput = document.getElementById('sourceDateNote');
+            const noteInput = document.getElementById('sourceNote');
+            const descriptionInput = document.getElementById('sourceDescription');
+
+            if (titleInput) titleInput.value = '';
+            if (urlInput) urlInput.value = '';
+            if (typeInput) typeInput.value = 'web';
+            if (dateInput) dateInput.value = '';
+            if (dateNoteInput) dateNoteInput.value = '';
+            if (noteInput) noteInput.value = '';
+            if (descriptionInput) descriptionInput.value = '';
+            
             sourceTags = [];
             renderSourceTags();
             updateExistingTagsDisplay();
@@ -2482,6 +2533,8 @@
 
         // Render quotes
         function renderQuotes(quotesToRender) {
+            if (!quotesList) return;
+            
             if (quotesToRender.length === 0) {
                 quotesList.innerHTML = `
                     <div class="empty-state">
@@ -2547,13 +2600,13 @@
             const textHtml = quote.textHtml || quote.text || '';
             const speakerHtml = quote.speakerHtml || quote.speaker || '';
             
-            quoteTextEditor.innerHTML = textHtml;
-            speakerEditor.innerHTML = speakerHtml;
-            sourceSelect.value = quote.sourceId || '';
+            if (quoteTextEditor) quoteTextEditor.innerHTML = textHtml;
+            if (speakerEditor) speakerEditor.innerHTML = speakerHtml;
             quoteTags = [...(quote.tags || [])];
             renderQuoteTags();
             
-            document.querySelector('#quoteForm .submit-btn').textContent = 'Update Quote';
+            const submitBtn = document.querySelector('#quoteForm .submit-btn');
+            if (submitBtn) submitBtn.textContent = 'Update Quote';
             
             document.querySelectorAll('.quote-card').forEach(card => {
                 card.classList.remove('editing');
@@ -2568,7 +2621,8 @@
                 targetCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
             
-            document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+            const formSection = document.querySelector('.form-section');
+            if (formSection) formSection.scrollIntoView({ behavior: 'smooth' });
         }
 
         function deleteQuote(quoteId) {
@@ -2627,15 +2681,20 @@
             e.preventDefault();
             
             const submitBtn = e.target.querySelector('.submit-btn');
+            if (!submitBtn) return;
+            
             const originalText = submitBtn.textContent;
             
             submitBtn.disabled = true;
             submitBtn.textContent = 'Saving...';
 
             try {
+                if (!quoteTextEditor || !speakerEditor) {
+                    throw new Error('Quote form elements not found');
+                }
+
                 const quoteText = quoteTextEditor.innerHTML.trim();
                 const speakerText = speakerEditor.innerHTML.trim();
-                const sourceId = sourceSelect.value;
 
                 if (!quoteText || !speakerText) {
                     throw new Error('Quote and Citation are required');
@@ -2646,7 +2705,6 @@
                     textHtml: quoteText,
                     speaker: stripHtml(speakerText),
                     speakerHtml: speakerText,
-                    sourceId: sourceId,
                     tags: [...quoteTags]
                 };
 
@@ -2673,9 +2731,8 @@
         }
 
         function clearQuoteForm() {
-            quoteTextEditor.innerHTML = '';
-            speakerEditor.innerHTML = '';
-            sourceSelect.value = '';
+            if (quoteTextEditor) quoteTextEditor.innerHTML = '';
+            if (speakerEditor) speakerEditor.innerHTML = '';
             quoteTags = [];
             renderQuoteTags();
         }
@@ -2683,7 +2740,8 @@
         function cancelQuoteEdit() {
             editingQuoteId = null;
             clearQuoteForm();
-            document.querySelector('#quoteForm .submit-btn').textContent = 'Save Quote';
+            const submitBtn = document.querySelector('#quoteForm .submit-btn');
+            if (submitBtn) submitBtn.textContent = 'Save Quote';
             document.querySelectorAll('.quote-card').forEach(card => {
                 card.classList.remove('editing');
             });
@@ -3394,6 +3452,8 @@
         }
 
         function renderTagsInContainer(tagsArray, container, input, removeFunction) {
+            if (!container || !input) return;
+            
             const existingTags = container.querySelectorAll('.tag');
             existingTags.forEach(tag => tag.remove());
 
@@ -3417,11 +3477,11 @@
         }
 
         function focusTagInput() {
-            tagInput.focus();
+            if (tagInput) tagInput.focus();
         }
 
         function focusSourceTagInput() {
-            sourceTagInput.focus();
+            if (sourceTagInput) sourceTagInput.focus();
         }
 
         // Link modal functions
@@ -3505,21 +3565,25 @@
 
         // Utility functions
         function updateQuotesCount() {
-            quotesCount.textContent = quotes.length;
+            if (quotesCount) quotesCount.textContent = quotes.length;
         }
 
         function updateSourcesCount() {
-            sourcesCount.textContent = sources.length;
+            if (sourcesCount) sourcesCount.textContent = sources.length;
         }
 
         function showMessage(message, type) {
-            statusMessage.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
-            setTimeout(() => statusMessage.innerHTML = '', 5000);
+            if (statusMessage) {
+                statusMessage.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
+                setTimeout(() => statusMessage.innerHTML = '', 5000);
+            }
         }
 
         function showSourceMessage(message, type) {
-            sourceStatusMessage.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
-            setTimeout(() => sourceStatusMessage.innerHTML = '', 5000);
+            if (sourceStatusMessage) {
+                sourceStatusMessage.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
+                setTimeout(() => sourceStatusMessage.innerHTML = '', 5000);
+            }
         }
 
         function escapeHtml(text) {
