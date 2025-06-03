@@ -1,0 +1,2505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fafafa;
+            min-height: 100vh;
+            padding: 20px;
+            color: #2c2c2c;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e5e5e5;
+            overflow: hidden;
+        }
+
+        .header {
+            background: white;
+            color: #2c2c2c;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #2c2c2c;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            min-height: 600px;
+        }
+
+        .form-section {
+            padding: 30px;
+            border-right: 1px solid #e5e5e5;
+            background: #fbfbfb;
+        }
+
+        .quotes-section {
+            padding: 30px;
+            background: white;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #374151;
+            font-size: 0.9rem;
+        }
+
+        .editable-content {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px 16px;
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: white;
+            outline: none;
+            transition: all 0.2s ease;
+            line-height: 1.5;
+        }
+
+        .editable-content.quote-editor {
+            min-height: 120px;
+        }
+
+        .editable-content:focus {
+            border-color: #666;
+            box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.1);
+        }
+
+        .editable-content[contenteditable="true"]:empty:before {
+            content: attr(placeholder);
+            color: #999;
+            font-style: italic;
+        }
+
+        .editable-content a {
+            color: #0066cc;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .editable-content a:hover {
+            background: rgba(0, 102, 204, 0.1);
+        }
+
+        .source-selector {
+            display: flex;
+            gap: 8px;
+            align-items: stretch;
+            width: 100%;
+        }
+
+        .source-dropdown {
+            flex: 1;
+            min-width: 0;
+            padding: 12px 16px;
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+        }
+
+        .source-dropdown:focus {
+            outline: none;
+            border-color: #666;
+            box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.1);
+        }
+
+        .add-source-btn {
+            padding: 12px 12px;
+            background: #2c2c2c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+            min-width: 50px;
+        }
+
+        .add-source-btn:hover {
+            background: #1a1a1a;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            background: white;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #666;
+            box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.1);
+        }
+
+        .tags-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            min-height: 40px;
+            padding: 8px;
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+            background: white;
+            cursor: text;
+        }
+
+        .tags-input:focus-within {
+            border-color: #666;
+            box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.1);
+        }
+
+        .tag {
+            background: #2c2c2c;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tag-remove {
+            cursor: pointer;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        .tag-input {
+            border: none;
+            outline: none;
+            flex: 1;
+            min-width: 80px;
+            padding: 6px 4px;
+            font-size: 0.9rem;
+        }
+
+        .submit-btn {
+            background: #2c2c2c;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            background: #1a1a1a;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .quotes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .quotes-header h2 {
+            color: #374151;
+            font-size: 1.3rem;
+            font-weight: 500;
+        }
+
+        .quotes-count {
+            background: #2c2c2c;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 10px 16px;
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            background: white;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #666;
+            box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.1);
+        }
+
+        .quotes-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .quote-card {
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .quote-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-color: #d1d1d1;
+        }
+
+        .quote-card.editing {
+            border-color: #0066cc;
+            box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+        }
+
+        .quote-clickable {
+            cursor: pointer;
+        }
+
+        .quote-clickable:hover {
+            background: rgba(0, 102, 204, 0.02);
+        }
+
+        .quote-text {
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #374151;
+            margin-bottom: 12px;
+            font-style: italic;
+        }
+
+        .quote-text a,
+        .quote-speaker a {
+            color: #0066cc;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quote-text a:hover,
+        .quote-speaker a:hover {
+            background: rgba(0, 102, 204, 0.1);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .quote-speaker {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .quote-speaker .bulk-edit-btn {
+            position: absolute;
+            right: 0;
+            top: 0;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            background: #f0f0f0;
+            border: 1px solid #d1d1d1;
+            border-radius: 3px;
+            padding: 2px 6px;
+            font-size: 10px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .quote-card:hover .quote-speaker .bulk-edit-btn {
+            opacity: 1;
+        }
+
+        .bulk-edit-btn:hover {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .quote-source {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 8px;
+            background: #f8f8f8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .quote-source .bulk-edit-btn {
+            margin-left: 8px;
+            background: #e8e8e8;
+            border: 1px solid #d1d1d1;
+            border-radius: 3px;
+            padding: 2px 6px;
+            font-size: 10px;
+            cursor: pointer;
+            color: #666;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .quote-card:hover .quote-source .bulk-edit-btn {
+            opacity: 1;
+        }
+
+        .quote-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .quote-tag {
+            background: #f0f0f0;
+            color: #666;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+        }
+
+        .quote-actions {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            display: flex;
+            gap: 8px;
+        }
+
+        .quote-card:hover .quote-actions {
+            opacity: 1;
+        }
+
+        .action-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: #f0f0f0;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: #666;
+            color: white;
+        }
+
+        .status-message {
+            padding: 10px 16px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .status-success {
+            background: #f0f9f0;
+            color: #2d5d2d;
+            border: 1px solid #b8e6b8;
+        }
+
+        .status-error {
+            background: #fdf2f2;
+            color: #8b2635;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status-info {
+            background: #f0f8ff;
+            color: #1e3a8a;
+            border: 1px solid #93c5fd;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6b7280;
+        }
+
+        .empty-state p {
+            margin: 8px 0;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 0;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #2c2c2c;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: #0066cc;
+            box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+        }
+
+        .modal-actions {
+            padding: 15px 20px 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-btn.primary {
+            background: #0066cc;
+            color: white;
+        }
+
+        .modal-btn.secondary {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-section {
+                border-right: none;
+                border-bottom: 1px solid #e5e5e5;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Quote Manager</h1>
+        </header>
+
+        <main class="main-content">
+            <section class="form-section">
+                <div id="statusMessage"></div>
+                
+                <form id="quoteForm">
+                    <div class="form-group">
+                        <label for="quoteText">Quote *</label>
+                        <div id="quoteText" 
+                             class="editable-content quote-editor" 
+                             contenteditable="true" 
+                             placeholder="Enter your quote here... Press Cmd+K to add links"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="speaker">Citation *</label>
+                        <div id="speaker" 
+                             class="editable-content" 
+                             contenteditable="true" 
+                             placeholder="Citation... You can also add links with Cmd+K"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="source">Source</label>
+                        <div class="source-selector">
+                            <select id="sourceSelect" class="source-dropdown">
+                                <option value="">Select source...</option>
+                            </select>
+                            <button type="button" class="add-source-btn" onclick="showAddSourceModal()">+ Add</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tags">Tags</label>
+                        <div class="tags-input" onclick="focusTagInput()">
+                            <input type="text" class="tag-input" id="tagInput" placeholder="Press Enter to add tags...">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Save Quote</button>
+                </form>
+            </section>
+
+            <section class="quotes-section">
+                <div class="quotes-header">
+                    <h2>Quotes</h2>
+                    <span class="quotes-count" id="quotesCount">0</span>
+                </div>
+
+                <input type="text" class="search-box" id="searchBox" placeholder="Search quotes...">
+
+                <div class="quotes-list" id="quotesList">
+                    <div class="empty-state">
+                        <p>📝 No quotes yet</p>
+                        <p>Add your first quote</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Link Modal -->
+    <div class="modal" id="linkModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Add Link</div>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label class="input-label">Text</label>
+                    <input type="text" class="modal-input" id="linkText" placeholder="Link text">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">URL</label>
+                    <input type="url" class="modal-input" id="linkUrl" placeholder="https://...">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn secondary" onclick="closeLinkModal()">Cancel</button>
+                <button class="modal-btn primary" onclick="insertLink()">Insert</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Source Modal -->
+    <div class="modal" id="addSourceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Add New Source</div>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label class="input-label">Source Title *</label>
+                    <input type="text" class="modal-input" id="sourceTitle" placeholder="e.g., Stanford Lecture, TED Talk, Book...">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">URL (optional)</label>
+                    <input type="url" class="modal-input" id="sourceUrl" placeholder="https://...">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Type</label>
+                    <select class="modal-input" id="sourceType">
+                        <option value="web">Web</option>
+                        <option value="youtube">YouTube</option>
+                        <option value="document">Document</option>
+                        <option value="book">Book</option>
+                        <option value="podcast">Podcast</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn secondary" onclick="closeAddSourceModal()">Cancel</button>
+                <button class="modal-btn primary" onclick="addNewSource()">Add Source</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Citation Edit Options Modal -->
+    <div class="modal" id="speakerEditOptionsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Edit Citation Options</div>
+            </div>
+            <div class="modal-body">
+                <p>How would you like to edit this citation?</p>
+                <div style="margin: 20px 0;">
+                    <strong>Current Citation:</strong> <span id="currentSpeakerPreview"></span>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 15px; margin: 20px 0;">
+                    <button class="modal-btn primary" onclick="editSingleSpeaker()" style="text-align: left; padding: 15px;">
+                        <strong>Edit only this quote</strong><br>
+                        <small style="opacity: 0.8;">Change citation for this quote only</small>
+                    </button>
+                    
+                    <button class="modal-btn primary" onclick="editAllSpeakersWithSameName()" style="text-align: left; padding: 15px;">
+                        <strong>Edit all quotes with this citation</strong><br>
+                        <small style="opacity: 0.8;">Change citation for <span id="sameNameCount">0</span> quotes with identical citation</small>
+                    </button>
+                    
+                    <button class="modal-btn primary" onclick="editAllSpeakersFromSameSource()" style="text-align: left; padding: 15px;" id="sameSourceOption">
+                        <strong>Edit all quotes from the same source</strong><br>
+                        <small style="opacity: 0.8;">Change citation for <span id="sameSourceCount">0</span> quotes from "<span id="currentSourceName"></span>"</small>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn secondary" onclick="closeSpeakerEditOptionsModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Citation Edit Modal -->
+    <div class="modal" id="enhancedSpeakerEditModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="speakerEditTitle">Edit Citation</div>
+            </div>
+            <div class="modal-body">
+                <p id="speakerEditDescription">This will update the citation text while preserving any embedded links.</p>
+                
+                <div class="input-group">
+                    <label class="input-label">Current Citation (with links)</label>
+                    <div id="currentSpeakerWithLinks" style="background: #f8f8f8; padding: 10px; border-radius: 4px; border: 1px solid #e0e0e0; margin-bottom: 10px;"></div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">New Citation Text *</label>
+                    <input type="text" class="modal-input" id="newSpeakerText" placeholder="Enter new citation text">
+                </div>
+                
+                <div class="input-group" id="linkHandlingGroup" style="display: none;">
+                    <label class="input-label">Link Handling</label>
+                    <div style="margin: 8px 0;">
+                        <label style="display: flex; align-items: center; margin-bottom: 8px; font-weight: normal;">
+                            <input type="radio" name="linkHandling" value="preserve" checked style="margin-right: 8px;">
+                            Preserve all links (append to end)
+                        </label>
+                        <label style="display: flex; align-items: center; margin-bottom: 8px; font-weight: normal;">
+                            <input type="radio" name="linkHandling" value="remove" style="margin-right: 8px;">
+                            Remove all links (text only)
+                        </label>
+                        <label style="display: flex; align-items: center; font-weight: normal;">
+                            <input type="radio" name="linkHandling" value="smart" style="margin-right: 8px;">
+                            Smart replacement (preserve if text matches)
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Preview</label>
+                    <div id="speakerPreview" style="background: #f0f8ff; padding: 10px; border-radius: 4px; border: 1px solid #b3d9ff; font-style: italic; min-height: 40px;"></div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn secondary" onclick="closeEnhancedSpeakerEditModal()">Cancel</button>
+                <button class="modal-btn primary" onclick="executeEnhancedSpeakerEdit()">Update Citation(s)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Source Modal -->
+    <div class="modal" id="editSourceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Edit Source</div>
+            </div>
+            <div class="modal-body">
+                <p>This will update the source for <strong id="sourceQuoteCount">0</strong> quotes.</p>
+                <div class="input-group">
+                    <label class="input-label">Source Title *</label>
+                    <input type="text" class="modal-input" id="editSourceTitle">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">URL (optional)</label>
+                    <input type="url" class="modal-input" id="editSourceUrl">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Type</label>
+                    <select class="modal-input" id="editSourceType">
+                        <option value="web">Web</option>
+                        <option value="youtube">YouTube</option>
+                        <option value="document">Document</option>
+                        <option value="book">Book</option>
+                        <option value="podcast">Podcast</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn secondary" onclick="closeEditSourceModal()">Cancel</button>
+                <button class="modal-btn primary" onclick="updateSource()">Update Source</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/neo4j-driver@5/lib/browser/neo4j-web.min.js"></script>
+    <script>
+        // Configuration
+        const NEO4J_URI = "neo4j+s://e5d00669.databases.neo4j.io";
+        const NEO4J_USER = "neo4j";
+        const NEO4J_PASSWORD = "Ol59FQKG3YzEGi-o9R0LAMsvEFZcsf_vjXVVCVM9RMI";
+
+        // State
+        let driver = null;
+        let isConnected = false;
+        let quotes = [];
+        let sources = [];
+        let tags = [];
+        let currentUser = 'researcher_' + Date.now();
+        let activeEditor = null;
+        let currentSelection = null;
+        let editingQuoteId = null;
+        let currentEditingSpeaker = null;
+        let currentEditingSourceId = null;
+        let currentEditingQuoteForSpeaker = null;
+        let speakerEditMode = null;
+
+        // DOM elements
+        const quoteForm = document.getElementById('quoteForm');
+        const quotesList = document.getElementById('quotesList');
+        const quotesCount = document.getElementById('quotesCount');
+        const searchBox = document.getElementById('searchBox');
+        const tagInput = document.getElementById('tagInput');
+        const tagsContainer = tagInput.parentElement;
+        const statusMessage = document.getElementById('statusMessage');
+        const quoteTextEditor = document.getElementById('quoteText');
+        const speakerEditor = document.getElementById('speaker');
+        const sourceSelect = document.getElementById('sourceSelect');
+
+        // Initialize with safer integer handling
+        document.addEventListener('DOMContentLoaded', async function() {
+            await initializeDatabase();
+            setupEventListeners();
+            await loadData();
+        });
+
+        // Database connection with proper integer handling
+        async function initializeDatabase() {
+            try {
+                showMessage('🔄 Connecting...', 'info');
+                
+                driver = neo4j.driver(
+                    NEO4J_URI,
+                    neo4j.auth.basic(NEO4J_USER, NEO4J_PASSWORD),
+                    { 
+                        disableLosslessIntegers: true,
+                        // Force integers to be returned as JavaScript numbers
+                        config: {
+                            trust: 'TRUST_ALL_CERTIFICATES'
+                        }
+                    }
+                );
+
+                await driver.verifyConnectivity();
+                isConnected = true;
+                showMessage('✅ Connected to Neo4j', 'success');
+                await ensureConstraints();
+                
+            } catch (error) {
+                console.error('Connection error:', error);
+                isConnected = false;
+                showMessage('📱 Local mode', 'info');
+            }
+        }
+
+        async function ensureConstraints() {
+            if (!isConnected) return;
+            const session = driver.session();
+            try {
+                await session.run('CREATE CONSTRAINT quote_id IF NOT EXISTS FOR (q:Quote) REQUIRE q.id IS UNIQUE');
+                await session.run('CREATE CONSTRAINT source_id IF NOT EXISTS FOR (s:Source) REQUIRE s.id IS UNIQUE');
+            } catch (e) {
+                // Constraints already exist
+            } finally {
+                await session.close();
+            }
+        }
+
+        // Setup event listeners for live preview updates
+        function setupEventListeners() {
+            quoteForm.addEventListener('submit', handleSubmit);
+            searchBox.addEventListener('input', handleSearch);
+            tagInput.addEventListener('keydown', handleTagInput);
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                    e.preventDefault();
+                    if (activeEditor) {
+                        showLinkModal();
+                    }
+                }
+
+                if (e.key === 'Escape') {
+                    closeLinkModal();
+                    closeAddSourceModal();
+                    closeSpeakerEditOptionsModal();
+                    closeEnhancedSpeakerEditModal();
+                    closeEditSourceModal();
+                    if (editingQuoteId) {
+                        cancelEdit();
+                    }
+                }
+            });
+
+            // Track active editor
+            quoteTextEditor.addEventListener('focus', () => activeEditor = quoteTextEditor);
+            speakerEditor.addEventListener('focus', () => activeEditor = speakerEditor);
+            
+            // Live preview for speaker editing
+            document.addEventListener('input', (e) => {
+                if (e.target.id === 'newSpeakerText') {
+                    updateSpeakerPreview();
+                }
+            });
+            
+            // Live preview for link handling radio buttons
+            document.addEventListener('change', (e) => {
+                if (e.target.name === 'linkHandling') {
+                    updateSpeakerPreview();
+                }
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.editable-content')) {
+                    activeEditor = null;
+                }
+            });
+
+            // Modal events
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.remove('show');
+                    }
+                });
+            });
+        }
+
+        // Load data
+        async function loadData() {
+            await Promise.all([
+                loadSources(),
+                loadQuotes()
+            ]);
+        }
+
+        // Sources management
+        async function loadSources() {
+            if (!isConnected) {
+                return loadSourcesLocally();
+            }
+
+            const session = driver.session();
+            try {
+                const result = await session.run(`
+                    MATCH (s:Source)
+                    RETURN s {.id, .title, .url, .type}
+                    ORDER BY s.title ASC
+                `);
+                
+                sources = result.records.map(record => record.get('s'));
+                renderSourceOptions();
+                
+            } catch (error) {
+                console.error('Error loading sources:', error);
+                loadSourcesLocally();
+            } finally {
+                await session.close();
+            }
+        }
+
+        function loadSourcesLocally() {
+            sources = JSON.parse(localStorage.getItem('rsrch_sources') || '[]');
+            renderSourceOptions();
+        }
+
+        function renderSourceOptions() {
+            const currentValue = sourceSelect.value;
+            sourceSelect.innerHTML = '<option value="">Select source...</option>';
+            
+            sources.forEach(source => {
+                const option = document.createElement('option');
+                option.value = source.id;
+                option.textContent = source.title;
+                sourceSelect.appendChild(option);
+            });
+            
+            if (currentValue) {
+                sourceSelect.value = currentValue;
+            }
+        }
+
+        async function saveSource(sourceData) {
+            if (!isConnected) {
+                return saveSourceLocally(sourceData);
+            }
+
+            const session = driver.session();
+            try {
+                const result = await session.run(`
+                    CREATE (s:Source {
+                        id: randomUUID(),
+                        title: $title,
+                        url: $url,
+                        type: $type,
+                        createdBy: $createdBy,
+                        createdAt: datetime()
+                    })
+                    RETURN s.id as id
+                `, {
+                    title: sourceData.title,
+                    url: sourceData.url || '',
+                    type: sourceData.type || 'document',
+                    createdBy: currentUser
+                });
+
+                return result.records[0].get('id');
+                
+            } catch (error) {
+                throw new Error('Error saving source: ' + error.message);
+            } finally {
+                await session.close();
+            }
+        }
+
+        function saveSourceLocally(sourceData) {
+            const newSource = {
+                id: 'source_' + Date.now(),
+                title: sourceData.title,
+                url: sourceData.url || '',
+                type: sourceData.type || 'document',
+                createdBy: currentUser,
+                createdAt: new Date().toISOString()
+            };
+            
+            sources.push(newSource);
+            localStorage.setItem('rsrch_sources', JSON.stringify(sources));
+            return newSource.id;
+        }
+
+        // Source modal functions
+        function showAddSourceModal() {
+            document.getElementById('sourceTitle').value = '';
+            document.getElementById('sourceUrl').value = '';
+            document.getElementById('sourceType').value = 'web';
+            document.getElementById('addSourceModal').classList.add('show');
+            
+            setTimeout(() => {
+                document.getElementById('sourceTitle').focus();
+            }, 100);
+        }
+
+        function closeAddSourceModal() {
+            document.getElementById('addSourceModal').classList.remove('show');
+        }
+
+        async function addNewSource() {
+            const title = document.getElementById('sourceTitle').value.trim();
+            const url = document.getElementById('sourceUrl').value.trim();
+            const type = document.getElementById('sourceType').value;
+            
+            if (!title) {
+                alert('Please enter a source title');
+                return;
+            }
+
+            try {
+                const sourceId = await saveSource({ title, url, type });
+                
+                const newSource = { id: sourceId, title, url, type };
+                sources.push(newSource);
+                
+                renderSourceOptions();
+                sourceSelect.value = sourceId;
+                
+                closeAddSourceModal();
+                showMessage('✅ Source added', 'success');
+                
+            } catch (error) {
+                console.error('Error adding source:', error);
+                showMessage('❌ Error adding source', 'error');
+            }
+        }
+
+        // Tag management
+        function handleTagInput(e) {
+            if (e.key === 'Enter' && tagInput.value.trim()) {
+                e.preventDefault();
+                addTag(tagInput.value.trim());
+                tagInput.value = '';
+            } else if (e.key === 'Backspace' && !tagInput.value && tags.length > 0) {
+                removeTag(tags.length - 1);
+            }
+        }
+
+        function addTag(tagText) {
+            if (!tags.includes(tagText) && tagText.length > 0) {
+                tags.push(tagText);
+                renderTags();
+            }
+        }
+
+        function removeTag(index) {
+            tags.splice(index, 1);
+            renderTags();
+        }
+
+        function renderTags() {
+            const existingTags = tagsContainer.querySelectorAll('.tag');
+            existingTags.forEach(tag => tag.remove());
+
+            tags.forEach((tag, index) => {
+                const tagElement = document.createElement('div');
+                tagElement.className = 'tag';
+                tagElement.innerHTML = `
+                    ${escapeHtml(tag)}
+                    <span class="tag-remove" onclick="removeTag(${index})">×</span>
+                `;
+                tagsContainer.insertBefore(tagElement, tagInput);
+            });
+        }
+
+        function focusTagInput() {
+            tagInput.focus();
+        }
+
+        // Form submission
+        async function handleSubmit(e) {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Saving...';
+
+            try {
+                const quoteText = quoteTextEditor.innerHTML.trim();
+                const speakerText = speakerEditor.innerHTML.trim();
+                const sourceId = sourceSelect.value;
+
+                if (!quoteText || !speakerText) {
+                    throw new Error('Quote and Citation are required');
+                }
+
+                const quoteData = {
+                    text: quoteText,
+                    speaker: speakerText,
+                    sourceId: sourceId,
+                    tags: [...tags],
+                    createdBy: currentUser
+                };
+
+                if (editingQuoteId) {
+                    await updateQuote(editingQuoteId, quoteData);
+                    showMessage('✅ Quote updated', 'success');
+                    cancelEdit();
+                } else {
+                    await saveQuote(quoteData);
+                    showMessage('✅ Quote saved', 'success');
+                    clearForm();
+                }
+                
+                await loadQuotes();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('❌ Error: ' + error.message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        }
+
+        function clearForm() {
+            quoteTextEditor.innerHTML = '';
+            speakerEditor.innerHTML = '';
+            sourceSelect.value = '';
+            tags = [];
+            renderTags();
+        }
+
+        function cancelEdit() {
+            editingQuoteId = null;
+            clearForm();
+            document.querySelector('.submit-btn').textContent = 'Save Quote';
+            document.querySelectorAll('.quote-card').forEach(card => {
+                card.classList.remove('editing');
+            });
+        }
+
+        // Database operations for quotes
+        async function saveQuote(quoteData) {
+            if (!isConnected) {
+                return saveQuoteLocally(quoteData);
+            }
+
+            const session = driver.session();
+            try {
+                const mockEmbedding = Array.from({length: 1536}, () => Math.random() - 0.5);
+                
+                const query = quoteData.sourceId ? `
+                    MATCH (s:Source {id: $sourceId})
+                    CREATE (q:Quote {
+                        id: randomUUID(),
+                        text: $text,
+                        textHtml: $textHtml,
+                        shortText: substring($textPlain, 0, 120),
+                        author: $speakerPlain,
+                        speaker: $speakerPlain,
+                        speakerHtml: $speakerHtml,
+                        tags: $tags,
+                        embedding: $embedding,
+                        createdBy: $createdBy,
+                        createdAt: datetime(),
+                        isArchived: false
+                    })
+                    CREATE (q)-[:CITES_SOURCE]->(s)
+                ` : `
+                    CREATE (q:Quote {
+                        id: randomUUID(),
+                        text: $text,
+                        textHtml: $textHtml,
+                        shortText: substring($textPlain, 0, 120),
+                        author: $speakerPlain,
+                        speaker: $speakerPlain,
+                        speakerHtml: $speakerHtml,
+                        tags: $tags,
+                        embedding: $embedding,
+                        createdBy: $createdBy,
+                        createdAt: datetime(),
+                        isArchived: false
+                    })
+                `;
+                
+                await session.run(query, {
+                    text: stripHtml(quoteData.text),
+                    textHtml: quoteData.text,
+                    textPlain: stripHtml(quoteData.text),
+                    speakerPlain: stripHtml(quoteData.speaker),
+                    speakerHtml: quoteData.speaker,
+                    sourceId: quoteData.sourceId,
+                    tags: quoteData.tags,
+                    embedding: mockEmbedding,
+                    createdBy: quoteData.createdBy
+                });
+                
+            } catch (error) {
+                throw new Error('Error saving quote: ' + error.message);
+            } finally {
+                await session.close();
+            }
+        }
+
+        async function updateQuote(quoteId, quoteData) {
+            if (!isConnected) {
+                return updateQuoteLocally(quoteId, quoteData);
+            }
+
+            const session = driver.session();
+            try {
+                await session.run(`
+                    MATCH (q:Quote {id: $id})
+                    SET q.text = $text,
+                        q.textHtml = $textHtml,
+                        q.shortText = substring($textPlain, 0, 120),
+                        q.author = $speakerPlain,
+                        q.speaker = $speakerPlain,
+                        q.speakerHtml = $speakerHtml,
+                        q.tags = $tags,
+                        q.lastModified = datetime()
+                `, {
+                    id: quoteId,
+                    text: stripHtml(quoteData.text),
+                    textHtml: quoteData.text,
+                    textPlain: stripHtml(quoteData.text),
+                    speakerPlain: stripHtml(quoteData.speaker),
+                    speakerHtml: quoteData.speaker,
+                    tags: quoteData.tags
+                });
+
+                await session.run(`
+                    MATCH (q:Quote {id: $id})
+                    OPTIONAL MATCH (q)-[r:CITES_SOURCE]->()
+                    DELETE r
+                `, { id: quoteId });
+
+                if (quoteData.sourceId) {
+                    await session.run(`
+                        MATCH (q:Quote {id: $quoteId}), (s:Source {id: $sourceId})
+                        CREATE (q)-[:CITES_SOURCE]->(s)
+                    `, {
+                        quoteId: quoteId,
+                        sourceId: quoteData.sourceId
+                    });
+                }
+                
+            } catch (error) {
+                throw new Error('Error updating quote: ' + error.message);
+            } finally {
+                await session.close();
+            }
+        }
+
+        async function deleteQuote(quoteId) {
+            if (!confirm('Delete this quote?')) return;
+
+            if (!isConnected) {
+                return deleteQuoteLocally(quoteId);
+            }
+
+            const session = driver.session();
+            try {
+                await session.run('MATCH (q:Quote {id: $id}) DETACH DELETE q', { id: quoteId });
+                await loadQuotes();
+                showMessage('✅ Quote deleted', 'success');
+            } catch (error) {
+                showMessage('❌ Error deleting quote', 'error');
+            } finally {
+                await session.close();
+            }
+        }
+
+        // Local storage fallbacks
+        function saveQuoteLocally(quoteData) {
+            const newQuote = {
+                id: 'quote_' + Date.now(),
+                text: stripHtml(quoteData.text),
+                textHtml: quoteData.text,
+                speaker: stripHtml(quoteData.speaker),
+                speakerHtml: quoteData.speaker,
+                sourceId: quoteData.sourceId,
+                tags: quoteData.tags,
+                createdAt: new Date().toISOString(),
+                createdBy: quoteData.createdBy
+            };
+            
+            let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
+            savedQuotes.unshift(newQuote);
+            localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
+        }
+
+        function updateQuoteLocally(quoteId, quoteData) {
+            let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
+            const index = savedQuotes.findIndex(q => q.id === quoteId);
+            if (index !== -1) {
+                savedQuotes[index] = {
+                    ...savedQuotes[index],
+                    text: stripHtml(quoteData.text),
+                    textHtml: quoteData.text,
+                    speaker: stripHtml(quoteData.speaker),
+                    speakerHtml: quoteData.speaker,
+                    sourceId: quoteData.sourceId,
+                    tags: quoteData.tags,
+                    lastModified: new Date().toISOString()
+                };
+                localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
+            }
+        }
+
+        function deleteQuoteLocally(quoteId) {
+            let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
+            savedQuotes = savedQuotes.filter(q => q.id !== quoteId);
+            localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
+            loadQuotesLocally();
+            showMessage('✅ Quote deleted', 'success');
+        }
+
+        // Load quotes
+        async function loadQuotes() {
+            if (!isConnected) {
+                return loadQuotesLocally();
+            }
+
+            const session = driver.session();
+            try {
+                const result = await session.run(`
+                    MATCH (q:Quote)
+                    WHERE q.isArchived = false OR q.isArchived IS NULL
+                    OPTIONAL MATCH (q)-[:CITES_SOURCE]->(s:Source)
+                    RETURN q {
+                        .id, .text, .textHtml, .author, .speaker, .speakerHtml, .tags, .createdAt
+                    }, s {.id, .title} as source
+                    ORDER BY q.createdAt DESC
+                    LIMIT 200
+                `);
+                
+                quotes = result.records.map(record => {
+                    const q = record.get('q');
+                    const source = record.get('source');
+                    
+                    const textHtml = q.textHtml || q.text || '';
+                    const speakerText = q.speaker || q.author || 'Unknown';
+                    const speakerHtml = q.speakerHtml || speakerText;
+                    
+                    return {
+                        id: q.id,
+                        text: q.text || '',
+                        textHtml: textHtml,
+                        speaker: speakerText,
+                        speakerHtml: speakerHtml,
+                        sourceId: source ? source.id : null,
+                        sourceTitle: source ? source.title : null,
+                        tags: q.tags || [],
+                        createdAt: q.createdAt || new Date().toISOString()
+                    };
+                });
+                
+                renderQuotes(quotes);
+                updateQuotesCount();
+                
+            } catch (error) {
+                console.error('Error loading quotes:', error);
+                loadQuotesLocally();
+            } finally {
+                await session.close();
+            }
+        }
+
+        function loadQuotesLocally() {
+            try {
+                const savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
+                quotes = savedQuotes.map(q => ({
+                    ...q,
+                    textHtml: q.textHtml || q.text,
+                    speakerHtml: q.speakerHtml || q.speaker,
+                    sourceTitle: q.sourceId ? sources.find(s => s.id === q.sourceId)?.title : null
+                }));
+                renderQuotes(quotes);
+                updateQuotesCount();
+            } catch (error) {
+                quotes = [];
+                renderQuotes(quotes);
+                updateQuotesCount();
+            }
+        }
+
+        // Render quotes
+        function renderQuotes(quotesToRender) {
+            if (quotesToRender.length === 0) {
+                quotesList.innerHTML = `
+                    <div class="empty-state">
+                        <p>📝 No quotes yet</p>
+                        <p>Add your first quote</p>
+                    </div>
+                `;
+                return;
+            }
+
+            quotesList.innerHTML = quotesToRender.map(quote => {
+                const quoteId = escapeHtml(quote.id);
+                const sourceId = quote.sourceId ? escapeHtml(quote.sourceId) : '';
+                const quoteTextHtml = quote.textHtml || quote.text || '';
+                const speakerHtml = quote.speakerHtml || quote.speaker || '';
+                const sourceTitle = quote.sourceTitle ? escapeHtml(quote.sourceTitle) : '';
+                
+                return `
+                    <div class="quote-card ${editingQuoteId === quote.id ? 'editing' : ''}">
+                        <div class="quote-actions">
+                            <button class="action-btn" onclick="editQuote('${quoteId}')" title="Edit">✏️</button>
+                            <button class="action-btn" onclick="deleteQuote('${quoteId}')" title="Delete">🗑️</button>
+                        </div>
+                        <div class="quote-text quote-clickable" onclick="handleTextClick(event, '${quoteId}')">"${quoteTextHtml}"</div>
+                        <div class="quote-speaker quote-clickable" onclick="handleTextClick(event, '${quoteId}')">
+                            — ${speakerHtml}
+                            <button class="bulk-edit-btn" onclick="event.stopPropagation(); showSpeakerEditOptions('${quoteId}')">Edit</button>
+                        </div>
+                        ${quote.sourceTitle ? `
+                            <div class="quote-source">
+                                📚 ${sourceTitle}
+                                <button class="bulk-edit-btn" onclick="event.stopPropagation(); showEditSource('${sourceId}')">Edit Source</button>
+                            </div>
+                        ` : ''}
+                        ${quote.tags && quote.tags.length > 0 ? `
+                            <div class="quote-tags">
+                                ${quote.tags.map(tag => `<span class="quote-tag">${escapeHtml(tag)}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function handleTextClick(event, quoteId) {
+            if (event.target.tagName === 'A' || event.target.closest('a')) {
+                event.stopPropagation();
+                return;
+            }
+            editQuote(quoteId);
+        }
+
+        function editQuote(quoteId) {
+            if (editingQuoteId === quoteId) return;
+
+            const quote = quotes.find(q => q.id === quoteId);
+            if (!quote) return;
+
+            editingQuoteId = quoteId;
+            
+            const textHtml = quote.textHtml || quote.text || '';
+            const speakerHtml = quote.speakerHtml || quote.speaker || '';
+            
+            quoteTextEditor.innerHTML = textHtml;
+            speakerEditor.innerHTML = speakerHtml;
+            sourceSelect.value = quote.sourceId || '';
+            tags = [...(quote.tags || [])];
+            renderTags();
+            
+            document.querySelector('.submit-btn').textContent = 'Update Quote';
+            
+            document.querySelectorAll('.quote-card').forEach(card => {
+                card.classList.remove('editing');
+            });
+            
+            const targetCard = Array.from(document.querySelectorAll('.quote-card')).find(card => {
+                const editButton = card.querySelector('.action-btn[onclick*="editQuote"]');
+                return editButton && editButton.getAttribute('onclick').includes(quoteId);
+            });
+            
+            if (targetCard) {
+                targetCard.classList.add('editing');
+            }
+            
+            document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function handleSearch(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredQuotes = quotes.filter(quote => {
+                const quoteText = (quote.text || '').toLowerCase();
+                const speakerText = (quote.speaker || '').toLowerCase();
+                const speakerHtmlText = quote.speakerHtml ? stripHtml(quote.speakerHtml).toLowerCase() : '';
+                const sourceTitle = (quote.sourceTitle || '').toLowerCase();
+                const tagsText = (quote.tags || []).join(' ').toLowerCase();
+                
+                return quoteText.includes(searchTerm) ||
+                       speakerText.includes(searchTerm) ||
+                       speakerHtmlText.includes(searchTerm) ||
+                       sourceTitle.includes(searchTerm) ||
+                       tagsText.includes(searchTerm);
+            });
+            renderQuotes(filteredQuotes);
+        }
+
+        // Link modal functions
+        function showLinkModal() {
+            if (!activeEditor) return;
+            
+            const selection = window.getSelection();
+            currentSelection = selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+            
+            const selectedText = currentSelection ? currentSelection.toString() : '';
+            
+            document.getElementById('linkText').value = selectedText;
+            document.getElementById('linkUrl').value = '';
+            document.getElementById('linkModal').classList.add('show');
+            
+            setTimeout(() => {
+                if (selectedText) {
+                    document.getElementById('linkUrl').focus();
+                } else {
+                    document.getElementById('linkText').focus();
+                }
+            }, 100);
+        }
+
+        function closeLinkModal() {
+            document.getElementById('linkModal').classList.remove('show');
+            currentSelection = null;
+        }
+
+        function insertLink() {
+            const linkText = document.getElementById('linkText').value.trim();
+            const linkUrl = document.getElementById('linkUrl').value.trim();
+            
+            if (!linkText || !linkUrl) {
+                alert('Please enter both text and URL');
+                return;
+            }
+            
+            if (!activeEditor) {
+                closeLinkModal();
+                return;
+            }
+            
+            const link = document.createElement('a');
+            link.href = linkUrl;
+            link.textContent = linkText;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            
+            if (currentSelection && activeEditor.contains(currentSelection.commonAncestorContainer)) {
+                currentSelection.deleteContents();
+                currentSelection.insertNode(link);
+            } else {
+                activeEditor.appendChild(link);
+            }
+            
+            closeLinkModal();
+        }
+
+        // Enhanced Speaker Edit Functions - FIXED
+        function showSpeakerEditOptions(quoteId) {
+            console.log('showSpeakerEditOptions called with quoteId:', quoteId);
+            
+            const quote = quotes.find(q => q.id === quoteId);
+            if (!quote) {
+                console.error('Quote not found:', quoteId);
+                console.log('Available quotes:', quotes.map(q => ({ id: q.id, speaker: q.speaker })));
+                alert('Error: Quote not found');
+                return;
+            }
+            
+            console.log('Found quote:', quote);
+            currentEditingQuoteForSpeaker = quote;
+            console.log('Set currentEditingQuoteForSpeaker to:', currentEditingQuoteForSpeaker);
+            
+            // Safe access to speaker properties
+            const speakerHtml = quote.speakerHtml || quote.speaker || '';
+            const speakerText = stripHtml(speakerHtml);
+            
+            console.log('Speaker HTML:', speakerHtml);
+            console.log('Speaker text:', speakerText);
+            
+            // Count quotes with same speaker name
+            const quotesWithSameSpeaker = quotes.filter(q => {
+                const qSpeakerHtml = q.speakerHtml || q.speaker || '';
+                const qSpeakerText = stripHtml(qSpeakerHtml);
+                return qSpeakerText === speakerText;
+            });
+            
+            // Count quotes from same source
+            const quotesFromSameSource = quote.sourceId ? 
+                quotes.filter(q => q.sourceId === quote.sourceId) : [];
+            
+            console.log('Quotes with same speaker:', quotesWithSameSpeaker.length);
+            console.log('Quotes from same source:', quotesFromSameSource.length);
+            
+            // Update modal content - with null checks
+            const previewElement = document.getElementById('currentSpeakerPreview');
+            const sameNameElement = document.getElementById('sameNameCount');
+            const sameSourceElement = document.getElementById('sameSourceCount');
+            const sourceNameElement = document.getElementById('currentSourceName');
+            const sameSourceOption = document.getElementById('sameSourceOption');
+            
+            if (previewElement) previewElement.innerHTML = speakerHtml;
+            if (sameNameElement) sameNameElement.textContent = quotesWithSameSpeaker.length;
+            if (sameSourceElement) sameSourceElement.textContent = quotesFromSameSource.length;
+            if (sourceNameElement) sourceNameElement.textContent = quote.sourceTitle || 'this source';
+            
+            // Hide source option if no source
+            if (sameSourceOption) {
+                if (!quote.sourceId) {
+                    sameSourceOption.style.display = 'none';
+                } else {
+                    sameSourceOption.style.display = 'block';
+                }
+            }
+            
+            console.log('About to show modal');
+            document.getElementById('speakerEditOptionsModal').classList.add('show');
+        }
+
+        function closeSpeakerEditOptionsModal() {
+            console.log('closeSpeakerEditOptionsModal called');
+            console.log('currentEditingQuoteForSpeaker before closing:', currentEditingQuoteForSpeaker);
+            
+            document.getElementById('speakerEditOptionsModal').classList.remove('show');
+            // DON'T reset currentEditingQuoteForSpeaker here - we need it for the next modal
+            // currentEditingQuoteForSpeaker = null;
+        }
+
+        function editSingleSpeaker() {
+            console.log('editSingleSpeaker called');
+            console.log('currentEditingQuoteForSpeaker before setting mode:', currentEditingQuoteForSpeaker);
+            
+            if (!currentEditingQuoteForSpeaker) {
+                console.error('No quote selected in editSingleSpeaker');
+                alert('Error: No quote selected. Please try again.');
+                return;
+            }
+            
+            speakerEditMode = 'single';
+            console.log('Set speakerEditMode to:', speakerEditMode);
+            
+            showEnhancedSpeakerEdit('Edit Citation for This Quote', 'This will update the citation for this quote only.');
+            closeSpeakerEditOptionsModal();
+        }
+
+        function editAllSpeakersWithSameName() {
+            console.log('editAllSpeakersWithSameName called');
+            console.log('currentEditingQuoteForSpeaker before setting mode:', currentEditingQuoteForSpeaker);
+            
+            if (!currentEditingQuoteForSpeaker) {
+                console.error('No quote selected in editAllSpeakersWithSameName');
+                alert('Error: No quote selected. Please try again.');
+                return;
+            }
+            
+            speakerEditMode = 'sameName';
+            console.log('Set speakerEditMode to:', speakerEditMode);
+            
+            const speakerHtml = currentEditingQuoteForSpeaker.speakerHtml || currentEditingQuoteForSpeaker.speaker || '';
+            const speakerText = stripHtml(speakerHtml);
+            
+            const count = quotes.filter(q => {
+                const qSpeakerHtml = q.speakerHtml || q.speaker || '';
+                const qSpeakerText = stripHtml(qSpeakerHtml);
+                return qSpeakerText === speakerText;
+            }).length;
+            
+            showEnhancedSpeakerEdit(
+                'Edit Citation for All Quotes with Same Citation', 
+                `This will update the citation for ${count} quotes with the same citation text.`
+            );
+            closeSpeakerEditOptionsModal();
+        }
+
+        function editAllSpeakersFromSameSource() {
+            console.log('editAllSpeakersFromSameSource called');
+            console.log('currentEditingQuoteForSpeaker before setting mode:', currentEditingQuoteForSpeaker);
+            
+            if (!currentEditingQuoteForSpeaker) {
+                console.error('No quote selected in editAllSpeakersFromSameSource');
+                alert('Error: No quote selected. Please try again.');
+                return;
+            }
+            
+            speakerEditMode = 'sameSource';
+            console.log('Set speakerEditMode to:', speakerEditMode);
+            
+            const count = quotes.filter(q => q.sourceId === currentEditingQuoteForSpeaker.sourceId).length;
+            showEnhancedSpeakerEdit(
+                'Edit Citation for All Quotes from Same Source', 
+                `This will update the citation for ${count} quotes from "${currentEditingQuoteForSpeaker.sourceTitle || 'this source'}".`
+            );
+            closeSpeakerEditOptionsModal();
+        }
+
+        function showEnhancedSpeakerEdit(title, description) {
+            if (!currentEditingQuoteForSpeaker) {
+                console.error('No quote selected for enhanced editing');
+                return;
+            }
+            
+            const quote = currentEditingQuoteForSpeaker;
+            
+            // Safe access with fallbacks
+            const currentSpeakerHtml = quote.speakerHtml || quote.speaker || '';
+            const currentSpeakerText = stripHtml(currentSpeakerHtml);
+            const hasLinks = currentSpeakerHtml.includes('<a');
+            
+            console.log('showEnhancedSpeakerEdit - Original HTML:', currentSpeakerHtml);
+            console.log('showEnhancedSpeakerEdit - Stripped text:', currentSpeakerText);
+            console.log('showEnhancedSpeakerEdit - Has links:', hasLinks);
+            
+            // Update modal elements with null checks
+            const titleElement = document.getElementById('speakerEditTitle');
+            const descElement = document.getElementById('speakerEditDescription');
+            const linksElement = document.getElementById('currentSpeakerWithLinks');
+            const textInput = document.getElementById('newSpeakerText');
+            const linkHandlingGroup = document.getElementById('linkHandlingGroup');
+            
+            if (titleElement) titleElement.textContent = title;
+            if (descElement) {
+                if (hasLinks) {
+                    descElement.textContent = 'This citation contains links. Choose how to handle them below.';
+                } else {
+                    descElement.textContent = 'This will update the citation text.';
+                }
+            }
+            if (linksElement) {
+                linksElement.innerHTML = currentSpeakerHtml;
+                console.log('Set current speaker with links display');
+            }
+            if (textInput) {
+                textInput.value = currentSpeakerText;
+                console.log('Set input field with stripped text');
+            }
+            
+            // Show/hide link handling options
+            if (linkHandlingGroup) {
+                if (hasLinks) {
+                    linkHandlingGroup.style.display = 'block';
+                } else {
+                    linkHandlingGroup.style.display = 'none';
+                }
+            }
+            
+            // Show the modal
+            document.getElementById('enhancedSpeakerEditModal').classList.add('show');
+            
+            // Update preview and focus
+            updateSpeakerPreview();
+            
+            setTimeout(() => {
+                if (textInput) {
+                    textInput.focus();
+                    textInput.select();
+                }
+            }, 100);
+        }
+
+        function closeEnhancedSpeakerEditModal() {
+            console.log('closeEnhancedSpeakerEditModal called');
+            console.log('Resetting currentEditingQuoteForSpeaker and speakerEditMode');
+            
+            document.getElementById('enhancedSpeakerEditModal').classList.remove('show');
+            speakerEditMode = null;
+            currentEditingQuoteForSpeaker = null; // Reset here, after the edit is complete
+        }
+
+        function updateSpeakerPreview() {
+            if (!currentEditingQuoteForSpeaker) return;
+            
+            const newTextInput = document.getElementById('newSpeakerText');
+            const previewElement = document.getElementById('speakerPreview');
+            
+            if (!newTextInput || !previewElement) return;
+            
+            const newText = newTextInput.value;
+            const originalHtml = currentEditingQuoteForSpeaker.speakerHtml || currentEditingQuoteForSpeaker.speaker || '';
+            
+            console.log('updateSpeakerPreview - New text:', newText);
+            console.log('updateSpeakerPreview - Original HTML:', originalHtml);
+            
+            // Get selected link handling option
+            const linkHandlingRadios = document.getElementsByName('linkHandling');
+            let linkHandling = 'preserve'; // default
+            
+            for (const radio of linkHandlingRadios) {
+                if (radio.checked) {
+                    linkHandling = radio.value;
+                    break;
+                }
+            }
+            
+            console.log('Link handling mode:', linkHandling);
+            
+            let previewHtml = newText;
+            
+            if (originalHtml.includes('<a')) {
+                switch (linkHandling) {
+                    case 'preserve':
+                        previewHtml = replaceTextPreserveLinks(originalHtml, newText);
+                        break;
+                    case 'remove':
+                        previewHtml = newText; // Just the plain text
+                        break;
+                    case 'smart':
+                        previewHtml = replaceTextSmartLinks(originalHtml, newText);
+                        break;
+                }
+            }
+            
+            console.log('updateSpeakerPreview - Preview HTML:', previewHtml);
+            
+            previewElement.innerHTML = previewHtml || newText;
+            
+            // Add visual indication
+            const hasLinksInPreview = previewHtml.includes('<a');
+            const hasLinksInOriginal = originalHtml.includes('<a');
+            
+            if (hasLinksInPreview && hasLinksInOriginal) {
+                previewElement.style.border = '1px solid #4CAF50';
+                previewElement.title = 'Links preserved ✅';
+            } else if (hasLinksInOriginal && !hasLinksInPreview) {
+                previewElement.style.border = '1px solid #FF9800';
+                previewElement.title = 'Links will be removed ⚠️';
+            } else {
+                previewElement.style.border = '1px solid #b3d9ff';
+                previewElement.title = '';
+            }
+        }
+
+        function replaceTextSmartLinks(originalHtml, newText) {
+            console.log('replaceTextSmartLinks called');
+            
+            if (!originalHtml || !originalHtml.includes('<a')) {
+                return newText;
+            }
+            
+            // Create a temp div to parse HTML safely
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = originalHtml;
+            
+            // Extract all links
+            const links = [];
+            const linkElements = tempDiv.querySelectorAll('a');
+            
+            linkElements.forEach(linkEl => {
+                links.push({
+                    text: linkEl.textContent,
+                    href: linkEl.href,
+                    target: linkEl.target || '_blank',
+                    rel: linkEl.rel || 'noopener noreferrer'
+                });
+            });
+            
+            let result = newText;
+            
+            // Try to replace link text in the new text
+            links.forEach(link => {
+                const linkText = link.text;
+                if (result.includes(linkText)) {
+                    // Escape quotes to prevent HTML breaking
+                    const escapedHref = link.href.replace(/"/g, '&quot;');
+                    const escapedText = escapeHtml(linkText);
+                    const escapedTarget = link.target.replace(/"/g, '&quot;');
+                    const escapedRel = link.rel.replace(/"/g, '&quot;');
+                    
+                    const linkHtml = `<a href="${escapedHref}" target="${escapedTarget}" rel="${escapedRel}">${escapedText}</a>`;
+                    result = result.replace(new RegExp(escapeRegExp(linkText), 'g'), linkHtml);
+                    console.log('Smart replacement successful for:', linkText);
+                }
+            });
+            
+            return result;
+        }
+
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function replaceTextPreserveLinks(originalHtml, newText) {
+            console.log('replaceTextPreserveLinks called with:', { originalHtml, newText });
+            
+            if (!originalHtml || !originalHtml.includes('<a')) {
+                console.log('No HTML or no links found, returning plain text');
+                return newText;
+            }
+            
+            // Create a temp div to parse HTML safely
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = originalHtml;
+            
+            // Extract all links with their information
+            const links = [];
+            const linkElements = tempDiv.querySelectorAll('a');
+            
+            linkElements.forEach(linkEl => {
+                links.push({
+                    text: linkEl.textContent,
+                    href: linkEl.href,
+                    target: linkEl.target || '_blank',
+                    rel: linkEl.rel || 'noopener noreferrer',
+                    outerHTML: linkEl.outerHTML
+                });
+            });
+            
+            console.log('Extracted links:', links);
+            
+            if (links.length === 0) {
+                console.log('No links found after parsing');
+                return newText;
+            }
+            
+            // STRATEGY: Always preserve all links by appending them to the new text
+            // This ensures no links are ever lost, regardless of text changes
+            
+            let result = newText.trim();
+            
+            // Add all links at the end with proper formatting
+            links.forEach((link, index) => {
+                const linkHtml = `<a href="${link.href}" target="${link.target}" rel="${link.rel}">${link.text}</a>`;
+                
+                if (index === 0) {
+                    // Add a space before the first link if the text doesn't end with punctuation
+                    const lastChar = result.slice(-1);
+                    if (!/[.!?:;,]/.test(lastChar)) {
+                        result += ' ';
+                    } else {
+                        result += ' ';
+                    }
+                } else {
+                    // Add comma separation for multiple links
+                    result += ', ';
+                }
+                
+                result += linkHtml;
+            });
+            
+            console.log('Final result with preserved links:', result);
+            return result;
+        }
+
+        async function executeEnhancedSpeakerEdit() {
+            console.log('Starting executeEnhancedSpeakerEdit');
+            
+            const newTextInput = document.getElementById('newSpeakerText');
+            if (!newTextInput) {
+                console.error('New speaker text input not found');
+                alert('Error: Input field not found');
+                return;
+            }
+            
+            const newText = newTextInput.value.trim();
+            console.log('New text value:', newText);
+            
+            if (!newText) {
+                alert('Please enter citation text');
+                return;
+            }
+
+            if (!currentEditingQuoteForSpeaker) {
+                console.error('No quote selected for editing');
+                alert('Error: No quote selected');
+                return;
+            }
+
+            if (!speakerEditMode) {
+                console.error('No edit mode selected');
+                alert('Error: No edit mode selected');
+                return;
+            }
+
+            // Get link handling preference
+            const linkHandlingRadios = document.getElementsByName('linkHandling');
+            let linkHandling = 'preserve'; // default
+            
+            for (const radio of linkHandlingRadios) {
+                if (radio.checked) {
+                    linkHandling = radio.value;
+                    break;
+                }
+            }
+            
+            console.log('Link handling mode:', linkHandling);
+
+            // Disable the button to prevent double-clicks
+            const updateBtn = document.querySelector('#enhancedSpeakerEditModal .modal-btn.primary');
+            if (updateBtn) {
+                updateBtn.disabled = true;
+                updateBtn.textContent = 'Updating...';
+            }
+
+            try {
+                const originalHtml = currentEditingQuoteForSpeaker.speakerHtml || currentEditingQuoteForSpeaker.speaker || '';
+                let newHtml = newText;
+                
+                // Apply link handling based on user choice
+                if (originalHtml.includes('<a')) {
+                    switch (linkHandling) {
+                        case 'preserve':
+                            newHtml = replaceTextPreserveLinks(originalHtml, newText);
+                            break;
+                        case 'remove':
+                            newHtml = newText; // Just plain text
+                            break;
+                        case 'smart':
+                            newHtml = replaceTextSmartLinks(originalHtml, newText);
+                            break;
+                    }
+                }
+                
+                console.log('Updating speaker with mode:', speakerEditMode);
+                console.log('Current quote:', currentEditingQuoteForSpeaker);
+                console.log('Original HTML:', originalHtml);
+                console.log('New text:', newText);
+                console.log('New HTML:', newHtml);
+                console.log('Link handling:', linkHandling);
+                
+                switch (speakerEditMode) {
+                    case 'single':
+                        console.log('Executing single quote update');
+                        await updateSingleQuoteSpeaker(currentEditingQuoteForSpeaker.id, newText, newHtml);
+                        break;
+                    case 'sameName':
+                        console.log('Executing same name update');
+                        const oldText = stripHtml(originalHtml);
+                        console.log('Old text for matching:', oldText);
+                        await updateSpeakerBySameName(oldText, newText, newHtml);
+                        break;
+                    case 'sameSource':
+                        console.log('Executing same source update');
+                        if (!currentEditingQuoteForSpeaker.sourceId) {
+                            throw new Error('No source ID available for this quote');
+                        }
+                        await updateSpeakerBySameSource(currentEditingQuoteForSpeaker.sourceId, newText, newHtml);
+                        break;
+                    default:
+                        throw new Error('Invalid speaker edit mode: ' + speakerEditMode);
+                }
+                
+                console.log('Update completed, closing modal and reloading');
+                closeEnhancedSpeakerEditModal();
+                await loadQuotes();
+                showMessage('✅ Citation updated successfully', 'success');
+                
+            } catch (error) {
+                console.error('Error updating citation:', error);
+                showMessage('❌ Error updating citation: ' + error.message, 'error');
+            } finally {
+                // Re-enable the button
+                if (updateBtn) {
+                    updateBtn.disabled = false;
+                    updateBtn.textContent = 'Update Citation(s)';
+                }
+            }
+        }
+
+        async function updateSingleQuoteSpeaker(quoteId, newText, newHtml) {
+            console.log('updateSingleQuoteSpeaker called with:', { quoteId, newText, newHtml });
+            
+            if (!quoteId) {
+                throw new Error('Quote ID is required');
+            }
+            
+            if (!isConnected) {
+                console.log('Not connected to Neo4j, updating locally');
+                updateSingleQuoteSpeakerLocally(quoteId, newText, newHtml);
+                return;
+            }
+
+            const session = driver.session();
+            try {
+                console.log('Executing Neo4j update for single quote');
+                const result = await session.run(`
+                    MATCH (q:Quote {id: $quoteId})
+                    SET q.speaker = $newText,
+                        q.speakerHtml = $newHtml,
+                        q.author = $newText,
+                        q.lastModified = datetime()
+                    RETURN q.id as updatedId
+                `, { 
+                    quoteId: quoteId, 
+                    newText: newText, 
+                    newHtml: newHtml 
+                });
+                
+                const updatedId = result.records[0]?.get('updatedId');
+                if (updatedId) {
+                    console.log('Single quote updated successfully in Neo4j:', updatedId);
+                } else {
+                    console.warn('No quote was updated - quote might not exist');
+                }
+            } catch (error) {
+                console.error('Neo4j error updating single quote:', error);
+                throw new Error('Failed to update citation in database: ' + error.message);
+            } finally {
+                await session.close();
+            }
+        }
+
+        async function updateSpeakerBySameName(oldSpeakerText, newText, newHtml) {
+            console.log('Updating by same name:', oldSpeakerText, '->', newText);
+            
+            if (!isConnected) {
+                updateSpeakerBySameNameLocally(oldSpeakerText, newText, newHtml);
+                return;
+            }
+
+            const session = driver.session();
+            try {
+                const result = await session.run(`
+                    MATCH (q:Quote)
+                    WHERE q.speaker = $oldSpeakerText OR q.author = $oldSpeakerText
+                    SET q.speaker = $newText,
+                        q.speakerHtml = $newHtml,
+                        q.author = $newText,
+                        q.lastModified = datetime()
+                    RETURN count(q) as updated
+                `, { 
+                    oldSpeakerText: oldSpeakerText, 
+                    newText: newText, 
+                    newHtml: newHtml 
+                });
+                
+                // Handle different Neo4j integer types
+                let updatedCount = 0;
+                if (result.records.length > 0) {
+                    const countValue = result.records[0].get('updated');
+                    if (typeof countValue === 'number') {
+                        updatedCount = countValue;
+                    } else if (countValue && typeof countValue.toNumber === 'function') {
+                        updatedCount = countValue.toNumber();
+                    } else if (countValue && typeof countValue.low === 'number') {
+                        updatedCount = countValue.low;
+                    } else {
+                        updatedCount = parseInt(countValue) || 0;
+                    }
+                }
+                console.log('Updated quotes by same name:', updatedCount);
+            } catch (error) {
+                console.error('Neo4j error updating by same name:', error);
+                throw new Error('Failed to update citations in database: ' + error.message);
+            } finally {
+                await session.close();
+            }
+        }
+
+        async function updateSpeakerBySameSource(sourceId, newText, newHtml) {
+            console.log('Updating by same source:', sourceId, '->', newText);
+            
+            if (!sourceId) {
+                throw new Error('No source ID provided for update');
+            }
+            
+            if (!isConnected) {
+                updateSpeakerBySameSourceLocally(sourceId, newText, newHtml);
+                return;
+            }
+
+            const session = driver.session();
+            try {
+                const result = await session.run(`
+                    MATCH (q:Quote)-[:CITES_SOURCE]->(s:Source {id: $sourceId})
+                    SET q.speaker = $newText,
+                        q.speakerHtml = $newHtml,
+                        q.author = $newText,
+                        q.lastModified = datetime()
+                    RETURN count(q) as updated
+                `, { 
+                    sourceId: sourceId, 
+                    newText: newText, 
+                    newHtml: newHtml 
+                });
+                
+                // Handle different Neo4j integer types
+                let updatedCount = 0;
+                if (result.records.length > 0) {
+                    const countValue = result.records[0].get('updated');
+                    if (typeof countValue === 'number') {
+                        updatedCount = countValue;
+                    } else if (countValue && typeof countValue.toNumber === 'function') {
+                        updatedCount = countValue.toNumber();
+                    } else if (countValue && typeof countValue.low === 'number') {
+                        updatedCount = countValue.low;
+                    } else {
+                        updatedCount = parseInt(countValue) || 0;
+                    }
+                }
+                console.log('Updated quotes by same source:', updatedCount);
+            } catch (error) {
+                console.error('Neo4j error updating by same source:', error);
+                throw new Error('Failed to update citations in database: ' + error.message);
+            } finally {
+                await session.close();
+            }
+        }
+
+        // Local storage versions with better error handling
+        function updateSingleQuoteSpeakerLocally(quoteId, newText, newHtml) {
+            console.log('updateSingleQuoteSpeakerLocally called with:', { quoteId, newText, newHtml });
+            
+            try {
+                let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
+                console.log('Loaded quotes from localStorage:', savedQuotes.length);
+                
+                const quoteIndex = savedQuotes.findIndex(q => q.id === quoteId);
+                console.log('Found quote at index:', quoteIndex);
+                
+                if (quoteIndex !== -1) {
+                    const originalQuote = { ...savedQuotes[quoteIndex] };
+                    savedQuotes[quoteIndex].speaker = newText;
+                    savedQuotes[quoteIndex].speakerHtml = newHtml;
+                    savedQuotes[quoteIndex].lastModified = new Date().toISOString();
+                    
+                    localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
+                    console.log('Quote updated locally:', {
+                        before: originalQuote.speaker,
+                        after: savedQuotes[quoteIndex].speaker
+                    });
+                    
+                    // Also update the quotes array in memory
+                    const memoryIndex = quotes.findIndex(q => q.id === quoteId);
+                    if (memoryIndex !== -1) {
+                        quotes[memoryIndex].speaker = newText;
+                        quotes[memoryIndex].speakerHtml = newHtml;
+                        console.log('Memory array also updated');
+                    }
+                } else {
+                    console.error('Quote not found in localStorage with ID:', quoteId);
+                    console.log('Available quote IDs:', savedQuotes.map(q => q.id));
+                    throw new Error('Quote not found in local storage');
+                }
+            } catch (error) {
+                console.error('Local storage error:', error);
+                throw new Error('Failed to update citation locally: ' + error.message);
+            }
+        }
+
+        function updateSpeakerBySameNameLocally(oldSpeakerText, newText, newHtml) {
+            try {
+                let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
+                let updatedCount = 0;
+                savedQuotes.forEach(quote => {
+                    if (quote.speaker === oldSpeakerText) {
+                        quote.speaker = newText;
+                        quote.speakerHtml = newHtml;
+                        quote.lastModified = new Date().toISOString();
+                        updatedCount++;
+                    }
+                });
+                localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
+                console.log('Updated quotes by same name locally:', updatedCount);
+            } catch (error) {
+                console.error('Local storage error:', error);
+                throw new Error('Failed to update citations locally: ' + error.message);
+            }
+        }
+
+        function updateSpeakerBySameSourceLocally(sourceId, newText, newHtml) {
+            try {
+                let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
+                let updatedCount = 0;
+                savedQuotes.forEach(quote => {
+                    if (quote.sourceId === sourceId) {
+                        quote.speaker = newText;
+                        quote.speakerHtml = newHtml;
+                        quote.lastModified = new Date().toISOString();
+                        updatedCount++;
+                    }
+                });
+                localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
+                console.log('Updated quotes by same source locally:', updatedCount);
+            } catch (error) {
+                console.error('Local storage error:', error);
+                throw new Error('Failed to update citations locally: ' + error.message);
+            }
+        }
+
+        // Source edit functions
+        function showEditSource(sourceId) {
+            currentEditingSourceId = sourceId;
+            const source = sources.find(s => s.id === sourceId);
+            
+            if (!source) return;
+            
+            // Count quotes with this source
+            const quotesWithSource = quotes.filter(q => q.sourceId === sourceId);
+            
+            document.getElementById('editSourceTitle').value = source.title;
+            document.getElementById('editSourceUrl').value = source.url || '';
+            document.getElementById('editSourceType').value = source.type || 'web';
+            document.getElementById('sourceQuoteCount').textContent = quotesWithSource.length;
+            document.getElementById('editSourceModal').classList.add('show');
+            
+            setTimeout(() => {
+                document.getElementById('editSourceTitle').focus();
+            }, 100);
+        }
+
+        function closeEditSourceModal() {
+            document.getElementById('editSourceModal').classList.remove('show');
+            currentEditingSourceId = null;
+        }
+
+        async function updateSource() {
+            const title = document.getElementById('editSourceTitle').value.trim();
+            const url = document.getElementById('editSourceUrl').value.trim();
+            const type = document.getElementById('editSourceType').value;
+            
+            if (!title) {
+                alert('Please enter a source title');
+                return;
+            }
+
+            try {
+                if (!isConnected) {
+                    updateSourceLocally(currentEditingSourceId, { title, url, type });
+                } else {
+                    await updateSourceInNeo4j(currentEditingSourceId, { title, url, type });
+                }
+                
+                // Update local sources array
+                const sourceIndex = sources.findIndex(s => s.id === currentEditingSourceId);
+                if (sourceIndex !== -1) {
+                    sources[sourceIndex] = { ...sources[sourceIndex], title, url, type };
+                }
+                
+                closeEditSourceModal();
+                await loadData(); // Reload both sources and quotes
+                showMessage('✅ Source updated', 'success');
+                
+            } catch (error) {
+                console.error('Error updating source:', error);
+                showMessage('❌ Error updating source', 'error');
+            }
+        }
+
+        async function updateSourceInNeo4j(sourceId, sourceData) {
+            const session = driver.session();
+            try {
+                await session.run(`
+                    MATCH (s:Source {id: $id})
+                    SET s.title = $title,
+                        s.url = $url,
+                        s.type = $type,
+                        s.lastModified = datetime()
+                `, {
+                    id: sourceId,
+                    title: sourceData.title,
+                    url: sourceData.url,
+                    type: sourceData.type
+                });
+            } finally {
+                await session.close();
+            }
+        }
+
+        function updateSourceLocally(sourceId, sourceData) {
+            let savedSources = JSON.parse(localStorage.getItem('rsrch_sources') || '[]');
+            const sourceIndex = savedSources.findIndex(s => s.id === sourceId);
+            if (sourceIndex !== -1) {
+                savedSources[sourceIndex] = { 
+                    ...savedSources[sourceIndex], 
+                    ...sourceData,
+                    lastModified: new Date().toISOString() 
+                };
+                localStorage.setItem('rsrch_sources', JSON.stringify(savedSources));
+            }
+        }
+
+        function updateQuotesCount() {
+            quotesCount.textContent = quotes.length;
+        }
+
+        function showMessage(message, type) {
+            statusMessage.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
+            setTimeout(() => statusMessage.innerHTML = '', 5000);
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function stripHtml(html) {
+            if (!html) return '';
+            const div = document.createElement('div');
+            div.innerHTML = html;
+            return div.textContent || div.innerText || '';
+        }
+
+        // Global functions
+        window.removeTag = removeTag;
+        window.focusTagInput = focusTagInput;
+        window.editQuote = editQuote;
+        window.deleteQuote = deleteQuote;
+        window.handleTextClick = handleTextClick;
+        window.showAddSourceModal = showAddSourceModal;
+        window.closeAddSourceModal = closeAddSourceModal;
+        window.addNewSource = addNewSource;
+        window.closeLinkModal = closeLinkModal;
+        window.insertLink = insertLink;
+        
+        // Enhanced speaker edit functions
+        window.showSpeakerEditOptions = showSpeakerEditOptions;
+        window.closeSpeakerEditOptionsModal = closeSpeakerEditOptionsModal;
+        window.editSingleSpeaker = editSingleSpeaker;
+        window.editAllSpeakersWithSameName = editAllSpeakersWithSameName;
+        window.editAllSpeakersFromSameSource = editAllSpeakersFromSameSource;
+        window.closeEnhancedSpeakerEditModal = closeEnhancedSpeakerEditModal;
+        window.executeEnhancedSpeakerEdit = executeEnhancedSpeakerEdit;
+        
+        // Source edit functions
+        window.showEditSource = showEditSource;
+        window.closeEditSourceModal = closeEditSourceModal;
+        window.updateSource = updateSource;
+    </script>
+</body>
+</html>
