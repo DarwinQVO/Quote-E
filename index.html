@@ -12,65 +12,135 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #fafafa;
+            font-family: 'Times New Roman', Times, serif;
+            background: #faf9f7;
             min-height: 100vh;
-            color: #2c2c2c;
+            color: #4a4a4a;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
             background: white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            border: 1px solid #e5e5e5;
-            min-height: 100vh;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            min-height: calc(100vh - 40px);
+            margin: 20px auto;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
 
         .header {
-            background: white;
-            color: #2c2c2c;
-            padding: 20px 30px;
+            background: linear-gradient(135deg, #e8f4f8 0%, #f0e8f4 100%);
+            color: #5a5a5a;
+            padding: 30px;
             text-align: center;
-            border-bottom: 1px solid #e5e5e5;
+            position: relative;
+        }
+
+        .connection-status {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .connection-status.connected {
+            background: #f0faf0;
+            color: #2d5d2d;
+            border: 2px solid #c8d8c8;
+        }
+
+        .connection-status.disconnected {
+            background: #fdf0f0;
+            color: #8b2d35;
+            border: 2px solid #f0c8ca;
+        }
+
+        .connection-status.connecting {
+            background: #f0f8ff;
+            color: #1e4a8a;
+            border: 2px solid #c8d8fe;
+        }
+
+        .connection-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .connection-dot.connected {
+            background: #2d5d2d;
+        }
+
+        .connection-dot.disconnected {
+            background: #8b2d35;
+        }
+
+        .connection-dot.connecting {
+            background: #1e4a8a;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         .header h1 {
-            font-size: 1.8rem;
-            font-weight: 500;
-            margin-bottom: 8px;
-            color: #2c2c2c;
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .nav-tabs {
             display: flex;
             background: #f8f9fa;
-            border-bottom: 1px solid #e5e5e5;
+            border-bottom: 1px solid #e9ecef;
         }
 
         .nav-tab {
-            padding: 15px 25px;
+            padding: 18px 30px;
             background: none;
             border: none;
             cursor: pointer;
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 500;
-            color: #666;
+            color: #6c757d;
             border-bottom: 3px solid transparent;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            position: relative;
         }
 
         .nav-tab.active {
-            color: #2c2c2c;
-            border-bottom-color: #2c2c2c;
+            color: #7b9ea8;
+            border-bottom-color: #7b9ea8;
             background: white;
+            box-shadow: 0 -2px 10px rgba(123, 158, 168, 0.1);
         }
 
         .nav-tab:hover:not(.active) {
-            background: #f0f0f0;
-            color: #2c2c2c;
+            background: #f1f3f4;
+            color: #495057;
         }
 
         .main-content {
@@ -97,8 +167,8 @@
 
         .form-section {
             padding: 30px;
-            border-right: 1px solid #e5e5e5;
-            background: #fbfbfb;
+            border-right: 1px solid #e9ecef;
+            background: #fafbfc;
         }
 
         .quotes-section {
@@ -106,17 +176,11 @@
             background: white;
         }
 
-        /* Sources Tab */
+        /* Sources Tab - Layout corregido */
         .sources-layout {
             display: grid;
-            grid-template-columns: 450px 1fr;
+            grid-template-columns: 1fr 450px;
             min-height: 600px;
-        }
-
-        .sources-form-section {
-            padding: 30px;
-            border-right: 1px solid #e5e5e5;
-            background: #fbfbfb;
         }
 
         .sources-list-section {
@@ -124,14 +188,20 @@
             background: white;
         }
 
+        .sources-form-section {
+            padding: 30px;
+            border-left: 1px solid #e9ecef;
+            background: #fafbfc;
+        }
+
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 6px;
-            font-weight: 500;
+            margin-bottom: 8px;
+            font-weight: 600;
             color: #374151;
             font-size: 0.9rem;
         }
@@ -139,15 +209,15 @@
         .editable-content {
             width: 100%;
             min-height: 80px;
-            padding: 12px 16px;
-            border: 1px solid #d1d1d1;
-            border-radius: 4px;
+            padding: 16px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
             font-size: 1rem;
             font-family: inherit;
             background: white;
             outline: none;
-            transition: all 0.2s ease;
-            line-height: 1.5;
+            transition: all 0.3s ease;
+            line-height: 1.6;
         }
 
         .editable-content.quote-editor {
@@ -155,24 +225,27 @@
         }
 
         .editable-content:focus {
-            border-color: #666;
-            box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.1);
+            border-color: #a8c8d1;
+            box-shadow: 0 0 0 3px rgba(168, 200, 209, 0.15);
+            transform: translateY(-1px);
         }
 
         .editable-content[contenteditable="true"]:empty:before {
             content: attr(placeholder);
-            color: #999;
+            color: #9ca3af;
             font-style: italic;
         }
 
         .editable-content a {
-            color: #0066cc;
+            color: #7b9ea8;
             text-decoration: underline;
             cursor: pointer;
         }
 
         .editable-content a:hover {
-            background: rgba(0, 102, 204, 0.1);
+            background: rgba(123, 158, 168, 0.1);
+            padding: 2px 4px;
+            border-radius: 4px;
         }
 
         .source-selector {
@@ -185,86 +258,97 @@
         .source-dropdown {
             flex: 1;
             min-width: 0;
-            padding: 12px 16px;
-            border: 1px solid #d1d1d1;
-            border-radius: 4px;
+            padding: 16px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
             font-size: 1rem;
             background: white;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
 
         .source-dropdown:focus {
             outline: none;
-            border-color: #666;
-            box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.1);
+            border-color: #a8c8d1;
+            box-shadow: 0 0 0 3px rgba(168, 200, 209, 0.15);
+            transform: translateY(-1px);
         }
 
         .add-source-btn {
-            padding: 12px 12px;
-            background: #2c2c2c;
-            color: white;
+            padding: 16px 16px;
+            background: linear-gradient(135deg, #d4b5d4 0%, #c8a8c8 100%);
+            color: #5a5a5a;
             border: none;
-            border-radius: 4px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 0.9rem;
+            font-weight: 600;
             white-space: nowrap;
             flex-shrink: 0;
-            min-width: 70px;
+            min-width: 80px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(212, 181, 212, 0.3);
         }
 
         .add-source-btn:hover {
-            background: #1a1a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 181, 212, 0.4);
         }
 
         .form-group input {
             width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #d1d1d1;
-            border-radius: 4px;
+            padding: 16px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
             font-size: 1rem;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             font-family: inherit;
             background: white;
         }
 
         .form-group input:focus {
             outline: none;
-            border-color: #666;
-            box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.1);
+            border-color: #a8c8d1;
+            box-shadow: 0 0 0 3px rgba(168, 200, 209, 0.15);
+            transform: translateY(-1px);
         }
 
         .form-group select {
             width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #d1d1d1;
-            border-radius: 4px;
+            padding: 16px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
             font-size: 1rem;
             background: white;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
 
         .form-group select:focus {
             outline: none;
-            border-color: #666;
-            box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.1);
+            border-color: #a8c8d1;
+            box-shadow: 0 0 0 3px rgba(168, 200, 209, 0.15);
+            transform: translateY(-1px);
         }
 
         .form-group textarea {
             width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #d1d1d1;
-            border-radius: 4px;
+            padding: 16px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
             font-size: 1rem;
             font-family: inherit;
             background: white;
             resize: vertical;
-            min-height: 60px;
+            min-height: 80px;
+            transition: all 0.3s ease;
         }
 
         .form-group textarea:focus {
             outline: none;
-            border-color: #666;
-            box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.1);
+            border-color: #a8c8d1;
+            box-shadow: 0 0 0 3px rgba(168, 200, 209, 0.15);
+            transform: translateY(-1px);
         }
 
         /* URL Input with Enhanced Features */
@@ -274,55 +358,61 @@
 
         .url-input-container {
             display: flex;
-            gap: 8px;
+            gap: 12px;
             align-items: stretch;
         }
 
         .url-input {
             flex: 1;
-            padding: 12px 16px;
-            border: 1px solid #d1d1d1;
-            border-radius: 4px;
+            padding: 16px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
             font-size: 1rem;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             font-family: inherit;
             background: white;
         }
 
         .url-input:focus {
             outline: none;
-            border-color: #666;
-            box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.1);
+            border-color: #a8c8d1;
+            box-shadow: 0 0 0 3px rgba(168, 200, 209, 0.15);
+            transform: translateY(-1px);
         }
 
         .fetch-metadata-btn {
-            padding: 12px 16px;
-            background: #0066cc;
-            color: white;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, #d4b5d4 0%, #c8a8c8 100%);
+            color: #5a5a5a;
             border: none;
-            border-radius: 4px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 0.9rem;
+            font-weight: 600;
             white-space: nowrap;
             flex-shrink: 0;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(212, 181, 212, 0.3);
         }
 
         .fetch-metadata-btn:hover {
-            background: #0052a3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 181, 212, 0.4);
         }
 
         .fetch-metadata-btn:disabled {
-            background: #ccc;
+            background: #9ca3af;
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
 
         .url-preview {
-            margin-top: 10px;
-            padding: 12px;
-            border: 1px solid #e5e5e5;
-            border-radius: 6px;
-            background: #f8f9fa;
+            margin-top: 15px;
+            padding: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            background: #f9fafb;
             display: none;
         }
 
@@ -333,51 +423,51 @@
         .preview-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 8px;
+            gap: 12px;
+            margin-bottom: 10px;
         }
 
         .favicon {
-            width: 20px;
-            height: 20px;
-            border-radius: 3px;
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
             flex-shrink: 0;
         }
 
         .preview-title {
             font-weight: 600;
-            color: #2c2c2c;
-            font-size: 0.95rem;
-            line-height: 1.3;
+            color: #374151;
+            font-size: 1rem;
+            line-height: 1.4;
         }
 
         .preview-description {
-            color: #666;
-            font-size: 0.85rem;
-            line-height: 1.4;
-            margin-bottom: 6px;
+            color: #6b7280;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 8px;
         }
 
         .preview-meta {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
-            font-size: 0.75rem;
-            color: #888;
+            gap: 15px;
+            font-size: 0.8rem;
+            color: #9ca3af;
         }
 
         .preview-meta-item {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
         }
 
         .loading-indicator {
             display: none;
             align-items: center;
-            gap: 8px;
-            margin-top: 10px;
-            color: #666;
+            gap: 10px;
+            margin-top: 15px;
+            color: #6b7280;
             font-size: 0.9rem;
         }
 
@@ -386,10 +476,10 @@
         }
 
         .spinner {
-            width: 16px;
-            height: 16px;
-            border: 2px solid #e5e5e5;
-            border-top: 2px solid #0066cc;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #e5e7eb;
+            border-top: 3px solid #a8c8d1;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -402,156 +492,287 @@
         .tags-input {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            min-height: 40px;
-            padding: 8px;
-            border: 1px solid #d1d1d1;
-            border-radius: 4px;
+            gap: 8px;
+            min-height: 50px;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
             background: white;
             cursor: text;
+            transition: all 0.3s ease;
         }
 
         .tags-input:focus-within {
-            border-color: #666;
-            box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.1);
+            border-color: #a8c8d1;
+            box-shadow: 0 0 0 3px rgba(168, 200, 209, 0.15);
+            transform: translateY(-1px);
         }
 
         .tag {
-            background: #2c2c2c;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.8rem;
+            background: linear-gradient(135deg, #b8d4b8 0%, #a8c8a8 100%);
+            color: #4a5a4a;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(184, 212, 184, 0.3);
         }
 
         .tag-remove {
             cursor: pointer;
             background: rgba(255,255,255,0.3);
             border-radius: 50%;
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 10px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .tag-remove:hover {
+            background: rgba(255,255,255,0.5);
         }
 
         .tag-input {
             border: none;
             outline: none;
             flex: 1;
-            min-width: 80px;
-            padding: 6px 4px;
-            font-size: 0.9rem;
+            min-width: 100px;
+            padding: 8px 6px;
+            font-size: 0.95rem;
         }
 
         .submit-btn {
-            background: #2c2c2c;
-            color: white;
+            background: linear-gradient(135deg, #c8d6d4 0%, #b8c8c8 100%);
+            color: #4a5a5a;
             border: none;
-            padding: 12px 24px;
-            border-radius: 4px;
-            font-size: 1rem;
-            font-weight: 500;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
             width: 100%;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(200, 214, 212, 0.3);
         }
 
         .submit-btn:hover {
-            background: #1a1a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(200, 214, 212, 0.4);
         }
 
         .submit-btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 2px 8px rgba(200, 214, 212, 0.2);
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f3f4f6;
         }
 
         .section-header h2 {
             color: #374151;
-            font-size: 1.3rem;
-            font-weight: 500;
+            font-size: 1.5rem;
+            font-weight: 600;
         }
 
         .count-badge {
-            background: #2c2c2c;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-            font-weight: 500;
+            background: linear-gradient(135deg, #f4d4c8 0%, #e8c8b8 100%);
+            color: #5a4a4a;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(244, 212, 200, 0.3);
         }
 
         .search-box {
             width: 100%;
-            padding: 10px 16px;
-            border: 1px solid #d1d1d1;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
+            padding: 16px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-size: 1rem;
             background: white;
+            transition: all 0.3s ease;
         }
 
         .search-box:focus {
             outline: none;
-            border-color: #666;
-            box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.1);
+            border-color: #a8c8d1;
+            box-shadow: 0 0 0 3px rgba(168, 200, 209, 0.15);
+            transform: translateY(-1px);
         }
 
         .list-container {
-            max-height: 500px;
+            max-height: 600px;
             overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .list-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .list-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .list-container::-webkit-scrollbar-thumb {
+            background: #a8c8d1;
+            border-radius: 10px;
+        }
+
+        .list-container::-webkit-scrollbar-thumb:hover {
+            background: #9bb8c1;
         }
 
         .quote-card {
             background: white;
-            border: 1px solid #e5e5e5;
-            border-radius: 6px;
-            padding: 20px;
-            margin-bottom: 15px;
-            transition: all 0.2s ease;
+            border: 2px solid #f3f4f6;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
             position: relative;
-        }
-
-        .quote-card:hover {
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border-color: #d1d1d1;
-        }
-
-        .quote-card.editing {
-            border-color: #0066cc;
-            box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
-        }
-
-        .quote-clickable {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             cursor: pointer;
         }
 
+        .quote-card:hover {
+            box-shadow: 0 8px 30px rgba(168, 200, 209, 0.15);
+            border-color: #a8c8d1;
+            transform: translateY(-2px);
+        }
+
+        .quote-card.editing {
+            border-color: #a8c8d1;
+            box-shadow: 0 0 0 3px rgba(168, 200, 209, 0.15);
+            transform: translateY(-2px);
+            cursor: default;
+        }
+
+        .quote-card.new-quote {
+            animation: slideInFromTop 0.5s ease-out;
+            border-color: #b8d4b8;
+            box-shadow: 0 8px 30px rgba(184, 212, 184, 0.15);
+        }
+
+        .quote-options {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            gap: 8px;
+        }
+
+        .quote-card:hover .quote-options {
+            opacity: 1;
+        }
+
+        .quote-option-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .quote-option-btn:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
+            color: #374151;
+        }
+
+        .delete-option:hover {
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: #dc2626;
+        }
+
+        .edit-hint {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            font-size: 0.7rem;
+            color: #9ca3af;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-style: italic;
+        }
+
+        .quote-card:hover .edit-hint {
+            opacity: 1;
+        }
+
+        .quote-card.editing .edit-hint {
+            display: none;
+        }
+
+        @keyframes slideInFromTop {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .quote-clickable {
+            cursor: inherit;
+        }
+
         .quote-clickable:hover {
-            background: rgba(0, 102, 204, 0.02);
+            background: none;
+            border-radius: 0;
+            padding: 0;
+            margin: 0;
         }
 
         .quote-text {
-            font-size: 1rem;
-            line-height: 1.5;
+            font-size: 1.1rem;
+            line-height: 1.7;
             color: #374151;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
             font-style: italic;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .quote-text::before {
+            content: '"';
+            position: absolute;
+            left: 0;
+            top: -5px;
+            font-size: 2rem;
+            color: #a8c8d1;
+            font-weight: bold;
         }
 
         .quote-text a,
         .quote-speaker a {
-            color: #0066cc;
+            color: #7b9ea8;
             text-decoration: underline;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -559,16 +780,17 @@
 
         .quote-text a:hover,
         .quote-speaker a:hover {
-            background: rgba(0, 102, 204, 0.1);
-            padding: 2px 4px;
-            border-radius: 3px;
+            background: rgba(123, 158, 168, 0.1);
+            padding: 2px 6px;
+            border-radius: 6px;
         }
 
         .quote-speaker {
-            font-size: 0.9rem;
+            font-size: 1rem;
             font-weight: 600;
-            color: #666;
-            margin-bottom: 8px;
+            color: #6b7280;
+            margin-bottom: 12px;
+            padding-left: 20px;
         }
 
         .quote-source {
@@ -584,233 +806,282 @@
         .quote-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            margin-top: 10px;
+            gap: 8px;
+            margin-top: 15px;
         }
 
         .quote-tag {
-            background: #f0f0f0;
-            color: #666;
-            padding: 2px 8px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-        }
-
-        .quote-actions {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            display: flex;
-            gap: 8px;
-        }
-
-        .quote-card:hover .quote-actions {
-            opacity: 1;
-        }
-
-        .action-btn {
-            width: 28px;
-            height: 28px;
-            border: none;
-            background: #f0f0f0;
-            border-radius: 4px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .action-btn:hover {
-            background: #666;
-            color: white;
+            background: #f3f4f6;
+            color: #6b7280;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
         }
 
         /* Source Card Styles */
         .source-card {
             background: white;
-            border: 1px solid #e5e5e5;
-            border-radius: 6px;
-            padding: 20px;
-            margin-bottom: 15px;
-            transition: all 0.2s ease;
+            border: 2px solid #f3f4f6;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
             position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            cursor: pointer;
         }
 
         .source-card:hover {
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border-color: #d1d1d1;
+            box-shadow: 0 8px 30px rgba(168, 200, 209, 0.15);
+            border-color: #a8c8d1;
+            transform: translateY(-2px);
         }
 
         .source-card.editing {
-            border-color: #0066cc;
-            box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+            border-color: #a8c8d1;
+            box-shadow: 0 0 0 3px rgba(168, 200, 209, 0.15);
+            transform: translateY(-2px);
+            cursor: default;
+        }
+
+        .source-card.new-source {
+            animation: slideInFromTop 0.5s ease-out;
+            border-color: #b8d4b8;
+            box-shadow: 0 8px 30px rgba(184, 212, 184, 0.15);
+        }
+
+        .source-options {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            gap: 8px;
+        }
+
+        .source-card:hover .source-options {
+            opacity: 1;
+        }
+
+        .source-option-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .source-option-btn:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
+            color: #374151;
+        }
+
+        .source-edit-hint {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            font-size: 0.7rem;
+            color: #9ca3af;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-style: italic;
+        }
+
+        .source-card:hover .source-edit-hint {
+            opacity: 1;
+        }
+
+        .source-card.editing .source-edit-hint {
+            display: none;
         }
 
         .source-header {
             display: flex;
             align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 12px;
+            gap: 15px;
+            margin-bottom: 15px;
         }
 
         .source-favicon {
-            width: 24px;
-            height: 24px;
-            border-radius: 4px;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
             flex-shrink: 0;
             margin-top: 2px;
         }
 
         .source-title {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            color: #2c2c2c;
-            margin-bottom: 4px;
-            cursor: pointer;
+            color: #374151;
+            margin-bottom: 6px;
+            cursor: inherit;
             flex: 1;
-            line-height: 1.3;
+            line-height: 1.4;
+            transition: color 0.2s ease;
         }
 
         .source-title:hover {
-            color: #0066cc;
+            color: #374151;
         }
 
         .source-meta {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 12px;
+            gap: 15px;
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-bottom: 15px;
         }
 
         .source-meta-item {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
         }
 
         .source-url {
-            color: #0066cc;
+            color: #7b9ea8;
             text-decoration: none;
             word-break: break-all;
+            transition: color 0.2s ease;
         }
 
         .source-url:hover {
             text-decoration: underline;
+            color: #6b8e98;
         }
 
         .source-description {
-            background: #f8f9fa;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 10px;
-            line-height: 1.4;
+            background: #f9fafb;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            color: #6b7280;
+            margin-bottom: 12px;
+            line-height: 1.5;
+            border-left: 4px solid #a8c8d1;
         }
 
         .source-note {
-            background: #f8f9fa;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 10px;
+            background: #f9fafb;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            color: #6b7280;
+            margin-bottom: 12px;
             font-style: italic;
+            border-left: 4px solid #f4d4c8;
         }
 
         .source-families {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 10px;
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
         .existing-tag {
-            background: #f0f0f0;
-            color: #666;
-            padding: 2px 6px;
-            border-radius: 8px;
-            font-size: 0.75rem;
+            background: #f3f4f6;
+            color: #6b7280;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
             cursor: pointer;
-            transition: background 0.2s ease;
+            transition: all 0.2s ease;
         }
 
         .existing-tag:hover {
-            background: #e0e0e0;
+            background: #e5e7eb;
         }
 
         .existing-tag.selected {
-            background: #2c2c2c;
-            color: white;
+            background: linear-gradient(135deg, #c8d6d4 0%, #b8c8c8 100%);
+            color: #4a5a5a;
         }
 
         .source-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            margin-top: 10px;
+            gap: 8px;
+            margin-top: 15px;
         }
 
         .source-tag {
-            background: #f0f0f0;
-            color: #666;
-            padding: 2px 8px;
-            border-radius: 8px;
-            font-size: 0.75rem;
+            background: #f3f4f6;
+            color: #6b7280;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
         }
 
         .source-quote-count {
             position: absolute;
-            top: 15px;
-            right: 50px;
-            background: #f0f0f0;
-            color: #666;
-            padding: 4px 8px;
-            border-radius: 10px;
-            font-size: 0.75rem;
-            font-weight: 500;
+            top: 20px;
+            right: 15px;
+            background: #f3f4f6;
+            color: #6b7280;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .source-card:hover .source-quote-count {
+            opacity: 1;
         }
 
         .status-message {
-            padding: 10px 16px;
-            border-radius: 6px;
-            margin-bottom: 15px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
             font-weight: 500;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            border: 2px solid;
         }
 
         .status-success {
-            background: #f0f9f0;
+            background: #f0faf0;
             color: #2d5d2d;
-            border: 1px solid #b8e6b8;
+            border-color: #c8d8c8;
         }
 
         .status-error {
-            background: #fdf2f2;
-            color: #8b2635;
-            border: 1px solid #f5c6cb;
+            background: #fdf0f0;
+            color: #8b2d35;
+            border-color: #f0c8ca;
         }
 
         .status-info {
             background: #f0f8ff;
-            color: #1e3a8a;
-            border: 1px solid #93c5fd;
+            color: #1e4a8a;
+            border-color: #c8d8fe;
         }
 
         .empty-state {
             text-align: center;
-            padding: 40px 20px;
-            color: #6b7280;
+            padding: 60px 20px;
+            color: #9ca3af;
         }
 
         .empty-state p {
-            margin: 8px 0;
+            margin: 12px 0;
+            font-size: 1.1rem;
+        }
+
+        .empty-state p:first-child {
+            font-size: 3rem;
+            margin-bottom: 20px;
         }
 
         .modal {
@@ -819,11 +1090,12 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 1000;
+            backdrop-filter: blur(4px);
         }
 
         .modal.show {
@@ -832,99 +1104,109 @@
 
         .modal-content {
             background: white;
-            border-radius: 8px;
+            border-radius: 16px;
             padding: 0;
             max-width: 500px;
             width: 90%;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             max-height: 90vh;
             overflow-y: auto;
         }
 
         .modal-header {
-            padding: 20px;
-            border-bottom: 1px solid #e5e5e5;
+            padding: 24px;
+            border-bottom: 2px solid #f3f4f6;
         }
 
         .modal-title {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 600;
-            margin-bottom: 4px;
-            color: #2c2c2c;
+            margin-bottom: 6px;
+            color: #374151;
         }
 
         .modal-body {
-            padding: 20px;
+            padding: 24px;
         }
 
         .input-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .input-label {
             display: block;
-            font-size: 0.9rem;
-            font-weight: 500;
+            font-size: 0.95rem;
+            font-weight: 600;
             color: #374151;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .modal-input {
             width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #d1d1d1;
-            border-radius: 4px;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
             font-size: 1rem;
+            transition: all 0.3s ease;
         }
 
         .modal-input:focus {
             outline: none;
-            border-color: #0066cc;
-            box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+            border-color: #a8c8d1;
+            box-shadow: 0 0 0 3px rgba(168, 200, 209, 0.15);
         }
 
         .modal-actions {
-            padding: 15px 20px 20px;
+            padding: 20px 24px 24px;
             display: flex;
-            gap: 10px;
+            gap: 12px;
             justify-content: flex-end;
         }
 
         .modal-btn {
-            padding: 8px 16px;
+            padding: 12px 24px;
             border: none;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            font-weight: 500;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
 
         .modal-btn.primary {
-            background: #0066cc;
-            color: white;
+            background: linear-gradient(135deg, #c8d6d4 0%, #b8c8c8 100%);
+            color: #4a5a5a;
+            box-shadow: 0 4px 12px rgba(200, 214, 212, 0.3);
         }
 
         .modal-btn.secondary {
-            background: #f0f0f0;
-            color: #666;
+            background: #f3f4f6;
+            color: #6b7280;
         }
 
         .modal-btn:hover {
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+        }
+
+        .modal-btn.primary:hover {
+            box-shadow: 0 6px 20px rgba(200, 214, 212, 0.4);
         }
 
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 20px;
         }
 
         .error-message {
             color: #dc2626;
-            font-size: 0.85rem;
-            margin-top: 5px;
+            font-size: 0.9rem;
+            margin-top: 8px;
             display: none;
+            padding: 8px 12px;
+            background: #fef2f2;
+            border-radius: 6px;
+            border: 1px solid #fecaca;
         }
 
         .error-message.show {
@@ -937,14 +1219,40 @@
                 grid-template-columns: 1fr;
             }
             
-            .form-section,
-            .sources-form-section {
+            .form-section {
                 border-right: none;
-                border-bottom: 1px solid #e5e5e5;
+                border-bottom: 2px solid #f3f4f6;
+            }
+
+            .sources-form-section {
+                border-left: none;
+                border-bottom: 2px solid #f3f4f6;
             }
 
             .form-row {
                 grid-template-columns: 1fr;
+            }
+
+            .container {
+                margin: 10px;
+                border-radius: 16px;
+                min-height: calc(100vh - 20px);
+            }
+        }
+
+        /* Add styles for better visual feedback */
+        .quote-card.highlight {
+            animation: highlightFlash 2s ease-out;
+        }
+
+        @keyframes highlightFlash {
+            0% {
+                box-shadow: 0 0 0 4px rgba(184, 212, 184, 0.3);
+                border-color: #b8d4b8;
+            }
+            100% {
+                box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                border-color: #f3f4f6;
             }
         }
     </style>
@@ -952,7 +1260,11 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1>Quote Manager</h1>
+            <div class="connection-status" id="connectionStatus">
+                <div class="connection-dot" id="connectionDot"></div>
+                <span id="connectionText">Checking connection...</span>
+            </div>
+            <h1>📝 Quote Manager</h1>
         </header>
 
         <nav class="nav-tabs">
@@ -984,15 +1296,7 @@
                                      placeholder="Citation... You can also add links with Cmd+K"></div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="source">Source</label>
-                                <div class="source-selector">
-                                    <select id="sourceSelect" class="source-dropdown">
-                                        <option value="">Select source...</option>
-                                    </select>
-                                    <button type="button" class="add-source-btn" onclick="switchTab('sources')">Manage</button>
-                                </div>
-                            </div>
+
 
                             <div class="form-group">
                                 <label for="tags">Tags</label>
@@ -1000,6 +1304,15 @@
                                     <input type="text" class="tag-input" id="tagInput" placeholder="Press Enter to add tags..." list="availableQuoteTags">
                                 </div>
                                 <datalist id="availableQuoteTags"></datalist>
+                                
+                                <!-- Quote Tag Management -->
+                                <div id="quoteTagManagement" style="margin-top: 15px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                        <span style="font-size: 0.85rem; color: #6b7280;">Existing Tags:</span>
+                                        <button type="button" onclick="showQuoteTagManager()" style="background: #f8f4f8; border: 2px solid #e8d8e8; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; font-weight: 500; color: #6a5a6a;">Manage Tags</button>
+                                    </div>
+                                    <div id="existingQuoteTags" style="display: flex; flex-wrap: wrap; gap: 6px; max-height: 100px; overflow-y: auto;"></div>
+                                </div>
                             </div>
 
                             <button type="submit" class="submit-btn">Save Quote</button>
@@ -1008,16 +1321,17 @@
 
                     <section class="quotes-section">
                         <div class="section-header">
-                            <h2>Quotes</h2>
+                            <h2>My Quotes</h2>
                             <span class="count-badge" id="quotesCount">0</span>
                         </div>
 
-                        <input type="text" class="search-box" id="searchBox" placeholder="Search quotes...">
+                        <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search quotes...">
 
                         <div class="list-container" id="quotesList">
                             <div class="empty-state">
-                                <p>📝 No quotes yet</p>
-                                <p>Add your first quote</p>
+                                <p>📝</p>
+                                <p>No quotes yet</p>
+                                <p>Add your first quote using the form on the left</p>
                             </div>
                         </div>
                     </section>
@@ -1027,6 +1341,23 @@
             <!-- Sources Tab -->
             <div class="tab-content" id="sourcesTab">
                 <div class="sources-layout">
+                    <section class="sources-list-section">
+                        <div class="section-header">
+                            <h2>My Sources</h2>
+                            <span class="count-badge" id="sourcesCount">0</span>
+                        </div>
+
+                        <input type="text" class="search-box" id="sourceSearchBox" placeholder="🔍 Search sources...">
+
+                        <div class="list-container" id="sourcesList">
+                            <div class="empty-state">
+                                <p>📚</p>
+                                <p>No sources yet</p>
+                                <p>Add your first source using the form on the right</p>
+                            </div>
+                        </div>
+                    </section>
+
                     <section class="sources-form-section">
                         <div id="sourceStatusMessage"></div>
                         
@@ -1103,32 +1434,16 @@
                                 
                                 <!-- Tag Management -->
                                 <div id="tagManagement" style="margin-top: 15px;">
-                                    <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 10px;">
-                                        <span style="font-size: 0.85rem; color: #666;">Existing Tags:</span>
-                                        <button type="button" onclick="showTagManager()" style="background: none; border: 1px solid #ddd; padding: 4px 8px; border-radius: 3px; font-size: 0.8rem; cursor: pointer;">Manage Tags</button>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                        <span style="font-size: 0.85rem; color: #6b7280;">Existing Tags:</span>
+                                        <button type="button" onclick="showTagManager()" style="background: #f8f4f8; border: 2px solid #e8d8e8; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; font-weight: 500; color: #6a5a6a;">Manage Tags</button>
                                     </div>
-                                    <div id="existingTags" style="display: flex; flex-wrap: wrap; gap: 4px; max-height: 100px; overflow-y: auto;"></div>
+                                    <div id="existingTags" style="display: flex; flex-wrap: wrap; gap: 6px; max-height: 100px; overflow-y: auto;"></div>
                                 </div>
                             </div>
 
                             <button type="submit" class="submit-btn">Save Source</button>
                         </form>
-                    </section>
-
-                    <section class="sources-list-section">
-                        <div class="section-header">
-                            <h2>Sources</h2>
-                            <span class="count-badge" id="sourcesCount">0</span>
-                        </div>
-
-                        <input type="text" class="search-box" id="sourceSearchBox" placeholder="Search sources...">
-
-                        <div class="list-container" id="sourcesList">
-                            <div class="empty-state">
-                                <p>📚 No sources yet</p>
-                                <p>Add your first source</p>
-                            </div>
-                        </div>
                     </section>
                 </div>
             </div>
@@ -1158,6 +1473,29 @@
         </div>
     </div>
 
+    <!-- Quote Tag Manager Modal -->
+    <div class="modal" id="quoteTagManagerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Manage Quote Tags</div>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom: 15px;">
+                    <input type="text" class="modal-input" id="newQuoteTagInput" placeholder="Add new quote tag...">
+                    <button onclick="addGlobalQuoteTag()" style="margin-top: 8px; padding: 12px 20px; background: linear-gradient(135deg, #c8d6d4 0%, #b8c8c8 100%); color: #4a5a5a; border: none; border-radius: 10px; cursor: pointer; font-weight: 600;">Add Tag</button>
+                </div>
+                
+                <div style="border-top: 2px solid #f3f4f6; padding-top: 15px;">
+                    <h4 style="margin-bottom: 10px; font-size: 0.9rem; color: #6b7280;">Existing Quote Tags:</h4>
+                    <div id="quoteTagManagerList" style="max-height: 300px; overflow-y: auto;"></div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn secondary" onclick="closeQuoteTagManager()">Close</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Tag Manager Modal -->
     <div class="modal" id="tagManagerModal">
         <div class="modal-content">
@@ -1167,11 +1505,11 @@
             <div class="modal-body">
                 <div style="margin-bottom: 15px;">
                     <input type="text" class="modal-input" id="newTagInput" placeholder="Add new tag...">
-                    <button onclick="addGlobalTag()" style="margin-top: 8px; padding: 8px 16px; background: #2c2c2c; color: white; border: none; border-radius: 4px; cursor: pointer;">Add Tag</button>
+                    <button onclick="addGlobalTag()" style="margin-top: 8px; padding: 12px 20px; background: linear-gradient(135deg, #c8d6d4 0%, #b8c8c8 100%); color: #4a5a5a; border: none; border-radius: 10px; cursor: pointer; font-weight: 600;">Add Tag</button>
                 </div>
                 
-                <div style="border-top: 1px solid #eee; padding-top: 15px;">
-                    <h4 style="margin-bottom: 10px; font-size: 0.9rem; color: #666;">Existing Tags:</h4>
+                <div style="border-top: 2px solid #f3f4f6; padding-top: 15px;">
+                    <h4 style="margin-bottom: 10px; font-size: 0.9rem; color: #6b7280;">Existing Tags:</h4>
                     <div id="tagManagerList" style="max-height: 300px; overflow-y: auto;"></div>
                 </div>
             </div>
@@ -1180,6 +1518,7 @@
             </div>
         </div>
     </div>
+
     <div class="modal" id="deleteModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1187,11 +1526,11 @@
             </div>
             <div class="modal-body">
                 <p id="deleteModalMessage">Are you sure you want to delete this item?</p>
-                <p id="deleteModalDetails" style="margin-top: 10px; color: #666; font-size: 0.9rem;"></p>
+                <p id="deleteModalDetails" style="margin-top: 10px; color: #6b7280; font-size: 0.9rem;"></p>
             </div>
             <div class="modal-actions">
                 <button class="modal-btn secondary" onclick="closeDeleteModal()">Cancel</button>
-                <button class="modal-btn primary" style="background: #dc2626;" onclick="confirmDelete()">Delete</button>
+                <button class="modal-btn primary" style="background: linear-gradient(135deg, #f4b8b8 0%, #e8a8a8 100%); color: #5a4a4a;" onclick="confirmDelete()">Delete</button>
             </div>
         </div>
     </div>
@@ -1250,6 +1589,152 @@
             await loadData();
         });
 
+        // Database connection check
+        async function initializeDatabase() {
+            const statusElement = document.getElementById('connectionStatus');
+            const dotElement = document.getElementById('connectionDot');
+            const textElement = document.getElementById('connectionText');
+
+            try {
+                statusElement.className = 'connection-status connecting';
+                dotElement.className = 'connection-dot connecting';
+                textElement.textContent = 'Connecting...';
+                
+                driver = neo4j.driver(
+                    NEO4J_URI,
+                    neo4j.auth.basic(NEO4J_USER, NEO4J_PASSWORD),
+                    { 
+                        disableLosslessIntegers: true,
+                        config: {
+                            trust: 'TRUST_ALL_CERTIFICATES'
+                        }
+                    }
+                );
+
+                await driver.verifyConnectivity();
+                isConnected = true;
+                
+                statusElement.className = 'connection-status connected';
+                dotElement.className = 'connection-dot connected';
+                textElement.textContent = 'Neo4j Connected';
+                
+                await ensureConstraints();
+                
+            } catch (error) {
+                console.error('Connection error:', error);
+                isConnected = false;
+                statusElement.className = 'connection-status disconnected';
+                dotElement.className = 'connection-dot disconnected';
+                textElement.textContent = 'Local Storage';
+            }
+        }
+
+        async function ensureConstraints() {
+            if (!isConnected) return;
+            const session = driver.session();
+            try {
+                await session.run('CREATE CONSTRAINT quote_id IF NOT EXISTS FOR (q:Quote) REQUIRE q.id IS UNIQUE');
+                await session.run('CREATE CONSTRAINT source_id IF NOT EXISTS FOR (s:Source) REQUIRE s.id IS UNIQUE');
+            } catch (e) {
+                // Constraints already exist
+            } finally {
+                await session.close();
+            }
+        }
+
+        // Load data
+        async function loadData() {
+            await Promise.all([
+                loadSources(),
+                loadQuotes(),
+                loadGlobalTags()
+            ]);
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            quoteForm.addEventListener('submit', handleQuoteSubmit);
+            sourceForm.addEventListener('submit', handleSourceSubmit);
+            
+            searchBox.addEventListener('input', handleQuoteSearch);
+            sourceSearchBox.addEventListener('input', handleSourceSearch);
+            
+            tagInput.addEventListener('keydown', (e) => handleTagInput(e, quoteTags, renderQuoteTags));
+            sourceTagInput.addEventListener('keydown', (e) => handleTagInput(e, sourceTags, renderSourceTags));
+
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabName = tab.getAttribute('data-tab');
+                    switchTab(tabName);
+                });
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                    e.preventDefault();
+                    if (activeEditor) {
+                        showLinkModal();
+                    }
+                }
+
+                if (e.key === 'Escape') {
+                    closeLinkModal();
+                    closeDeleteModal();
+                    closeTagManager();
+                    if (editingQuoteId) {
+                        cancelQuoteEdit();
+                    }
+                    if (editingSourceId) {
+                        cancelSourceEdit();
+                    }
+                }
+            });
+
+            quoteTextEditor.addEventListener('focus', () => activeEditor = quoteTextEditor);
+            speakerEditor.addEventListener('focus', () => activeEditor = speakerEditor);
+            
+            quoteTextEditor.addEventListener('blur', () => {
+                setTimeout(() => {
+                    if (activeEditor === quoteTextEditor && !document.activeElement.closest('.modal')) {
+                        activeEditor = null;
+                    }
+                }, 100);
+            });
+            
+            speakerEditor.addEventListener('blur', () => {
+                setTimeout(() => {
+                    if (activeEditor === speakerEditor && !document.activeElement.closest('.modal')) {
+                        activeEditor = null;
+                    }
+                }, 100);
+            });
+
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.remove('show');
+                    }
+                });
+            });
+
+            setupUrlAutoFetch();
+        }
+
+        // Tab management
+        function switchTab(tabName) {
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelector(`.nav-tab[data-tab="${tabName}"]`).classList.add('active');
+
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tabName + 'Tab').classList.add('active');
+
+            if (tabName === 'quotes') {
+                cancelSourceEdit();
+            } else if (tabName === 'sources') {
+                cancelQuoteEdit();
+            }
+        }
+
         // URL Metadata Extraction
         async function fetchUrlMetadata() {
             const url = urlInput.value.trim();
@@ -1290,9 +1775,6 @@
         }
 
         async function extractMetadata(url) {
-            // For demo purposes, we'll simulate different types of URLs
-            // In a real implementation, you'd use a CORS proxy or backend service
-            
             const metadata = {
                 title: '',
                 description: '',
@@ -1305,12 +1787,11 @@
             };
 
             try {
-                // Simulate metadata extraction based on URL patterns
                 if (url.includes('youtube.com') || url.includes('youtu.be')) {
                     metadata.type = 'youtube';
                     metadata.title = 'YouTube Video Title';
                     metadata.description = 'Video description from YouTube';
-                    metadata.favicon = 'https://www.youtube.com/favicon.ico';
+                    metadata.favicon = '🎥';
                     metadata.siteName = 'YouTube';
                     metadata.publishDate = '2024-01-15';
                     
@@ -1318,7 +1799,7 @@
                     metadata.type = 'paper';
                     metadata.title = 'Academic Paper Title from arXiv';
                     metadata.description = 'Abstract of the academic paper';
-                    metadata.favicon = 'https://arxiv.org/favicon.ico';
+                    metadata.favicon = '📄';
                     metadata.siteName = 'arXiv';
                     metadata.publishDate = '2024-02-10';
                     
@@ -1326,14 +1807,14 @@
                     metadata.type = 'web';
                     metadata.title = 'GitHub Repository';
                     metadata.description = 'Repository description';
-                    metadata.favicon = 'https://github.com/favicon.ico';
+                    metadata.favicon = '💻';
                     metadata.siteName = 'GitHub';
                     
                 } else if (url.includes('medium.com') || url.includes('substack.com')) {
                     metadata.type = 'article';
                     metadata.title = 'Blog Post Title';
                     metadata.description = 'Article description and summary';
-                    metadata.favicon = getDomainFavicon(url);
+                    metadata.favicon = '📝';
                     metadata.siteName = 'Blog';
                     metadata.publishDate = '2024-03-01';
                     metadata.author = 'Author Name';
@@ -1342,34 +1823,22 @@
                     metadata.type = 'web';
                     metadata.title = 'Tweet Thread';
                     metadata.description = 'Twitter/X post content';
-                    metadata.favicon = 'https://abs.twimg.com/favicons/twitter.3.ico';
+                    metadata.favicon = '🐦';
                     metadata.siteName = 'X (Twitter)';
                     
                 } else {
-                    // Default web page - try to extract date from common patterns
                     metadata.title = getPageTitleFromUrl(url);
                     metadata.description = 'Web page content';
-                    metadata.favicon = getDomainFavicon(url);
+                    metadata.favicon = '🌐';
                     metadata.siteName = getDomainName(url);
-                    metadata.publishDate = '2024-01-25'; // Try to get actual date in real implementation
+                    metadata.publishDate = '2024-01-25';
                 }
                 
-                // Simulate API delay
                 await new Promise(resolve => setTimeout(resolve, 1500));
-                
                 return metadata;
                 
             } catch (error) {
                 throw new Error('Failed to extract metadata');
-            }
-        }
-
-        function getDomainFavicon(url) {
-            try {
-                const domain = new URL(url).origin;
-                return `${domain}/favicon.ico`;
-            } catch (e) {
-                return getDomainName(url) + ' favicon';
             }
         }
 
@@ -1388,7 +1857,7 @@
                 if (parts.length > 0) {
                     return parts[parts.length - 1]
                         .replace(/[-_]/g, ' ')
-                        .replace(/\.[^/.]+$/, '') // Remove file extension
+                        .replace(/\.[^/.]+$/, '')
                         .split(' ')
                         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
                         .join(' ');
@@ -1401,15 +1870,10 @@
 
         function displayUrlPreview(metadata) {
             const favicon = metadata.favicon || '🌐';
-            const isEmojiIcon = favicon.length <= 2;
             
             urlPreview.innerHTML = `
                 <div class="preview-header">
-                    ${isEmojiIcon ? 
-                        `<span style="font-size: 20px;">${favicon}</span>` :
-                        `<img src="${favicon}" alt="favicon" class="favicon" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'">`
-                    }
-                    <span style="display: ${isEmojiIcon ? 'none' : 'inline'}; font-size: 20px;">🌐</span>
+                    <span style="font-size: 24px;">${favicon}</span>
                     <div class="preview-title">${escapeHtml(metadata.title || 'No title found')}</div>
                 </div>
                 
@@ -1466,8 +1930,6 @@
                     // Invalid date format
                 }
             }
-
-            // Don't auto-suggest tags - let user add them manually
         }
 
         function showUrlPreview() {
@@ -1495,7 +1957,6 @@
             urlError.classList.remove('show');
         }
 
-        // Auto-fetch metadata when URL changes
         let urlFetchTimeout;
         function setupUrlAutoFetch() {
             urlInput.addEventListener('input', () => {
@@ -1508,142 +1969,883 @@
                 if (url && isValidUrl(url)) {
                     urlFetchTimeout = setTimeout(() => {
                         fetchUrlMetadata();
-                    }, 1000); // Auto-fetch after 1 second of no typing
+                    }, 1000);
                 }
             });
         }
 
-        // Tab management
-        function switchTab(tabName) {
-            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelector(`.nav-tab[data-tab="${tabName}"]`).classList.add('active');
-
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            document.getElementById(tabName + 'Tab').classList.add('active');
-
-            if (tabName === 'quotes') {
-                cancelSourceEdit();
-            } else if (tabName === 'sources') {
-                cancelQuoteEdit();
+        // Sources management
+        async function loadSources() {
+            if (!isConnected) {
+                return loadSourcesLocally();
             }
-        }
 
-        // Database connection
-        async function initializeDatabase() {
-            try {
-                showMessage('🔄 Connecting...', 'info');
-                
-                driver = neo4j.driver(
-                    NEO4J_URI,
-                    neo4j.auth.basic(NEO4J_USER, NEO4J_PASSWORD),
-                    { 
-                        disableLosslessIntegers: true,
-                        config: {
-                            trust: 'TRUST_ALL_CERTIFICATES'
-                        }
-                    }
-                );
-
-                await driver.verifyConnectivity();
-                isConnected = true;
-                showMessage('✅ Connected to Neo4j', 'success');
-                await ensureConstraints();
-                
-            } catch (error) {
-                console.error('Connection error:', error);
-                isConnected = false;
-                showMessage('📱 Local mode', 'info');
-            }
-        }
-
-        async function ensureConstraints() {
-            if (!isConnected) return;
             const session = driver.session();
             try {
-                await session.run('CREATE CONSTRAINT quote_id IF NOT EXISTS FOR (q:Quote) REQUIRE q.id IS UNIQUE');
-                await session.run('CREATE CONSTRAINT source_id IF NOT EXISTS FOR (s:Source) REQUIRE s.id IS UNIQUE');
-            } catch (e) {
-                // Constraints already exist
+                const result = await session.run(`
+                    MATCH (s:Source)
+                    RETURN s {
+                        .id, .title, .url, .type, .date, .dateNote, .note, .description, .favicon, .tags, .createdAt
+                    }
+                    ORDER BY s.createdAt DESC
+                `);
+                
+                sources = result.records.map(record => {
+                    const s = record.get('s');
+                    return {
+                        ...s,
+                        tags: s.tags || [],
+                        dateNote: s.dateNote || '',
+                        note: s.note || '',
+                        description: s.description || '',
+                        favicon: s.favicon || ''
+                    };
+                });
+                renderSourceOptions();
+                renderSources(sources);
+                updateSourcesCount();
+                
+            } catch (error) {
+                console.error('Error loading sources:', error);
+                loadSourcesLocally();
             } finally {
                 await session.close();
             }
         }
 
-        // Setup event listeners
-        function setupEventListeners() {
-            quoteForm.addEventListener('submit', handleQuoteSubmit);
-            sourceForm.addEventListener('submit', handleSourceSubmit);
-            
-            searchBox.addEventListener('input', handleQuoteSearch);
-            sourceSearchBox.addEventListener('input', handleSourceSearch);
-            
-            tagInput.addEventListener('keydown', (e) => handleTagInput(e, quoteTags, renderQuoteTags));
-            sourceTagInput.addEventListener('keydown', (e) => handleTagInput(e, sourceTags, renderSourceTags));
-
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const tabName = tab.getAttribute('data-tab');
-                    switchTab(tabName);
-                });
-            });
-
-            document.addEventListener('keydown', (e) => {
-                if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-                    e.preventDefault();
-                    if (activeEditor) {
-                        showLinkModal();
-                    }
-                }
-
-                if (e.key === 'Escape') {
-                    closeLinkModal();
-                    closeDeleteModal();
-                    if (editingQuoteId) {
-                        cancelQuoteEdit();
-                    }
-                    if (editingSourceId) {
-                        cancelSourceEdit();
-                    }
-                }
-            });
-
-            quoteTextEditor.addEventListener('focus', () => activeEditor = quoteTextEditor);
-            speakerEditor.addEventListener('focus', () => activeEditor = speakerEditor);
-            
-            quoteTextEditor.addEventListener('blur', () => {
-                setTimeout(() => {
-                    if (activeEditor === quoteTextEditor && !document.activeElement.closest('.modal')) {
-                        activeEditor = null;
-                    }
-                }, 100);
-            });
-            
-            speakerEditor.addEventListener('blur', () => {
-                setTimeout(() => {
-                    if (activeEditor === speakerEditor && !document.activeElement.closest('.modal')) {
-                        activeEditor = null;
-                    }
-                }, 100);
-            });
-
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) {
-                        modal.classList.remove('show');
-                    }
-                });
-            });
-
-            setupUrlAutoFetch();
+        function loadSourcesLocally() {
+            sources = JSON.parse(localStorage.getItem('quote_manager_sources') || '[]');
+            renderSourceOptions();
+            renderSources(sources);
+            updateSourcesCount();
         }
 
-        // Load data
-        async function loadData() {
-            await Promise.all([
-                loadSources(),
-                loadQuotes(),
-                loadGlobalTags()
-            ]);
+        function renderSourceOptions() {
+            const currentValue = sourceSelect.value;
+            sourceSelect.innerHTML = '<option value="">Select source...</option>';
+            
+            sources.forEach(source => {
+                const option = document.createElement('option');
+                option.value = source.id;
+                option.textContent = source.title;
+                sourceSelect.appendChild(option);
+            });
+            
+            if (currentValue) {
+                sourceSelect.value = currentValue;
+            }
+        }
+
+        function renderSources(sourcesToRender) {
+            if (sourcesToRender.length === 0) {
+                sourcesList.innerHTML = `
+                    <div class="empty-state">
+                        <p>📚</p>
+                        <p>No sources yet</p>
+                        <p>Add your first source using the form on the right</p>
+                    </div>
+                `;
+                return;
+            }
+
+            sourcesList.innerHTML = sourcesToRender.map(source => {
+                const sourceId = escapeHtml(source.id);
+                const quoteCount = quotes.filter(q => q.sourceId === source.id).length;
+                const favicon = source.favicon || '🌐';
+
+                const metaItems = [];
+                if (source.type) metaItems.push(`<span class="source-meta-item">📁 ${escapeHtml(source.type)}</span>`);
+                if (source.date) metaItems.push(`<span class="source-meta-item">📅 ${formatDate(source.date)}</span>`);
+                
+                return `
+                    <div class="source-card ${editingSourceId === source.id ? 'editing' : ''}" onclick="handleSourceCardClick(event, '${sourceId}')">
+                        <div class="source-options" onclick="event.stopPropagation()">
+                            <button class="source-option-btn" onclick="deleteSource('${sourceId}')">Delete</button>
+                        </div>
+                        <div class="source-edit-hint">Click to edit</div>
+                        <div class="source-quote-count">${quoteCount} quotes</div>
+                        
+                        <div class="source-header">
+                            <span style="font-size: 28px; margin-top: 2px;">${favicon}</span>
+                            <div class="source-title">${escapeHtml(source.title)}</div>
+                        </div>
+                        
+                        ${source.url ? `
+                            <div style="margin-bottom: 12px;">
+                                <a href="${escapeHtml(source.url)}" target="_blank" rel="noopener noreferrer" class="source-url">
+                                    🔗 ${escapeHtml(source.url)}
+                                </a>
+                            </div>
+                        ` : ''}
+                        
+                        ${metaItems.length > 0 ? `<div class="source-meta">${metaItems.join('')}</div>` : ''}
+                        
+                        ${source.description ? `
+                            <div class="source-description">📄 ${escapeHtml(source.description)}</div>
+                        ` : ''}
+                        
+                        ${source.dateNote ? `
+                            <div class="source-note">📝 ${escapeHtml(source.dateNote)}</div>
+                        ` : ''}
+                        
+                        ${source.note ? `
+                            <div class="source-note">💭 ${escapeHtml(source.note)}</div>
+                        ` : ''}
+                        
+                        ${source.tags && source.tags.length > 0 ? `
+                            <div class="source-tags">
+                                ${source.tags.map(tag => `<span class="source-tag">${escapeHtml(tag)}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function handleSourceCardClick(event, sourceId) {
+            // Don't edit if clicking on links or if already editing
+            if (event.target.tagName === 'A' || event.target.closest('a') || editingSourceId === sourceId) {
+                return;
+            }
+            editSource(sourceId);
+        }
+
+        async function saveSource(sourceData) {
+            if (!isConnected) {
+                return saveSourceLocally(sourceData);
+            }
+
+            const session = driver.session();
+            try {
+                const query = editingSourceId ? `
+                    MATCH (s:Source {id: $id})
+                    SET s.title = $title,
+                        s.url = $url,
+                        s.type = $type,
+                        s.date = $date,
+                        s.dateNote = $dateNote,
+                        s.note = $note,
+                        s.description = $description,
+                        s.favicon = $favicon,
+                        s.tags = $tags,
+                        s.lastModified = datetime()
+                ` : `
+                    CREATE (s:Source {
+                        id: randomUUID(),
+                        title: $title,
+                        url: $url,
+                        type: $type,
+                        date: $date,
+                        dateNote: $dateNote,
+                        note: $note,
+                        description: $description,
+                        favicon: $favicon,
+                        tags: $tags,
+                        createdBy: $createdBy,
+                        createdAt: datetime()
+                    })
+                    RETURN s.id as id
+                `;
+
+                const result = await session.run(query, {
+                    id: editingSourceId,
+                    title: sourceData.title,
+                    url: sourceData.url || '',
+                    type: sourceData.type || 'web',
+                    date: sourceData.date || '',
+                    dateNote: sourceData.dateNote || '',
+                    note: sourceData.note || '',
+                    description: sourceData.description || '',
+                    favicon: sourceData.favicon || '',
+                    tags: sourceData.tags,
+                    createdBy: currentUser
+                });
+
+                return editingSourceId || result.records[0].get('id');
+                
+            } catch (error) {
+                throw new Error('Error saving source: ' + error.message);
+            } finally {
+                await session.close();
+            }
+        }
+
+        function saveSourceLocally(sourceData) {
+            if (editingSourceId) {
+                const index = sources.findIndex(s => s.id === editingSourceId);
+                if (index !== -1) {
+                    sources[index] = {
+                        ...sources[index],
+                        ...sourceData,
+                        lastModified: new Date().toISOString()
+                    };
+                }
+                localStorage.setItem('quote_manager_sources', JSON.stringify(sources));
+                return editingSourceId;
+            } else {
+                const newSource = {
+                    id: 'source_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                    ...sourceData,
+                    createdBy: currentUser,
+                    createdAt: new Date().toISOString()
+                };
+                
+                sources.unshift(newSource);
+                localStorage.setItem('quote_manager_sources', JSON.stringify(sources));
+                
+                // Add highlight animation to the new source
+                setTimeout(() => {
+                    const newSourceCard = document.querySelector('.source-card:first-child');
+                    if (newSourceCard) {
+                        newSourceCard.classList.add('new-source');
+                        newSourceCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                }, 100);
+                
+                return newSource.id;
+            }
+        }
+
+        // Source form handling
+        async function handleSourceSubmit(e) {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Saving...';
+
+            try {
+                const title = document.getElementById('sourceTitle').value.trim();
+                if (!title) {
+                    throw new Error('Title is required');
+                }
+
+                const sourceData = {
+                    title,
+                    url: document.getElementById('sourceUrl').value.trim(),
+                    type: document.getElementById('sourceType').value,
+                    date: document.getElementById('sourceDate').value,
+                    dateNote: document.getElementById('sourceDateNote').value.trim(),
+                    note: document.getElementById('sourceNote').value.trim(),
+                    description: document.getElementById('sourceDescription').value.trim(),
+                    favicon: lastFetchedMetadata?.favicon || '',
+                    tags: [...sourceTags]
+                };
+
+                const sourceId = await saveSource(sourceData);
+                
+                if (editingSourceId) {
+                    showSourceMessage('✅ Source updated', 'success');
+                    const index = sources.findIndex(s => s.id === editingSourceId);
+                    if (index !== -1) {
+                        sources[index] = { id: sourceId, ...sourceData };
+                    }
+                    cancelSourceEdit();
+                } else {
+                    showSourceMessage('✅ Source saved', 'success');
+                    clearSourceForm();
+                }
+                
+                await loadSources();
+                await loadGlobalTags();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showSourceMessage('❌ Error: ' + error.message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        }
+
+        function editSource(sourceId) {
+            if (editingSourceId === sourceId) return;
+
+            const source = sources.find(s => s.id === sourceId);
+            if (!source) return;
+
+            editingSourceId = sourceId;
+            
+            document.getElementById('sourceTitle').value = source.title || '';
+            document.getElementById('sourceUrl').value = source.url || '';
+            document.getElementById('sourceType').value = source.type || 'web';
+            document.getElementById('sourceDate').value = source.date || '';
+            document.getElementById('sourceDateNote').value = source.dateNote || '';
+            document.getElementById('sourceNote').value = source.note || '';
+            document.getElementById('sourceDescription').value = source.description || '';
+            
+            sourceTags = [...(source.tags || [])];
+            renderSourceTags();
+            updateExistingTagsDisplay();
+            
+            if (source.url && (source.favicon || source.description)) {
+                const metadata = {
+                    title: source.title,
+                    description: source.description,
+                    favicon: source.favicon,
+                    type: source.type,
+                    publishDate: source.date
+                };
+                displayUrlPreview(metadata);
+                lastFetchedMetadata = metadata;
+            }
+            
+            document.querySelector('#sourceForm .submit-btn').textContent = 'Update Source';
+            
+            document.querySelectorAll('.source-card').forEach(card => {
+                card.classList.remove('editing');
+            });
+            
+            const targetCard = Array.from(document.querySelectorAll('.source-card')).find(card => {
+                return card.querySelector('.source-title')?.textContent === source.title;
+            });
+            
+            if (targetCard) {
+                targetCard.classList.add('editing');
+                targetCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+            
+            document.querySelector('.sources-form-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function cancelSourceEdit() {
+            editingSourceId = null;
+            clearSourceForm();
+            document.querySelector('#sourceForm .submit-btn').textContent = 'Save Source';
+            document.querySelectorAll('.source-card').forEach(card => {
+                card.classList.remove('editing');
+            });
+        }
+
+        function clearSourceForm() {
+            document.getElementById('sourceTitle').value = '';
+            document.getElementById('sourceUrl').value = '';
+            document.getElementById('sourceType').value = 'web';
+            document.getElementById('sourceDate').value = '';
+            document.getElementById('sourceDateNote').value = '';
+            document.getElementById('sourceNote').value = '';
+            document.getElementById('sourceDescription').value = '';
+            sourceTags = [];
+            renderSourceTags();
+            updateExistingTagsDisplay();
+            hideUrlPreview();
+            hideUrlError();
+            lastFetchedMetadata = null;
+        }
+
+        function deleteSource(sourceId) {
+            const source = sources.find(s => s.id === sourceId);
+            if (!source) return;
+            
+            const quotesUsingSource = quotes.filter(q => q.sourceId === sourceId).length;
+            
+            showDeleteModal(
+                'Delete Source',
+                `Are you sure you want to delete "${source.title}"?`,
+                quotesUsingSource > 0 ? `${quotesUsingSource} quotes are using this source. They will remain but won't be linked to any source.` : '',
+                async () => {
+                    try {
+                        if (isConnected) {
+                            const session = driver.session();
+                            try {
+                                await session.run(`
+                                    MATCH (q:Quote)-[r:CITES_SOURCE]->(s:Source {id: $sourceId})
+                                    DELETE r
+                                `, { sourceId });
+                                
+                                await session.run(`
+                                    MATCH (s:Source {id: $sourceId})
+                                    DELETE s
+                                `, { sourceId });
+                            } finally {
+                                await session.close();
+                            }
+                        } else {
+                            let savedSources = JSON.parse(localStorage.getItem('quote_manager_sources') || '[]');
+                            savedSources = savedSources.filter(s => s.id !== sourceId);
+                            localStorage.setItem('quote_manager_sources', JSON.stringify(savedSources));
+                            
+                            let savedQuotes = JSON.parse(localStorage.getItem('quote_manager_quotes') || '[]');
+                            savedQuotes.forEach(quote => {
+                                if (quote.sourceId === sourceId) {
+                                    quote.sourceId = null;
+                                }
+                            });
+                            localStorage.setItem('quote_manager_quotes', JSON.stringify(savedQuotes));
+                        }
+                        
+                        await loadSources();
+                        await loadQuotes();
+                        await loadGlobalTags();
+                        showSourceMessage('✅ Source deleted', 'success');
+                        
+                    } catch (error) {
+                        console.error('Error deleting source:', error);
+                        showSourceMessage('❌ Error deleting source', 'error');
+                    }
+                }
+            );
+        }
+
+        function handleSourceSearch(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredSources = sources.filter(source => {
+                const title = (source.title || '').toLowerCase();
+                const url = (source.url || '').toLowerCase();
+                const type = (source.type || '').toLowerCase();
+                const note = (source.note || '').toLowerCase();
+                const description = (source.description || '').toLowerCase();
+                const dateNote = (source.dateNote || '').toLowerCase();
+                const tagsText = (source.tags || []).join(' ').toLowerCase();
+                
+                return title.includes(searchTerm) ||
+                       url.includes(searchTerm) ||
+                       type.includes(searchTerm) ||
+                       note.includes(searchTerm) ||
+                       description.includes(searchTerm) ||
+                       dateNote.includes(searchTerm) ||
+                       tagsText.includes(searchTerm);
+            });
+            renderSources(filteredSources);
+        }
+
+        // Load quotes
+        async function loadQuotes() {
+            if (!isConnected) {
+                return loadQuotesLocally();
+            }
+
+            const session = driver.session();
+            try {
+                const result = await session.run(`
+                    MATCH (q:Quote)
+                    WHERE q.isArchived = false OR q.isArchived IS NULL
+                    OPTIONAL MATCH (q)-[:CITES_SOURCE]->(s:Source)
+                    RETURN q {
+                        .id, .text, .textHtml, .author, .speaker, .speakerHtml, .tags, .createdAt
+                    }, s {.id, .title} as source
+                    ORDER BY q.createdAt DESC
+                    LIMIT 200
+                `);
+                
+                quotes = result.records.map(record => {
+                    const q = record.get('q');
+                    const source = record.get('source');
+                    
+                    const textHtml = q.textHtml || q.text || '';
+                    const speakerText = q.speaker || q.author || 'Unknown';
+                    const speakerHtml = q.speakerHtml || speakerText;
+                    
+                    return {
+                        id: q.id,
+                        text: q.text || '',
+                        textHtml: textHtml,
+                        speaker: speakerText,
+                        speakerHtml: speakerHtml,
+                        sourceId: source ? source.id : null,
+                        sourceTitle: source ? source.title : null,
+                        tags: q.tags || [],
+                        createdAt: q.createdAt || new Date().toISOString()
+                    };
+                });
+                
+                renderQuotes(quotes);
+                updateQuotesCount();
+                
+            } catch (error) {
+                console.error('Error loading quotes:', error);
+                loadQuotesLocally();
+            } finally {
+                await session.close();
+            }
+        }
+
+        function loadQuotesLocally() {
+            try {
+                const savedQuotes = JSON.parse(localStorage.getItem('quote_manager_quotes') || '[]');
+                quotes = savedQuotes.map(q => ({
+                    ...q,
+                    textHtml: q.textHtml || q.text,
+                    speakerHtml: q.speakerHtml || q.speaker,
+                    sourceTitle: q.sourceId ? sources.find(s => s.id === q.sourceId)?.title : null
+                }));
+                renderQuotes(quotes);
+                updateQuotesCount();
+            } catch (error) {
+                quotes = [];
+                renderQuotes(quotes);
+                updateQuotesCount();
+            }
+        }
+
+        // Render quotes
+        function renderQuotes(quotesToRender) {
+            if (quotesToRender.length === 0) {
+                quotesList.innerHTML = `
+                    <div class="empty-state">
+                        <p>📝</p>
+                        <p>No quotes yet</p>
+                        <p>Add your first quote using the form on the left</p>
+                    </div>
+                `;
+                return;
+            }
+
+            quotesList.innerHTML = quotesToRender.map(quote => {
+                const quoteId = escapeHtml(quote.id);
+                const quoteTextHtml = quote.textHtml || quote.text || '';
+                const speakerHtml = quote.speakerHtml || quote.speaker || '';
+                const sourceTitle = quote.sourceTitle ? escapeHtml(quote.sourceTitle) : '';
+                
+                return `
+                    <div class="quote-card ${editingQuoteId === quote.id ? 'editing' : ''}" onclick="handleQuoteCardClick(event, '${quoteId}')">
+                        <div class="quote-options" onclick="event.stopPropagation()">
+                            <button class="quote-option-btn delete-option" onclick="deleteQuote('${quoteId}')">Delete</button>
+                        </div>
+                        <div class="edit-hint">Click to edit</div>
+                        <div class="quote-text">${quoteTextHtml}</div>
+                        <div class="quote-speaker">
+                            — ${speakerHtml}
+                        </div>
+                        ${quote.sourceTitle ? `
+                            <div class="quote-source">
+                                📚 ${sourceTitle}
+                            </div>
+                        ` : ''}
+                        ${quote.tags && quote.tags.length > 0 ? `
+                            <div class="quote-tags">
+                                ${quote.tags.map(tag => `<span class="quote-tag">${escapeHtml(tag)}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function handleQuoteCardClick(event, quoteId) {
+            // Don't edit if clicking on links or if already editing
+            if (event.target.tagName === 'A' || event.target.closest('a') || editingQuoteId === quoteId) {
+                return;
+            }
+            editQuote(quoteId);
+        }
+
+        function editQuote(quoteId) {
+            if (editingQuoteId === quoteId) return;
+
+            const quote = quotes.find(q => q.id === quoteId);
+            if (!quote) return;
+
+            if (!document.getElementById('quotesTab').classList.contains('active')) {
+                switchTab('quotes');
+            }
+
+            editingQuoteId = quoteId;
+            
+            const textHtml = quote.textHtml || quote.text || '';
+            const speakerHtml = quote.speakerHtml || quote.speaker || '';
+            
+            quoteTextEditor.innerHTML = textHtml;
+            speakerEditor.innerHTML = speakerHtml;
+            sourceSelect.value = quote.sourceId || '';
+            quoteTags = [...(quote.tags || [])];
+            renderQuoteTags();
+            
+            document.querySelector('#quoteForm .submit-btn').textContent = 'Update Quote';
+            
+            document.querySelectorAll('.quote-card').forEach(card => {
+                card.classList.remove('editing');
+            });
+            
+            const targetCard = Array.from(document.querySelectorAll('.quote-card')).find(card => {
+                return card.innerHTML.includes(quoteId);
+            });
+            
+            if (targetCard) {
+                targetCard.classList.add('editing');
+                targetCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+            
+            document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function deleteQuote(quoteId) {
+            const quote = quotes.find(q => q.id === quoteId);
+            if (!quote) return;
+            
+            showDeleteModal(
+                'Delete Quote',
+                'Are you sure you want to delete this quote?',
+                '',
+                async () => {
+                    try {
+                        if (isConnected) {
+                            const session = driver.session();
+                            try {
+                                await session.run('MATCH (q:Quote {id: $id}) DETACH DELETE q', { id: quoteId });
+                            } finally {
+                                await session.close();
+                            }
+                        } else {
+                            let savedQuotes = JSON.parse(localStorage.getItem('quote_manager_quotes') || '[]');
+                            savedQuotes = savedQuotes.filter(q => q.id !== quoteId);
+                            localStorage.setItem('quote_manager_quotes', JSON.stringify(savedQuotes));
+                        }
+                        
+                        await loadQuotes();
+                        await loadGlobalTags();
+                        showMessage('✅ Quote deleted', 'success');
+                    } catch (error) {
+                        showMessage('❌ Error deleting quote', 'error');
+                    }
+                }
+            );
+        }
+
+        function handleQuoteSearch(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredQuotes = quotes.filter(quote => {
+                const quoteText = (quote.text || '').toLowerCase();
+                const speakerText = (quote.speaker || '').toLowerCase();
+                const speakerHtmlText = quote.speakerHtml ? stripHtml(quote.speakerHtml).toLowerCase() : '';
+                const sourceTitle = (quote.sourceTitle || '').toLowerCase();
+                const tagsText = (quote.tags || []).join(' ').toLowerCase();
+                
+                return quoteText.includes(searchTerm) ||
+                       speakerText.includes(searchTerm) ||
+                       speakerHtmlText.includes(searchTerm) ||
+                       sourceTitle.includes(searchTerm) ||
+                       tagsText.includes(searchTerm);
+            });
+            renderQuotes(filteredQuotes);
+        }
+
+        // Quote form submission
+        async function handleQuoteSubmit(e) {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Saving...';
+
+            try {
+                const quoteText = quoteTextEditor.innerHTML.trim();
+                const speakerText = speakerEditor.innerHTML.trim();
+                const sourceId = sourceSelect.value;
+
+                if (!quoteText || !speakerText) {
+                    throw new Error('Quote and Citation are required');
+                }
+
+                const quoteData = {
+                    text: stripHtml(quoteText),
+                    textHtml: quoteText,
+                    speaker: stripHtml(speakerText),
+                    speakerHtml: speakerText,
+                    sourceId: sourceId,
+                    tags: [...quoteTags]
+                };
+
+                if (editingQuoteId) {
+                    await updateQuote(editingQuoteId, quoteData);
+                    showMessage('✅ Quote updated', 'success');
+                    cancelQuoteEdit();
+                } else {
+                    await saveQuote(quoteData);
+                    showMessage('✅ Quote saved', 'success');
+                    clearQuoteForm();
+                }
+                
+                await loadQuotes();
+                await loadGlobalTags();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('❌ Error: ' + error.message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        }
+
+        function clearQuoteForm() {
+            quoteTextEditor.innerHTML = '';
+            speakerEditor.innerHTML = '';
+            sourceSelect.value = '';
+            quoteTags = [];
+            renderQuoteTags();
+        }
+
+        function cancelQuoteEdit() {
+            editingQuoteId = null;
+            clearQuoteForm();
+            document.querySelector('#quoteForm .submit-btn').textContent = 'Save Quote';
+            document.querySelectorAll('.quote-card').forEach(card => {
+                card.classList.remove('editing');
+            });
+        }
+
+        // Database operations for quotes
+        async function saveQuote(quoteData) {
+            if (!isConnected) {
+                return saveQuoteLocally(quoteData);
+            }
+
+            const session = driver.session();
+            try {
+                const mockEmbedding = Array.from({length: 1536}, () => Math.random() - 0.5);
+                
+                const query = quoteData.sourceId ? `
+                    MATCH (s:Source {id: $sourceId})
+                    CREATE (q:Quote {
+                        id: randomUUID(),
+                        text: $text,
+                        textHtml: $textHtml,
+                        shortText: substring($textPlain, 0, 120),
+                        author: $speakerPlain,
+                        speaker: $speakerPlain,
+                        speakerHtml: $speakerHtml,
+                        tags: $tags,
+                        embedding: $embedding,
+                        createdBy: $createdBy,
+                        createdAt: datetime(),
+                        isArchived: false
+                    })
+                    CREATE (q)-[:CITES_SOURCE]->(s)
+                ` : `
+                    CREATE (q:Quote {
+                        id: randomUUID(),
+                        text: $text,
+                        textHtml: $textHtml,
+                        shortText: substring($textPlain, 0, 120),
+                        author: $speakerPlain,
+                        speaker: $speakerPlain,
+                        speakerHtml: $speakerHtml,
+                        tags: $tags,
+                        embedding: $embedding,
+                        createdBy: $createdBy,
+                        createdAt: datetime(),
+                        isArchived: false
+                    })
+                `;
+                
+                await session.run(query, {
+                    text: quoteData.text,
+                    textHtml: quoteData.textHtml,
+                    textPlain: quoteData.text,
+                    speakerPlain: quoteData.speaker,
+                    speakerHtml: quoteData.speakerHtml,
+                    sourceId: quoteData.sourceId,
+                    tags: quoteData.tags,
+                    embedding: mockEmbedding,
+                    createdBy: currentUser
+                });
+                
+            } catch (error) {
+                throw new Error('Error saving quote: ' + error.message);
+            } finally {
+                await session.close();
+            }
+        }
+
+        async function updateQuote(quoteId, quoteData) {
+            if (!isConnected) {
+                return updateQuoteLocally(quoteId, quoteData);
+            }
+
+            const session = driver.session();
+            try {
+                await session.run(`
+                    MATCH (q:Quote {id: $id})
+                    SET q.text = $text,
+                        q.textHtml = $textHtml,
+                        q.shortText = substring($textPlain, 0, 120),
+                        q.author = $speakerPlain,
+                        q.speaker = $speakerPlain,
+                        q.speakerHtml = $speakerHtml,
+                        q.tags = $tags,
+                        q.lastModified = datetime()
+                `, {
+                    id: quoteId,
+                    text: quoteData.text,
+                    textHtml: quoteData.textHtml,
+                    textPlain: quoteData.text,
+                    speakerPlain: quoteData.speaker,
+                    speakerHtml: quoteData.speakerHtml,
+                    tags: quoteData.tags
+                });
+
+                await session.run(`
+                    MATCH (q:Quote {id: $id})
+                    OPTIONAL MATCH (q)-[r:CITES_SOURCE]->()
+                    DELETE r
+                `, { id: quoteId });
+
+                if (quoteData.sourceId) {
+                    await session.run(`
+                        MATCH (q:Quote {id: $quoteId}), (s:Source {id: $sourceId})
+                        CREATE (q)-[:CITES_SOURCE]->(s)
+                    `, {
+                        quoteId: quoteId,
+                        sourceId: quoteData.sourceId
+                    });
+                }
+                
+            } catch (error) {
+                throw new Error('Error updating quote: ' + error.message);
+            } finally {
+                await session.close();
+            }
+        }
+
+        // Local storage fallbacks
+        function saveQuoteLocally(quoteData) {
+            const newQuote = {
+                id: 'quote_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                text: quoteData.text,
+                textHtml: quoteData.textHtml,
+                speaker: quoteData.speaker,
+                speakerHtml: quoteData.speakerHtml,
+                sourceId: quoteData.sourceId,
+                tags: quoteData.tags,
+                createdAt: new Date().toISOString(),
+                createdBy: currentUser
+            };
+            
+            let savedQuotes = JSON.parse(localStorage.getItem('quote_manager_quotes') || '[]');
+            savedQuotes.unshift(newQuote);
+            localStorage.setItem('quote_manager_quotes', JSON.stringify(savedQuotes));
+            
+            // Add highlight animation to the new quote
+            setTimeout(() => {
+                const newQuoteCard = document.querySelector('.quote-card:first-child');
+                if (newQuoteCard) {
+                    newQuoteCard.classList.add('new-quote');
+                    newQuoteCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            }, 100);
+        }
+
+        function updateQuoteLocally(quoteId, quoteData) {
+            let savedQuotes = JSON.parse(localStorage.getItem('quote_manager_quotes') || '[]');
+            const index = savedQuotes.findIndex(q => q.id === quoteId);
+            if (index !== -1) {
+                savedQuotes[index] = {
+                    ...savedQuotes[index],
+                    text: quoteData.text,
+                    textHtml: quoteData.textHtml,
+                    speaker: quoteData.speaker,
+                    speakerHtml: quoteData.speakerHtml,
+                    sourceId: quoteData.sourceId,
+                    tags: quoteData.tags,
+                    lastModified: new Date().toISOString()
+                };
+                localStorage.setItem('quote_manager_quotes', JSON.stringify(savedQuotes));
+            }
         }
 
         // Global tag management
@@ -1684,11 +2886,19 @@
 
         function updateExistingTagsDisplay() {
             const existingTagsContainer = document.getElementById('existingTags');
-            if (!existingTagsContainer) return;
+            if (existingTagsContainer) {
+                existingTagsContainer.innerHTML = globalSourceTags.map(tag => 
+                    `<span class="existing-tag ${sourceTags.includes(tag) ? 'selected' : ''}" onclick="toggleExistingTag('${escapeHtml(tag)}')">${escapeHtml(tag)}</span>`
+                ).join('');
+            }
             
-            existingTagsContainer.innerHTML = globalSourceTags.map(tag => 
-                `<span class="existing-tag ${sourceTags.includes(tag) ? 'selected' : ''}" onclick="toggleExistingTag('${escapeHtml(tag)}')">${escapeHtml(tag)}</span>`
-            ).join('');
+            // Update quote tags display
+            const existingQuoteTagsContainer = document.getElementById('existingQuoteTags');
+            if (existingQuoteTagsContainer) {
+                existingQuoteTagsContainer.innerHTML = globalQuoteTags.map(tag => 
+                    `<span class="existing-tag ${quoteTags.includes(tag) ? 'selected' : ''}" onclick="toggleExistingQuoteTag('${escapeHtml(tag)}')">${escapeHtml(tag)}</span>`
+                ).join('');
+            }
         }
 
         function toggleExistingTag(tagName) {
@@ -1699,6 +2909,196 @@
                 addTag(tagName, sourceTags, renderSourceTags);
             }
             updateExistingTagsDisplay();
+        }
+
+        function toggleExistingQuoteTag(tagName) {
+            if (quoteTags.includes(tagName)) {
+                const index = quoteTags.indexOf(tagName);
+                removeTag(index, quoteTags, renderQuoteTags);
+            } else {
+                addTag(tagName, quoteTags, renderQuoteTags);
+            }
+            updateExistingTagsDisplay();
+        }
+
+        function showQuoteTagManager() {
+            renderQuoteTagManagerList();
+            document.getElementById('quoteTagManagerModal').classList.add('show');
+        }
+
+        function closeQuoteTagManager() {
+            document.getElementById('quoteTagManagerModal').classList.remove('show');
+        }
+
+        function renderQuoteTagManagerList() {
+            const container = document.getElementById('quoteTagManagerList');
+            
+            container.innerHTML = globalQuoteTags.map(tag => {
+                const quoteUsage = quotes.filter(q => q.tags && q.tags.includes(tag)).length;
+                
+                return `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border: 2px solid #f3f4f6; margin-bottom: 8px; border-radius: 10px;">
+                        <div>
+                            <strong>${escapeHtml(tag)}</strong>
+                            <div style="font-size: 0.8rem; color: #6b7280;">
+                                Used in ${quoteUsage} quotes
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button onclick="editGlobalQuoteTag('${escapeHtml(tag)}')" style="background: #f3f4f6; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">Rename</button>
+                            <button onclick="deleteGlobalQuoteTag('${escapeHtml(tag)}')" style="background: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">Delete</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addGlobalQuoteTag() {
+            const newTagInput = document.getElementById('newQuoteTagInput');
+            const tagName = newTagInput.value.trim();
+            
+            if (!tagName) return;
+            
+            if (!globalQuoteTags.includes(tagName)) {
+                globalQuoteTags.push(tagName);
+                globalQuoteTags.sort();
+                updateTagDataLists();
+                updateExistingTagsDisplay();
+                renderQuoteTagManagerList();
+            }
+            
+            newTagInput.value = '';
+        }
+
+        async function editGlobalQuoteTag(oldTag) {
+            const newTag = prompt(`Rename quote tag "${oldTag}" to:`, oldTag);
+            if (!newTag || newTag === oldTag) return;
+            
+            try {
+                quotes.forEach(quote => {
+                    if (quote.tags && quote.tags.includes(oldTag)) {
+                        const index = quote.tags.indexOf(oldTag);
+                        quote.tags[index] = newTag;
+                    }
+                });
+                
+                if (globalQuoteTags.includes(oldTag)) {
+                    const index = globalQuoteTags.indexOf(oldTag);
+                    globalQuoteTags[index] = newTag;
+                    globalQuoteTags.sort();
+                }
+                
+                if (quoteTags.includes(oldTag)) {
+                    const index = quoteTags.indexOf(oldTag);
+                    quoteTags[index] = newTag;
+                    renderQuoteTags();
+                }
+                
+                if (isConnected) {
+                    await updateQuoteTagInDatabase(oldTag, newTag);
+                } else {
+                    updateQuoteTagInLocalStorage(oldTag, newTag);
+                }
+                
+                updateTagDataLists();
+                updateExistingTagsDisplay();
+                renderQuoteTagManagerList();
+                renderQuotes(quotes);
+                
+                showMessage(`✅ Quote tag renamed from "${oldTag}" to "${newTag}"`, 'success');
+                
+            } catch (error) {
+                console.error('Error updating quote tag:', error);
+                showMessage('❌ Error updating quote tag', 'error');
+            }
+        }
+
+        async function deleteGlobalQuoteTag(tagName) {
+            const quoteUsage = quotes.filter(q => q.tags && q.tags.includes(tagName)).length;
+            
+            if (!confirm(`Delete quote tag "${tagName}"?\n\nThis will remove it from ${quoteUsage} quotes.`)) {
+                return;
+            }
+            
+            try {
+                quotes.forEach(quote => {
+                    if (quote.tags) {
+                        quote.tags = quote.tags.filter(tag => tag !== tagName);
+                    }
+                });
+                
+                globalQuoteTags = globalQuoteTags.filter(tag => tag !== tagName);
+                quoteTags = quoteTags.filter(tag => tag !== tagName);
+                
+                if (isConnected) {
+                    await deleteQuoteTagFromDatabase(tagName);
+                } else {
+                    deleteQuoteTagFromLocalStorage(tagName);
+                }
+                
+                renderQuoteTags();
+                updateTagDataLists();
+                updateExistingTagsDisplay();
+                renderQuoteTagManagerList();
+                renderQuotes(quotes);
+                
+                showMessage(`✅ Quote tag "${tagName}" deleted`, 'success');
+                
+            } catch (error) {
+                console.error('Error deleting quote tag:', error);
+                showMessage('❌ Error deleting quote tag', 'error');
+            }
+        }
+
+        async function updateQuoteTagInDatabase(oldTag, newTag) {
+            if (!isConnected) return;
+            
+            const session = driver.session();
+            try {
+                await session.run(`
+                    MATCH (q:Quote)
+                    WHERE $oldTag IN q.tags
+                    SET q.tags = [tag IN q.tags | CASE WHEN tag = $oldTag THEN $newTag ELSE tag END]
+                `, { oldTag, newTag });
+            } finally {
+                await session.close();
+            }
+        }
+
+        async function deleteQuoteTagFromDatabase(tagName) {
+            if (!isConnected) return;
+            
+            const session = driver.session();
+            try {
+                await session.run(`
+                    MATCH (q:Quote)
+                    WHERE $tagName IN q.tags
+                    SET q.tags = [tag IN q.tags WHERE tag <> $tagName]
+                `, { tagName });
+            } finally {
+                await session.close();
+            }
+        }
+
+        function updateQuoteTagInLocalStorage(oldTag, newTag) {
+            let savedQuotes = JSON.parse(localStorage.getItem('quote_manager_quotes') || '[]');
+            savedQuotes.forEach(quote => {
+                if (quote.tags && quote.tags.includes(oldTag)) {
+                    const index = quote.tags.indexOf(oldTag);
+                    quote.tags[index] = newTag;
+                }
+            });
+            localStorage.setItem('quote_manager_quotes', JSON.stringify(savedQuotes));
+        }
+
+        function deleteQuoteTagFromLocalStorage(tagName) {
+            let savedQuotes = JSON.parse(localStorage.getItem('quote_manager_quotes') || '[]');
+            savedQuotes.forEach(quote => {
+                if (quote.tags) {
+                    quote.tags = quote.tags.filter(tag => tag !== tagName);
+                }
+            });
+            localStorage.setItem('quote_manager_quotes', JSON.stringify(savedQuotes));
         }
 
         function showTagManager() {
@@ -1719,16 +3119,16 @@
                 const sourceUsage = sources.filter(s => s.tags && s.tags.includes(tag)).length;
                 
                 return `
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; border: 1px solid #eee; margin-bottom: 5px; border-radius: 4px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border: 2px solid #f3f4f6; margin-bottom: 8px; border-radius: 10px;">
                         <div>
                             <strong>${escapeHtml(tag)}</strong>
-                            <div style="font-size: 0.8rem; color: #666;">
+                            <div style="font-size: 0.8rem; color: #6b7280;">
                                 ${quoteUsage} quotes, ${sourceUsage} sources
                             </div>
                         </div>
                         <div style="display: flex; gap: 8px;">
-                            <button onclick="editGlobalTag('${escapeHtml(tag)}')" style="background: #f0f0f0; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 0.8rem;">Rename</button>
-                            <button onclick="deleteGlobalTag('${escapeHtml(tag)}')" style="background: #ff4444; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 0.8rem;">Delete</button>
+                            <button onclick="editGlobalTag('${escapeHtml(tag)}')" style="background: #f3f4f6; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">Rename</button>
+                            <button onclick="deleteGlobalTag('${escapeHtml(tag)}')" style="background: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">Delete</button>
                         </div>
                     </div>
                 `;
@@ -1909,477 +3309,41 @@
         }
 
         function updateTagInLocalStorage(oldTag, newTag) {
-            let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
+            let savedQuotes = JSON.parse(localStorage.getItem('quote_manager_quotes') || '[]');
             savedQuotes.forEach(quote => {
                 if (quote.tags && quote.tags.includes(oldTag)) {
                     const index = quote.tags.indexOf(oldTag);
                     quote.tags[index] = newTag;
                 }
             });
-            localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
+            localStorage.setItem('quote_manager_quotes', JSON.stringify(savedQuotes));
             
-            let savedSources = JSON.parse(localStorage.getItem('rsrch_sources') || '[]');
+            let savedSources = JSON.parse(localStorage.getItem('quote_manager_sources') || '[]');
             savedSources.forEach(source => {
                 if (source.tags && source.tags.includes(oldTag)) {
                     const index = source.tags.indexOf(oldTag);
                     source.tags[index] = newTag;
                 }
             });
-            localStorage.setItem('rsrch_sources', JSON.stringify(savedSources));
+            localStorage.setItem('quote_manager_sources', JSON.stringify(savedSources));
         }
 
         function deleteTagFromLocalStorage(tagName) {
-            let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
+            let savedQuotes = JSON.parse(localStorage.getItem('quote_manager_quotes') || '[]');
             savedQuotes.forEach(quote => {
                 if (quote.tags) {
                     quote.tags = quote.tags.filter(tag => tag !== tagName);
                 }
             });
-            localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
+            localStorage.setItem('quote_manager_quotes', JSON.stringify(savedQuotes));
             
-            let savedSources = JSON.parse(localStorage.getItem('rsrch_sources') || '[]');
+            let savedSources = JSON.parse(localStorage.getItem('quote_manager_sources') || '[]');
             savedSources.forEach(source => {
                 if (source.tags) {
                     source.tags = source.tags.filter(tag => tag !== tagName);
                 }
             });
-            localStorage.setItem('rsrch_sources', JSON.stringify(savedSources));
-        }
-
-        // Sources management
-        async function loadSources() {
-            if (!isConnected) {
-                return loadSourcesLocally();
-            }
-
-            const session = driver.session();
-            try {
-                const result = await session.run(`
-                    MATCH (s:Source)
-                    RETURN s {
-                        .id, .title, .url, .type, .date, .dateNote, .note, .description, .favicon, .tags, .createdAt
-                    }
-                    ORDER BY s.createdAt DESC
-                `);
-                
-                sources = result.records.map(record => {
-                    const s = record.get('s');
-                    return {
-                        ...s,
-                        tags: s.tags || [],
-                        dateNote: s.dateNote || '',
-                        note: s.note || '',
-                        description: s.description || '',
-                        favicon: s.favicon || ''
-                    };
-                });
-                renderSourceOptions();
-                renderSources(sources);
-                updateSourcesCount();
-                
-            } catch (error) {
-                console.error('Error loading sources:', error);
-                loadSourcesLocally();
-            } finally {
-                await session.close();
-            }
-        }
-
-        function loadSourcesLocally() {
-            sources = JSON.parse(localStorage.getItem('rsrch_sources') || '[]');
-            renderSourceOptions();
-            renderSources(sources);
-            updateSourcesCount();
-        }
-
-        function renderSourceOptions() {
-            const currentValue = sourceSelect.value;
-            sourceSelect.innerHTML = '<option value="">Select source...</option>';
-            
-            sources.forEach(source => {
-                const option = document.createElement('option');
-                option.value = source.id;
-                option.textContent = source.title;
-                sourceSelect.appendChild(option);
-            });
-            
-            if (currentValue) {
-                sourceSelect.value = currentValue;
-            }
-        }
-
-        function renderSources(sourcesToRender) {
-            if (sourcesToRender.length === 0) {
-                sourcesList.innerHTML = `
-                    <div class="empty-state">
-                        <p>📚 No sources yet</p>
-                        <p>Add your first source</p>
-                    </div>
-                `;
-                return;
-            }
-
-            sourcesList.innerHTML = sourcesToRender.map(source => {
-                const sourceId = escapeHtml(source.id);
-                const quoteCount = quotes.filter(q => q.sourceId === source.id).length;
-                const favicon = source.favicon || '🌐';
-                const isEmojiIcon = favicon.length <= 2;
-
-                const metaItems = [];
-                if (source.type) metaItems.push(`<span class="source-meta-item">📁 ${escapeHtml(source.type)}</span>`);
-                if (source.date) metaItems.push(`<span class="source-meta-item">📅 ${formatDate(source.date)}</span>`);
-                
-                return `
-                    <div class="source-card ${editingSourceId === source.id ? 'editing' : ''}">
-                        <div class="quote-actions">
-                            <button class="action-btn" onclick="editSource('${sourceId}')" title="Edit">✏️</button>
-                            <button class="action-btn" onclick="deleteSource('${sourceId}')" title="Delete">🗑️</button>
-                        </div>
-                        <div class="source-quote-count">${quoteCount} quotes</div>
-                        
-                        <div class="source-header">
-                            ${isEmojiIcon ? 
-                                `<span style="font-size: 24px; margin-top: 2px;">${favicon}</span>` :
-                                `<img src="${favicon}" alt="favicon" class="source-favicon" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'">
-                                 <span style="display: none; font-size: 24px; margin-top: 2px;">🌐</span>`
-                            }
-                            <div class="source-title" onclick="editSource('${sourceId}')">${escapeHtml(source.title)}</div>
-                        </div>
-                        
-                        ${source.url ? `
-                            <div style="margin-bottom: 8px;">
-                                <a href="${escapeHtml(source.url)}" target="_blank" rel="noopener noreferrer" class="source-url">
-                                    🔗 ${escapeHtml(source.url)}
-                                </a>
-                            </div>
-                        ` : ''}
-                        
-                        ${metaItems.length > 0 ? `<div class="source-meta">${metaItems.join('')}</div>` : ''}
-                        
-                        ${source.description ? `
-                            <div class="source-description">📄 ${escapeHtml(source.description)}</div>
-                        ` : ''}
-                        
-                        ${source.dateNote ? `
-                            <div class="source-note">📝 ${escapeHtml(source.dateNote)}</div>
-                        ` : ''}
-                        
-                        ${source.note ? `
-                            <div class="source-note">💭 ${escapeHtml(source.note)}</div>
-                        ` : ''}
-                        
-                        ${source.tags && source.tags.length > 0 ? `
-                            <div class="source-tags">
-                                ${source.tags.map(tag => `<span class="source-tag">${escapeHtml(tag)}</span>`).join('')}
-                            </div>
-                        ` : ''}
-                    </div>
-                `;
-            }).join('');
-        }
-
-        async function saveSource(sourceData) {
-            if (!isConnected) {
-                return saveSourceLocally(sourceData);
-            }
-
-            const session = driver.session();
-            try {
-                const query = editingSourceId ? `
-                    MATCH (s:Source {id: $id})
-                    SET s.title = $title,
-                        s.url = $url,
-                        s.type = $type,
-                        s.date = $date,
-                        s.dateNote = $dateNote,
-                        s.note = $note,
-                        s.description = $description,
-                        s.favicon = $favicon,
-                        s.tags = $tags,
-                        s.lastModified = datetime()
-                ` : `
-                    CREATE (s:Source {
-                        id: randomUUID(),
-                        title: $title,
-                        url: $url,
-                        type: $type,
-                        date: $date,
-                        dateNote: $dateNote,
-                        note: $note,
-                        description: $description,
-                        favicon: $favicon,
-                        tags: $tags,
-                        createdBy: $createdBy,
-                        createdAt: datetime()
-                    })
-                    RETURN s.id as id
-                `;
-
-                const result = await session.run(query, {
-                    id: editingSourceId,
-                    title: sourceData.title,
-                    url: sourceData.url || '',
-                    type: sourceData.type || 'web',
-                    date: sourceData.date || '',
-                    dateNote: sourceData.dateNote || '',
-                    note: sourceData.note || '',
-                    description: sourceData.description || '',
-                    favicon: sourceData.favicon || '',
-                    tags: sourceData.tags,
-                    createdBy: currentUser
-                });
-
-                return editingSourceId || result.records[0].get('id');
-                
-            } catch (error) {
-                throw new Error('Error saving source: ' + error.message);
-            } finally {
-                await session.close();
-            }
-        }
-
-        function saveSourceLocally(sourceData) {
-            if (editingSourceId) {
-                const index = sources.findIndex(s => s.id === editingSourceId);
-                if (index !== -1) {
-                    sources[index] = {
-                        ...sources[index],
-                        ...sourceData,
-                        lastModified: new Date().toISOString()
-                    };
-                }
-                localStorage.setItem('rsrch_sources', JSON.stringify(sources));
-                return editingSourceId;
-            } else {
-                const newSource = {
-                    id: 'source_' + Date.now(),
-                    ...sourceData,
-                    createdBy: currentUser,
-                    createdAt: new Date().toISOString()
-                };
-                
-                sources.unshift(newSource);
-                localStorage.setItem('rsrch_sources', JSON.stringify(sources));
-                return newSource.id;
-            }
-        }
-
-        // Source form handling
-        async function handleSourceSubmit(e) {
-            e.preventDefault();
-            
-            const submitBtn = e.target.querySelector('.submit-btn');
-            const originalText = submitBtn.textContent;
-            
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Saving...';
-
-            try {
-                const title = document.getElementById('sourceTitle').value.trim();
-                if (!title) {
-                    throw new Error('Title is required');
-                }
-
-                const sourceData = {
-                    title,
-                    url: document.getElementById('sourceUrl').value.trim(),
-                    type: document.getElementById('sourceType').value,
-                    date: document.getElementById('sourceDate').value,
-                    dateNote: document.getElementById('sourceDateNote').value.trim(),
-                    note: document.getElementById('sourceNote').value.trim(),
-                    description: document.getElementById('sourceDescription').value.trim(),
-                    favicon: lastFetchedMetadata?.favicon || '',
-                    tags: [...sourceTags]
-                };
-
-                const sourceId = await saveSource(sourceData);
-                
-                if (editingSourceId) {
-                    showSourceMessage('✅ Source updated', 'success');
-                    const index = sources.findIndex(s => s.id === editingSourceId);
-                    if (index !== -1) {
-                        sources[index] = { id: sourceId, ...sourceData };
-                    }
-                    cancelSourceEdit();
-                } else {
-                    showSourceMessage('✅ Source saved', 'success');
-                    sources.unshift({ id: sourceId, ...sourceData });
-                    clearSourceForm();
-                }
-                
-                renderSourceOptions();
-                renderSources(sources);
-                updateSourcesCount();
-                await loadGlobalTags();
-                
-            } catch (error) {
-                console.error('Error:', error);
-                showSourceMessage('❌ Error: ' + error.message, 'error');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = originalText;
-            }
-        }
-
-        function editSource(sourceId) {
-            if (editingSourceId === sourceId) return;
-
-            const source = sources.find(s => s.id === sourceId);
-            if (!source) return;
-
-            editingSourceId = sourceId;
-            
-            document.getElementById('sourceTitle').value = source.title || '';
-            document.getElementById('sourceUrl').value = source.url || '';
-            document.getElementById('sourceType').value = source.type || 'web';
-            document.getElementById('sourceDate').value = source.date || '';
-            document.getElementById('sourceDateNote').value = source.dateNote || '';
-            document.getElementById('sourceNote').value = source.note || '';
-            document.getElementById('sourceDescription').value = source.description || '';
-            
-            sourceTags = [...(source.tags || [])];
-            renderSourceTags();
-            updateExistingTagsDisplay();
-            
-            // Show preview if source has metadata
-            if (source.url && (source.favicon || source.description)) {
-                const metadata = {
-                    title: source.title,
-                    description: source.description,
-                    favicon: source.favicon,
-                    type: source.type,
-                    publishDate: source.date
-                };
-                displayUrlPreview(metadata);
-                lastFetchedMetadata = metadata;
-            }
-            
-            document.querySelector('#sourceForm .submit-btn').textContent = 'Update Source';
-            
-            document.querySelectorAll('.source-card').forEach(card => {
-                card.classList.remove('editing');
-            });
-            
-            const targetCard = Array.from(document.querySelectorAll('.source-card')).find(card => {
-                const editButton = card.querySelector('.action-btn[onclick*="editSource"]');
-                return editButton && editButton.getAttribute('onclick').includes(sourceId);
-            });
-            
-            if (targetCard) {
-                targetCard.classList.add('editing');
-            }
-            
-            document.querySelector('.sources-form-section').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function cancelSourceEdit() {
-            editingSourceId = null;
-            clearSourceForm();
-            document.querySelector('#sourceForm .submit-btn').textContent = 'Save Source';
-            document.querySelectorAll('.source-card').forEach(card => {
-                card.classList.remove('editing');
-            });
-        }
-
-        function clearSourceForm() {
-            document.getElementById('sourceTitle').value = '';
-            document.getElementById('sourceUrl').value = '';
-            document.getElementById('sourceType').value = 'web';
-            document.getElementById('sourceDate').value = '';
-            document.getElementById('sourceDateNote').value = '';
-            document.getElementById('sourceNote').value = '';
-            document.getElementById('sourceDescription').value = '';
-            sourceTags = [];
-            renderSourceTags();
-            updateExistingTagsDisplay();
-            hideUrlPreview();
-            hideUrlError();
-            lastFetchedMetadata = null;
-        }
-
-        function deleteSource(sourceId) {
-            const source = sources.find(s => s.id === sourceId);
-            if (!source) return;
-            
-            const quotesUsingSource = quotes.filter(q => q.sourceId === sourceId).length;
-            
-            showDeleteModal(
-                'Delete Source',
-                `Are you sure you want to delete "${source.title}"?`,
-                quotesUsingSource > 0 ? `${quotesUsingSource} quotes are using this source. They will remain but won't be linked to any source.` : '',
-                async () => {
-                    try {
-                        if (isConnected) {
-                            const session = driver.session();
-                            try {
-                                await session.run(`
-                                    MATCH (q:Quote)-[r:CITES_SOURCE]->(s:Source {id: $sourceId})
-                                    DELETE r
-                                `, { sourceId });
-                                
-                                await session.run(`
-                                    MATCH (s:Source {id: $sourceId})
-                                    DELETE s
-                                `, { sourceId });
-                            } finally {
-                                await session.close();
-                            }
-                        } else {
-                            let savedSources = JSON.parse(localStorage.getItem('rsrch_sources') || '[]');
-                            savedSources = savedSources.filter(s => s.id !== sourceId);
-                            localStorage.setItem('rsrch_sources', JSON.stringify(savedSources));
-                            
-                            let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
-                            savedQuotes.forEach(quote => {
-                                if (quote.sourceId === sourceId) {
-                                    quote.sourceId = null;
-                                }
-                            });
-                            localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
-                        }
-                        
-                        sources = sources.filter(s => s.id !== sourceId);
-                        quotes.forEach(q => {
-                            if (q.sourceId === sourceId) {
-                                q.sourceId = null;
-                                q.sourceTitle = null;
-                            }
-                        });
-                        
-                        renderSourceOptions();
-                        renderSources(sources);
-                        renderQuotes(quotes);
-                        updateSourcesCount();
-                        showSourceMessage('✅ Source deleted', 'success');
-                        
-                    } catch (error) {
-                        console.error('Error deleting source:', error);
-                        showSourceMessage('❌ Error deleting source', 'error');
-                    }
-                }
-            );
-        }
-
-        function handleSourceSearch(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const filteredSources = sources.filter(source => {
-                const title = (source.title || '').toLowerCase();
-                const url = (source.url || '').toLowerCase();
-                const type = (source.type || '').toLowerCase();
-                const note = (source.note || '').toLowerCase();
-                const description = (source.description || '').toLowerCase();
-                const dateNote = (source.dateNote || '').toLowerCase();
-                const tagsText = (source.tags || []).join(' ').toLowerCase();
-                
-                return title.includes(searchTerm) ||
-                       url.includes(searchTerm) ||
-                       type.includes(searchTerm) ||
-                       note.includes(searchTerm) ||
-                       description.includes(searchTerm) ||
-                       dateNote.includes(searchTerm) ||
-                       tagsText.includes(searchTerm);
-            });
-            renderSources(filteredSources);
+            localStorage.setItem('quote_manager_sources', JSON.stringify(savedSources));
         }
 
         // Tag management
@@ -2421,6 +3385,7 @@
 
         function renderQuoteTags() {
             renderTagsInContainer(quoteTags, tagsContainer, tagInput, 'removeQuoteTag');
+            updateExistingTagsDisplay();
         }
 
         function renderSourceTags() {
@@ -2457,431 +3422,6 @@
 
         function focusSourceTagInput() {
             sourceTagInput.focus();
-        }
-
-        // Quote form submission
-        async function handleQuoteSubmit(e) {
-            e.preventDefault();
-            
-            const submitBtn = e.target.querySelector('.submit-btn');
-            const originalText = submitBtn.textContent;
-            
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Saving...';
-
-            try {
-                const quoteText = quoteTextEditor.innerHTML.trim();
-                const speakerText = speakerEditor.innerHTML.trim();
-                const sourceId = sourceSelect.value;
-
-                if (!quoteText || !speakerText) {
-                    throw new Error('Quote and Citation are required');
-                }
-
-                const quoteData = {
-                    text: quoteText,
-                    speaker: speakerText,
-                    sourceId: sourceId,
-                    tags: [...quoteTags],
-                    createdBy: currentUser
-                };
-
-                if (editingQuoteId) {
-                    await updateQuote(editingQuoteId, quoteData);
-                    showMessage('✅ Quote updated', 'success');
-                    cancelQuoteEdit();
-                } else {
-                    await saveQuote(quoteData);
-                    showMessage('✅ Quote saved', 'success');
-                    clearQuoteForm();
-                }
-                
-                await loadQuotes();
-                await loadGlobalTags();
-                
-            } catch (error) {
-                console.error('Error:', error);
-                showMessage('❌ Error: ' + error.message, 'error');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = originalText;
-            }
-        }
-
-        function clearQuoteForm() {
-            quoteTextEditor.innerHTML = '';
-            speakerEditor.innerHTML = '';
-            sourceSelect.value = '';
-            quoteTags = [];
-            renderQuoteTags();
-        }
-
-        function cancelQuoteEdit() {
-            editingQuoteId = null;
-            clearQuoteForm();
-            document.querySelector('#quoteForm .submit-btn').textContent = 'Save Quote';
-            document.querySelectorAll('.quote-card').forEach(card => {
-                card.classList.remove('editing');
-            });
-        }
-
-        // Database operations for quotes
-        async function saveQuote(quoteData) {
-            if (!isConnected) {
-                return saveQuoteLocally(quoteData);
-            }
-
-            const session = driver.session();
-            try {
-                const mockEmbedding = Array.from({length: 1536}, () => Math.random() - 0.5);
-                
-                const query = quoteData.sourceId ? `
-                    MATCH (s:Source {id: $sourceId})
-                    CREATE (q:Quote {
-                        id: randomUUID(),
-                        text: $text,
-                        textHtml: $textHtml,
-                        shortText: substring($textPlain, 0, 120),
-                        author: $speakerPlain,
-                        speaker: $speakerPlain,
-                        speakerHtml: $speakerHtml,
-                        tags: $tags,
-                        embedding: $embedding,
-                        createdBy: $createdBy,
-                        createdAt: datetime(),
-                        isArchived: false
-                    })
-                    CREATE (q)-[:CITES_SOURCE]->(s)
-                ` : `
-                    CREATE (q:Quote {
-                        id: randomUUID(),
-                        text: $text,
-                        textHtml: $textHtml,
-                        shortText: substring($textPlain, 0, 120),
-                        author: $speakerPlain,
-                        speaker: $speakerPlain,
-                        speakerHtml: $speakerHtml,
-                        tags: $tags,
-                        embedding: $embedding,
-                        createdBy: $createdBy,
-                        createdAt: datetime(),
-                        isArchived: false
-                    })
-                `;
-                
-                await session.run(query, {
-                    text: stripHtml(quoteData.text),
-                    textHtml: quoteData.text,
-                    textPlain: stripHtml(quoteData.text),
-                    speakerPlain: stripHtml(quoteData.speaker),
-                    speakerHtml: quoteData.speaker,
-                    sourceId: quoteData.sourceId,
-                    tags: quoteData.tags,
-                    embedding: mockEmbedding,
-                    createdBy: quoteData.createdBy
-                });
-                
-            } catch (error) {
-                throw new Error('Error saving quote: ' + error.message);
-            } finally {
-                await session.close();
-            }
-        }
-
-        async function updateQuote(quoteId, quoteData) {
-            if (!isConnected) {
-                return updateQuoteLocally(quoteId, quoteData);
-            }
-
-            const session = driver.session();
-            try {
-                await session.run(`
-                    MATCH (q:Quote {id: $id})
-                    SET q.text = $text,
-                        q.textHtml = $textHtml,
-                        q.shortText = substring($textPlain, 0, 120),
-                        q.author = $speakerPlain,
-                        q.speaker = $speakerPlain,
-                        q.speakerHtml = $speakerHtml,
-                        q.tags = $tags,
-                        q.lastModified = datetime()
-                `, {
-                    id: quoteId,
-                    text: stripHtml(quoteData.text),
-                    textHtml: quoteData.text,
-                    textPlain: stripHtml(quoteData.text),
-                    speakerPlain: stripHtml(quoteData.speaker),
-                    speakerHtml: quoteData.speaker,
-                    tags: quoteData.tags
-                });
-
-                await session.run(`
-                    MATCH (q:Quote {id: $id})
-                    OPTIONAL MATCH (q)-[r:CITES_SOURCE]->()
-                    DELETE r
-                `, { id: quoteId });
-
-                if (quoteData.sourceId) {
-                    await session.run(`
-                        MATCH (q:Quote {id: $quoteId}), (s:Source {id: $sourceId})
-                        CREATE (q)-[:CITES_SOURCE]->(s)
-                    `, {
-                        quoteId: quoteId,
-                        sourceId: quoteData.sourceId
-                    });
-                }
-                
-            } catch (error) {
-                throw new Error('Error updating quote: ' + error.message);
-            } finally {
-                await session.close();
-            }
-        }
-
-        function deleteQuote(quoteId) {
-            const quote = quotes.find(q => q.id === quoteId);
-            if (!quote) return;
-            
-            showDeleteModal(
-                'Delete Quote',
-                'Are you sure you want to delete this quote?',
-                '',
-                async () => {
-                    try {
-                        if (isConnected) {
-                            const session = driver.session();
-                            try {
-                                await session.run('MATCH (q:Quote {id: $id}) DETACH DELETE q', { id: quoteId });
-                            } finally {
-                                await session.close();
-                            }
-                        } else {
-                            let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
-                            savedQuotes = savedQuotes.filter(q => q.id !== quoteId);
-                            localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
-                        }
-                        
-                        await loadQuotes();
-                        showMessage('✅ Quote deleted', 'success');
-                    } catch (error) {
-                        showMessage('❌ Error deleting quote', 'error');
-                    }
-                }
-            );
-        }
-
-        // Local storage fallbacks
-        function saveQuoteLocally(quoteData) {
-            const newQuote = {
-                id: 'quote_' + Date.now(),
-                text: stripHtml(quoteData.text),
-                textHtml: quoteData.text,
-                speaker: stripHtml(quoteData.speaker),
-                speakerHtml: quoteData.speaker,
-                sourceId: quoteData.sourceId,
-                tags: quoteData.tags,
-                createdAt: new Date().toISOString(),
-                createdBy: quoteData.createdBy
-            };
-            
-            let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
-            savedQuotes.unshift(newQuote);
-            localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
-        }
-
-        function updateQuoteLocally(quoteId, quoteData) {
-            let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
-            const index = savedQuotes.findIndex(q => q.id === quoteId);
-            if (index !== -1) {
-                savedQuotes[index] = {
-                    ...savedQuotes[index],
-                    text: stripHtml(quoteData.text),
-                    textHtml: quoteData.text,
-                    speaker: stripHtml(quoteData.speaker),
-                    speakerHtml: quoteData.speaker,
-                    sourceId: quoteData.sourceId,
-                    tags: quoteData.tags,
-                    lastModified: new Date().toISOString()
-                };
-                localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
-            }
-        }
-
-        // Load quotes
-        async function loadQuotes() {
-            if (!isConnected) {
-                return loadQuotesLocally();
-            }
-
-            const session = driver.session();
-            try {
-                const result = await session.run(`
-                    MATCH (q:Quote)
-                    WHERE q.isArchived = false OR q.isArchived IS NULL
-                    OPTIONAL MATCH (q)-[:CITES_SOURCE]->(s:Source)
-                    RETURN q {
-                        .id, .text, .textHtml, .author, .speaker, .speakerHtml, .tags, .createdAt
-                    }, s {.id, .title} as source
-                    ORDER BY q.createdAt DESC
-                    LIMIT 200
-                `);
-                
-                quotes = result.records.map(record => {
-                    const q = record.get('q');
-                    const source = record.get('source');
-                    
-                    const textHtml = q.textHtml || q.text || '';
-                    const speakerText = q.speaker || q.author || 'Unknown';
-                    const speakerHtml = q.speakerHtml || speakerText;
-                    
-                    return {
-                        id: q.id,
-                        text: q.text || '',
-                        textHtml: textHtml,
-                        speaker: speakerText,
-                        speakerHtml: speakerHtml,
-                        sourceId: source ? source.id : null,
-                        sourceTitle: source ? source.title : null,
-                        tags: q.tags || [],
-                        createdAt: q.createdAt || new Date().toISOString()
-                    };
-                });
-                
-                renderQuotes(quotes);
-                updateQuotesCount();
-                
-            } catch (error) {
-                console.error('Error loading quotes:', error);
-                loadQuotesLocally();
-            } finally {
-                await session.close();
-            }
-        }
-
-        function loadQuotesLocally() {
-            try {
-                const savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
-                quotes = savedQuotes.map(q => ({
-                    ...q,
-                    textHtml: q.textHtml || q.text,
-                    speakerHtml: q.speakerHtml || q.speaker,
-                    sourceTitle: q.sourceId ? sources.find(s => s.id === q.sourceId)?.title : null
-                }));
-                renderQuotes(quotes);
-                updateQuotesCount();
-            } catch (error) {
-                quotes = [];
-                renderQuotes(quotes);
-                updateQuotesCount();
-            }
-        }
-
-        // Render quotes
-        function renderQuotes(quotesToRender) {
-            if (quotesToRender.length === 0) {
-                quotesList.innerHTML = `
-                    <div class="empty-state">
-                        <p>📝 No quotes yet</p>
-                        <p>Add your first quote</p>
-                    </div>
-                `;
-                return;
-            }
-
-            quotesList.innerHTML = quotesToRender.map(quote => {
-                const quoteId = escapeHtml(quote.id);
-                const quoteTextHtml = quote.textHtml || quote.text || '';
-                const speakerHtml = quote.speakerHtml || quote.speaker || '';
-                const sourceTitle = quote.sourceTitle ? escapeHtml(quote.sourceTitle) : '';
-                
-                return `
-                    <div class="quote-card ${editingQuoteId === quote.id ? 'editing' : ''}">
-                        <div class="quote-actions">
-                            <button class="action-btn" onclick="editQuote('${quoteId}')" title="Edit">✏️</button>
-                            <button class="action-btn" onclick="deleteQuote('${quoteId}')" title="Delete">🗑️</button>
-                        </div>
-                        <div class="quote-text quote-clickable" onclick="handleTextClick(event, '${quoteId}')">"${quoteTextHtml}"</div>
-                        <div class="quote-speaker quote-clickable" onclick="handleTextClick(event, '${quoteId}')">
-                            — ${speakerHtml}
-                        </div>
-                        ${quote.sourceTitle ? `
-                            <div class="quote-source">
-                                📚 ${sourceTitle}
-                            </div>
-                        ` : ''}
-                        ${quote.tags && quote.tags.length > 0 ? `
-                            <div class="quote-tags">
-                                ${quote.tags.map(tag => `<span class="quote-tag">${escapeHtml(tag)}</span>`).join('')}
-                            </div>
-                        ` : ''}
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function handleTextClick(event, quoteId) {
-            if (event.target.tagName === 'A' || event.target.closest('a')) {
-                event.stopPropagation();
-                return;
-            }
-            editQuote(quoteId);
-        }
-
-        function editQuote(quoteId) {
-            if (editingQuoteId === quoteId) return;
-
-            const quote = quotes.find(q => q.id === quoteId);
-            if (!quote) return;
-
-            if (!document.getElementById('quotesTab').classList.contains('active')) {
-                switchTab('quotes');
-            }
-
-            editingQuoteId = quoteId;
-            
-            const textHtml = quote.textHtml || quote.text || '';
-            const speakerHtml = quote.speakerHtml || quote.speaker || '';
-            
-            quoteTextEditor.innerHTML = textHtml;
-            speakerEditor.innerHTML = speakerHtml;
-            sourceSelect.value = quote.sourceId || '';
-            quoteTags = [...(quote.tags || [])];
-            renderQuoteTags();
-            
-            document.querySelector('#quoteForm .submit-btn').textContent = 'Update Quote';
-            
-            document.querySelectorAll('.quote-card').forEach(card => {
-                card.classList.remove('editing');
-            });
-            
-            const targetCard = Array.from(document.querySelectorAll('.quote-card')).find(card => {
-                const editButton = card.querySelector('.action-btn[onclick*="editQuote"]');
-                return editButton && editButton.getAttribute('onclick').includes(quoteId);
-            });
-            
-            if (targetCard) {
-                targetCard.classList.add('editing');
-            }
-            
-            document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function handleQuoteSearch(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const filteredQuotes = quotes.filter(quote => {
-                const quoteText = (quote.text || '').toLowerCase();
-                const speakerText = (quote.speaker || '').toLowerCase();
-                const speakerHtmlText = quote.speakerHtml ? stripHtml(quote.speakerHtml).toLowerCase() : '';
-                const sourceTitle = (quote.sourceTitle || '').toLowerCase();
-                const tagsText = (quote.tags || []).join(' ').toLowerCase();
-                
-                return quoteText.includes(searchTerm) ||
-                       speakerText.includes(searchTerm) ||
-                       speakerHtmlText.includes(searchTerm) ||
-                       sourceTitle.includes(searchTerm) ||
-                       tagsText.includes(searchTerm);
-            });
-            renderQuotes(filteredQuotes);
         }
 
         // Link modal functions
@@ -3016,17 +3556,24 @@
         window.deleteQuote = deleteQuote;
         window.editSource = editSource;
         window.deleteSource = deleteSource;
-        window.handleTextClick = handleTextClick;
+        window.handleQuoteCardClick = handleQuoteCardClick;
+        window.handleSourceCardClick = handleSourceCardClick;
         window.closeLinkModal = closeLinkModal;
         window.insertLink = insertLink;
         window.closeDeleteModal = closeDeleteModal;
         window.confirmDelete = confirmDelete;
         window.toggleExistingTag = toggleExistingTag;
+        window.toggleExistingQuoteTag = toggleExistingQuoteTag;
         window.showTagManager = showTagManager;
         window.closeTagManager = closeTagManager;
+        window.showQuoteTagManager = showQuoteTagManager;
+        window.closeQuoteTagManager = closeQuoteTagManager;
         window.addGlobalTag = addGlobalTag;
+        window.addGlobalQuoteTag = addGlobalQuoteTag;
         window.editGlobalTag = editGlobalTag;
+        window.editGlobalQuoteTag = editGlobalQuoteTag;
         window.deleteGlobalTag = deleteGlobalTag;
+        window.deleteGlobalQuoteTag = deleteGlobalQuoteTag;
         window.fetchUrlMetadata = fetchUrlMetadata;
     </script>
 </body>
