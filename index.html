@@ -15,24 +15,24 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #fafafa;
             min-height: 100vh;
-            padding: 20px;
             color: #2c2c2c;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1400px;
             margin: 0 auto;
             background: white;
-            border-radius: 8px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             border: 1px solid #e5e5e5;
-            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .header {
             background: white;
             color: #2c2c2c;
-            padding: 30px;
+            padding: 20px 30px;
             text-align: center;
             border-bottom: 1px solid #e5e5e5;
         }
@@ -44,7 +44,52 @@
             color: #2c2c2c;
         }
 
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .nav-tab {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .nav-tab.active {
+            color: #2c2c2c;
+            border-bottom-color: #2c2c2c;
+            background: white;
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: #f0f0f0;
+            color: #2c2c2c;
+        }
+
         .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tab-content {
+            display: none;
+            flex: 1;
+        }
+
+        .tab-content.active {
+            display: flex;
+        }
+
+        /* Quotes Tab */
+        .quotes-layout {
             display: grid;
             grid-template-columns: 400px 1fr;
             min-height: 600px;
@@ -57,6 +102,24 @@
         }
 
         .quotes-section {
+            padding: 30px;
+            background: white;
+        }
+
+        /* Sources Tab */
+        .sources-layout {
+            display: grid;
+            grid-template-columns: 450px 1fr;
+            min-height: 600px;
+        }
+
+        .sources-form-section {
+            padding: 30px;
+            border-right: 1px solid #e5e5e5;
+            background: #fbfbfb;
+        }
+
+        .sources-list-section {
             padding: 30px;
             background: white;
         }
@@ -130,33 +193,6 @@
             cursor: pointer;
         }
 
-        .source-option {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 2px 0;
-        }
-
-        .delete-source-btn {
-            background: #dc2626;
-            color: white;
-            border: none;
-            padding: 2px 8px;
-            border-radius: 3px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-        }
-
-        .source-option:hover .delete-source-btn {
-            opacity: 1;
-        }
-
-        .delete-source-btn:hover {
-            background: #b91c1c;
-        }
-
         .source-dropdown:focus {
             outline: none;
             border-color: #666;
@@ -173,7 +209,7 @@
             font-size: 0.9rem;
             white-space: nowrap;
             flex-shrink: 0;
-            min-width: 50px;
+            min-width: 70px;
         }
 
         .add-source-btn:hover {
@@ -195,6 +231,172 @@
             outline: none;
             border-color: #666;
             box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.1);
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+        }
+
+        .form-group select:focus {
+            outline: none;
+            border-color: #666;
+            box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.1);
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: white;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #666;
+            box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.1);
+        }
+
+        /* URL Input with Enhanced Features */
+        .url-input-group {
+            position: relative;
+        }
+
+        .url-input-container {
+            display: flex;
+            gap: 8px;
+            align-items: stretch;
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #d1d1d1;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            background: white;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: #666;
+            box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.1);
+        }
+
+        .fetch-metadata-btn {
+            padding: 12px 16px;
+            background: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .fetch-metadata-btn:hover {
+            background: #0052a3;
+        }
+
+        .fetch-metadata-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .url-preview {
+            margin-top: 10px;
+            padding: 12px;
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            background: #f8f9fa;
+            display: none;
+        }
+
+        .url-preview.show {
+            display: block;
+        }
+
+        .preview-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .favicon {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        .preview-title {
+            font-weight: 600;
+            color: #2c2c2c;
+            font-size: 0.95rem;
+            line-height: 1.3;
+        }
+
+        .preview-description {
+            color: #666;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            margin-bottom: 6px;
+        }
+
+        .preview-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        .preview-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .loading-indicator {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .loading-indicator.show {
+            display: flex;
+        }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #e5e5e5;
+            border-top: 2px solid #0066cc;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .tags-input {
@@ -268,20 +470,20 @@
             cursor: not-allowed;
         }
 
-        .quotes-header {
+        .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
 
-        .quotes-header h2 {
+        .section-header h2 {
             color: #374151;
             font-size: 1.3rem;
             font-weight: 500;
         }
 
-        .quotes-count {
+        .count-badge {
             background: #2c2c2c;
             color: white;
             padding: 4px 10px;
@@ -306,7 +508,7 @@
             box-shadow: 0 0 0 2px rgba(102, 102, 102, 0.1);
         }
 
-        .quotes-list {
+        .list-container {
             max-height: 500px;
             overflow-y: auto;
         }
@@ -427,6 +629,154 @@
             color: white;
         }
 
+        /* Source Card Styles */
+        .source-card {
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .source-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-color: #d1d1d1;
+        }
+
+        .source-card.editing {
+            border-color: #0066cc;
+            box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+        }
+
+        .source-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .source-favicon {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .source-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c2c2c;
+            margin-bottom: 4px;
+            cursor: pointer;
+            flex: 1;
+            line-height: 1.3;
+        }
+
+        .source-title:hover {
+            color: #0066cc;
+        }
+
+        .source-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .source-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .source-url {
+            color: #0066cc;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .source-url:hover {
+            text-decoration: underline;
+        }
+
+        .source-description {
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .source-note {
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        .source-families {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .existing-tag {
+            background: #f0f0f0;
+            color: #666;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .existing-tag:hover {
+            background: #e0e0e0;
+        }
+
+        .existing-tag.selected {
+            background: #2c2c2c;
+            color: white;
+        }
+
+        .source-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .source-tag {
+            background: #f0f0f0;
+            color: #666;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+        }
+
+        .source-quote-count {
+            position: absolute;
+            top: 15px;
+            right: 50px;
+            background: #f0f0f0;
+            color: #666;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
         .status-message {
             padding: 10px 16px;
             border-radius: 6px;
@@ -484,9 +834,11 @@
             background: white;
             border-radius: 8px;
             padding: 0;
-            max-width: 400px;
+            max-width: 500px;
             width: 90%;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .modal-header {
@@ -562,14 +914,37 @@
             transform: translateY(-1px);
         }
 
-        @media (max-width: 768px) {
-            .main-content {
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .error-message {
+            color: #dc2626;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        @media (max-width: 1024px) {
+            .quotes-layout,
+            .sources-layout {
                 grid-template-columns: 1fr;
             }
             
-            .form-section {
+            .form-section,
+            .sources-form-section {
                 border-right: none;
                 border-bottom: 1px solid #e5e5e5;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -580,64 +955,183 @@
             <h1>Quote Manager</h1>
         </header>
 
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="quotes">Quotes</button>
+            <button class="nav-tab" data-tab="sources">Sources</button>
+        </nav>
+
         <main class="main-content">
-            <section class="form-section">
-                <div id="statusMessage"></div>
-                
-                <form id="quoteForm">
-                    <div class="form-group">
-                        <label for="quoteText">Quote *</label>
-                        <div id="quoteText" 
-                             class="editable-content quote-editor" 
-                             contenteditable="true" 
-                             placeholder="Enter your quote here... Press Cmd+K to add links"></div>
-                    </div>
+            <!-- Quotes Tab -->
+            <div class="tab-content active" id="quotesTab">
+                <div class="quotes-layout">
+                    <section class="form-section">
+                        <div id="statusMessage"></div>
+                        
+                        <form id="quoteForm">
+                            <div class="form-group">
+                                <label for="quoteText">Quote *</label>
+                                <div id="quoteText" 
+                                     class="editable-content quote-editor" 
+                                     contenteditable="true" 
+                                     placeholder="Enter your quote here... Press Cmd+K to add links"></div>
+                            </div>
 
-                    <div class="form-group">
-                        <label for="speaker">Citation *</label>
-                        <div id="speaker" 
-                             class="editable-content" 
-                             contenteditable="true" 
-                             placeholder="Citation... You can also add links with Cmd+K"></div>
-                    </div>
+                            <div class="form-group">
+                                <label for="speaker">Citation *</label>
+                                <div id="speaker" 
+                                     class="editable-content" 
+                                     contenteditable="true" 
+                                     placeholder="Citation... You can also add links with Cmd+K"></div>
+                            </div>
 
-                    <div class="form-group">
-                        <label for="source">Source</label>
-                        <div class="source-selector">
-                            <select id="sourceSelect" class="source-dropdown">
-                                <option value="">Select source...</option>
-                            </select>
-                            <button type="button" class="add-source-btn" onclick="showAddSourceModal()">+ Add</button>
+                            <div class="form-group">
+                                <label for="source">Source</label>
+                                <div class="source-selector">
+                                    <select id="sourceSelect" class="source-dropdown">
+                                        <option value="">Select source...</option>
+                                    </select>
+                                    <button type="button" class="add-source-btn" onclick="switchTab('sources')">Manage</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tags">Tags</label>
+                                <div class="tags-input" onclick="focusTagInput()">
+                                    <input type="text" class="tag-input" id="tagInput" placeholder="Press Enter to add tags..." list="availableQuoteTags">
+                                </div>
+                                <datalist id="availableQuoteTags"></datalist>
+                            </div>
+
+                            <button type="submit" class="submit-btn">Save Quote</button>
+                        </form>
+                    </section>
+
+                    <section class="quotes-section">
+                        <div class="section-header">
+                            <h2>Quotes</h2>
+                            <span class="count-badge" id="quotesCount">0</span>
                         </div>
-                        <div id="sourcesList" style="margin-top: 10px;"></div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="tags">Tags</label>
-                        <div class="tags-input" onclick="focusTagInput()">
-                            <input type="text" class="tag-input" id="tagInput" placeholder="Press Enter to add tags...">
+                        <input type="text" class="search-box" id="searchBox" placeholder="Search quotes...">
+
+                        <div class="list-container" id="quotesList">
+                            <div class="empty-state">
+                                <p>📝 No quotes yet</p>
+                                <p>Add your first quote</p>
+                            </div>
                         </div>
-                    </div>
-
-                    <button type="submit" class="submit-btn">Save Quote</button>
-                </form>
-            </section>
-
-            <section class="quotes-section">
-                <div class="quotes-header">
-                    <h2>Quotes</h2>
-                    <span class="quotes-count" id="quotesCount">0</span>
+                    </section>
                 </div>
+            </div>
 
-                <input type="text" class="search-box" id="searchBox" placeholder="Search quotes...">
+            <!-- Sources Tab -->
+            <div class="tab-content" id="sourcesTab">
+                <div class="sources-layout">
+                    <section class="sources-form-section">
+                        <div id="sourceStatusMessage"></div>
+                        
+                        <form id="sourceForm">
+                            <div class="form-group">
+                                <label for="sourceTitle">Title *</label>
+                                <input type="text" id="sourceTitle" placeholder="e.g., Stanford Lecture, TED Talk, Book...">
+                            </div>
 
-                <div class="quotes-list" id="quotesList">
-                    <div class="empty-state">
-                        <p>📝 No quotes yet</p>
-                        <p>Add your first quote</p>
-                    </div>
+                            <div class="form-group url-input-group">
+                                <label for="sourceUrl">URL</label>
+                                <div class="url-input-container">
+                                    <input type="url" id="sourceUrl" class="url-input" placeholder="https://...">
+                                    <button type="button" class="fetch-metadata-btn" onclick="fetchUrlMetadata()">
+                                        📄 Extract
+                                    </button>
+                                </div>
+                                <div class="loading-indicator" id="metadataLoading">
+                                    <div class="spinner"></div>
+                                    <span>Extracting metadata...</span>
+                                </div>
+                                <div class="url-preview" id="urlPreview">
+                                    <!-- Preview content will be populated here -->
+                                </div>
+                                <div class="error-message" id="urlError">
+                                    Unable to extract metadata from this URL.
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="sourceType">Type</label>
+                                    <select id="sourceType">
+                                        <option value="web">Web</option>
+                                        <option value="youtube">YouTube</option>
+                                        <option value="document">Document</option>
+                                        <option value="book">Book</option>
+                                        <option value="podcast">Podcast</option>
+                                        <option value="article">Article</option>
+                                        <option value="paper">Academic Paper</option>
+                                        <option value="lecture">Lecture</option>
+                                        <option value="interview">Interview</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="sourceDate">Date</label>
+                                    <input type="date" id="sourceDate">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sourceDateNote">Date Note</label>
+                                <input type="text" id="sourceDateNote" placeholder="Optional note about the date...">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sourceDescription">Description</label>
+                                <textarea id="sourceDescription" placeholder="Brief description of the content..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sourceNote">Note</label>
+                                <textarea id="sourceNote" placeholder="Additional notes about this source..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sourceTags">Tags</label>
+                                <div class="tags-input" onclick="focusSourceTagInput()">
+                                    <input type="text" class="tag-input" id="sourceTagInput" placeholder="Press Enter to add tags..." list="availableSourceTags">
+                                </div>
+                                <datalist id="availableSourceTags"></datalist>
+                                
+                                <!-- Tag Management -->
+                                <div id="tagManagement" style="margin-top: 15px;">
+                                    <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 10px;">
+                                        <span style="font-size: 0.85rem; color: #666;">Existing Tags:</span>
+                                        <button type="button" onclick="showTagManager()" style="background: none; border: 1px solid #ddd; padding: 4px 8px; border-radius: 3px; font-size: 0.8rem; cursor: pointer;">Manage Tags</button>
+                                    </div>
+                                    <div id="existingTags" style="display: flex; flex-wrap: wrap; gap: 4px; max-height: 100px; overflow-y: auto;"></div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="submit-btn">Save Source</button>
+                        </form>
+                    </section>
+
+                    <section class="sources-list-section">
+                        <div class="section-header">
+                            <h2>Sources</h2>
+                            <span class="count-badge" id="sourcesCount">0</span>
+                        </div>
+
+                        <input type="text" class="search-box" id="sourceSearchBox" placeholder="Search sources...">
+
+                        <div class="list-container" id="sourcesList">
+                            <div class="empty-state">
+                                <p>📚 No sources yet</p>
+                                <p>Add your first source</p>
+                            </div>
+                        </div>
+                    </section>
                 </div>
-            </section>
+            </div>
         </main>
     </div>
 
@@ -664,56 +1158,40 @@
         </div>
     </div>
 
-    <!-- Add Source Modal -->
-    <div class="modal" id="addSourceModal">
+    <!-- Tag Manager Modal -->
+    <div class="modal" id="tagManagerModal">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title">Add New Source</div>
+                <div class="modal-title">Manage Tags</div>
             </div>
             <div class="modal-body">
-                <div class="input-group">
-                    <label class="input-label">Source Title *</label>
-                    <input type="text" class="modal-input" id="sourceTitle" placeholder="e.g., Stanford Lecture, TED Talk, Book...">
+                <div style="margin-bottom: 15px;">
+                    <input type="text" class="modal-input" id="newTagInput" placeholder="Add new tag...">
+                    <button onclick="addGlobalTag()" style="margin-top: 8px; padding: 8px 16px; background: #2c2c2c; color: white; border: none; border-radius: 4px; cursor: pointer;">Add Tag</button>
                 </div>
-                <div class="input-group">
-                    <label class="input-label">URL (optional)</label>
-                    <input type="url" class="modal-input" id="sourceUrl" placeholder="https://...">
-                </div>
-                <div class="input-group">
-                    <label class="input-label">Type</label>
-                    <select class="modal-input" id="sourceType">
-                        <option value="web">Web</option>
-                        <option value="youtube">YouTube</option>
-                        <option value="document">Document</option>
-                        <option value="book">Book</option>
-                        <option value="podcast">Podcast</option>
-                        <option value="other">Other</option>
-                    </select>
+                
+                <div style="border-top: 1px solid #eee; padding-top: 15px;">
+                    <h4 style="margin-bottom: 10px; font-size: 0.9rem; color: #666;">Existing Tags:</h4>
+                    <div id="tagManagerList" style="max-height: 300px; overflow-y: auto;"></div>
                 </div>
             </div>
             <div class="modal-actions">
-                <button class="modal-btn secondary" onclick="closeAddSourceModal()">Cancel</button>
-                <button class="modal-btn primary" onclick="addNewSource()">Add Source</button>
+                <button class="modal-btn secondary" onclick="closeTagManager()">Close</button>
             </div>
         </div>
     </div>
-
-    <!-- Delete Source Confirmation Modal -->
-    <div class="modal" id="deleteSourceModal">
+    <div class="modal" id="deleteModal">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title">Delete Source</div>
+                <div class="modal-title" id="deleteModalTitle">Delete Item</div>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to delete "<span id="deleteSourceName"></span>"?</p>
-                <p style="margin-top: 10px; color: #666; font-size: 0.9rem;">
-                    <strong id="deleteSourceQuoteCount">0</strong> quotes are using this source. 
-                    They will remain but won't be linked to any source.
-                </p>
+                <p id="deleteModalMessage">Are you sure you want to delete this item?</p>
+                <p id="deleteModalDetails" style="margin-top: 10px; color: #666; font-size: 0.9rem;"></p>
             </div>
             <div class="modal-actions">
-                <button class="modal-btn secondary" onclick="closeDeleteSourceModal()">Cancel</button>
-                <button class="modal-btn primary" style="background: #dc2626;" onclick="confirmDeleteSource()">Delete</button>
+                <button class="modal-btn secondary" onclick="closeDeleteModal()">Cancel</button>
+                <button class="modal-btn primary" style="background: #dc2626;" onclick="confirmDelete()">Delete</button>
             </div>
         </div>
     </div>
@@ -730,24 +1208,40 @@
         let isConnected = false;
         let quotes = [];
         let sources = [];
-        let tags = [];
+        let quoteTags = [];
+        let sourceTags = [];
+        let globalQuoteTags = [];
+        let globalSourceTags = [];
         let currentUser = 'researcher_' + Date.now();
         let activeEditor = null;
         let currentSelection = null;
         let editingQuoteId = null;
-        let deletingSourceId = null;
+        let editingSourceId = null;
+        let deleteCallback = null;
+        let lastFetchedMetadata = null;
 
         // DOM elements
         const quoteForm = document.getElementById('quoteForm');
+        const sourceForm = document.getElementById('sourceForm');
         const quotesList = document.getElementById('quotesList');
+        const sourcesList = document.getElementById('sourcesList');
         const quotesCount = document.getElementById('quotesCount');
+        const sourcesCount = document.getElementById('sourcesCount');
         const searchBox = document.getElementById('searchBox');
+        const sourceSearchBox = document.getElementById('sourceSearchBox');
         const tagInput = document.getElementById('tagInput');
+        const sourceTagInput = document.getElementById('sourceTagInput');
         const tagsContainer = tagInput.parentElement;
+        const sourceTagsContainer = sourceTagInput.parentElement;
         const statusMessage = document.getElementById('statusMessage');
+        const sourceStatusMessage = document.getElementById('sourceStatusMessage');
         const quoteTextEditor = document.getElementById('quoteText');
         const speakerEditor = document.getElementById('speaker');
         const sourceSelect = document.getElementById('sourceSelect');
+        const urlInput = document.getElementById('sourceUrl');
+        const urlPreview = document.getElementById('urlPreview');
+        const metadataLoading = document.getElementById('metadataLoading');
+        const urlError = document.getElementById('urlError');
 
         // Initialize
         document.addEventListener('DOMContentLoaded', async function() {
@@ -755,6 +1249,284 @@
             setupEventListeners();
             await loadData();
         });
+
+        // URL Metadata Extraction
+        async function fetchUrlMetadata() {
+            const url = urlInput.value.trim();
+            if (!url) {
+                showUrlError('Please enter a URL first');
+                return;
+            }
+
+            if (!isValidUrl(url)) {
+                showUrlError('Please enter a valid URL');
+                return;
+            }
+
+            hideUrlError();
+            showMetadataLoading();
+            hideUrlPreview();
+
+            try {
+                const metadata = await extractMetadata(url);
+                lastFetchedMetadata = metadata;
+                displayUrlPreview(metadata);
+                populateFormFromMetadata(metadata);
+                hideMetadataLoading();
+            } catch (error) {
+                console.error('Error fetching metadata:', error);
+                hideMetadataLoading();
+                showUrlError('Unable to extract metadata from this URL');
+            }
+        }
+
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        async function extractMetadata(url) {
+            // For demo purposes, we'll simulate different types of URLs
+            // In a real implementation, you'd use a CORS proxy or backend service
+            
+            const metadata = {
+                title: '',
+                description: '',
+                favicon: '',
+                publishDate: '',
+                author: '',
+                siteName: '',
+                type: 'web',
+                image: ''
+            };
+
+            try {
+                // Simulate metadata extraction based on URL patterns
+                if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                    metadata.type = 'youtube';
+                    metadata.title = 'YouTube Video Title';
+                    metadata.description = 'Video description from YouTube';
+                    metadata.favicon = 'https://www.youtube.com/favicon.ico';
+                    metadata.siteName = 'YouTube';
+                    metadata.publishDate = '2024-01-15';
+                    
+                } else if (url.includes('arxiv.org')) {
+                    metadata.type = 'paper';
+                    metadata.title = 'Academic Paper Title from arXiv';
+                    metadata.description = 'Abstract of the academic paper';
+                    metadata.favicon = 'https://arxiv.org/favicon.ico';
+                    metadata.siteName = 'arXiv';
+                    metadata.publishDate = '2024-02-10';
+                    
+                } else if (url.includes('github.com')) {
+                    metadata.type = 'web';
+                    metadata.title = 'GitHub Repository';
+                    metadata.description = 'Repository description';
+                    metadata.favicon = 'https://github.com/favicon.ico';
+                    metadata.siteName = 'GitHub';
+                    
+                } else if (url.includes('medium.com') || url.includes('substack.com')) {
+                    metadata.type = 'article';
+                    metadata.title = 'Blog Post Title';
+                    metadata.description = 'Article description and summary';
+                    metadata.favicon = getDomainFavicon(url);
+                    metadata.siteName = 'Blog';
+                    metadata.publishDate = '2024-03-01';
+                    metadata.author = 'Author Name';
+                    
+                } else if (url.includes('twitter.com') || url.includes('x.com')) {
+                    metadata.type = 'web';
+                    metadata.title = 'Tweet Thread';
+                    metadata.description = 'Twitter/X post content';
+                    metadata.favicon = 'https://abs.twimg.com/favicons/twitter.3.ico';
+                    metadata.siteName = 'X (Twitter)';
+                    
+                } else {
+                    // Default web page - try to extract date from common patterns
+                    metadata.title = getPageTitleFromUrl(url);
+                    metadata.description = 'Web page content';
+                    metadata.favicon = getDomainFavicon(url);
+                    metadata.siteName = getDomainName(url);
+                    metadata.publishDate = '2024-01-25'; // Try to get actual date in real implementation
+                }
+                
+                // Simulate API delay
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                return metadata;
+                
+            } catch (error) {
+                throw new Error('Failed to extract metadata');
+            }
+        }
+
+        function getDomainFavicon(url) {
+            try {
+                const domain = new URL(url).origin;
+                return `${domain}/favicon.ico`;
+            } catch (e) {
+                return getDomainName(url) + ' favicon';
+            }
+        }
+
+        function getDomainName(url) {
+            try {
+                return new URL(url).hostname.replace('www.', '');
+            } catch (e) {
+                return 'Website';
+            }
+        }
+
+        function getPageTitleFromUrl(url) {
+            try {
+                const path = new URL(url).pathname;
+                const parts = path.split('/').filter(p => p);
+                if (parts.length > 0) {
+                    return parts[parts.length - 1]
+                        .replace(/[-_]/g, ' ')
+                        .replace(/\.[^/.]+$/, '') // Remove file extension
+                        .split(' ')
+                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                        .join(' ');
+                }
+                return getDomainName(url);
+            } catch (e) {
+                return 'Web Page';
+            }
+        }
+
+        function displayUrlPreview(metadata) {
+            const favicon = metadata.favicon || '🌐';
+            const isEmojiIcon = favicon.length <= 2;
+            
+            urlPreview.innerHTML = `
+                <div class="preview-header">
+                    ${isEmojiIcon ? 
+                        `<span style="font-size: 20px;">${favicon}</span>` :
+                        `<img src="${favicon}" alt="favicon" class="favicon" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'">`
+                    }
+                    <span style="display: ${isEmojiIcon ? 'none' : 'inline'}; font-size: 20px;">🌐</span>
+                    <div class="preview-title">${escapeHtml(metadata.title || 'No title found')}</div>
+                </div>
+                
+                ${metadata.description ? `
+                    <div class="preview-description">${escapeHtml(metadata.description)}</div>
+                ` : ''}
+                
+                <div class="preview-meta">
+                    ${metadata.siteName ? `
+                        <span class="preview-meta-item">
+                            🏠 ${escapeHtml(metadata.siteName)}
+                        </span>
+                    ` : ''}
+                    ${metadata.publishDate ? `
+                        <span class="preview-meta-item">
+                            📅 ${formatDate(metadata.publishDate)}
+                        </span>
+                    ` : ''}
+                    ${metadata.author ? `
+                        <span class="preview-meta-item">
+                            👤 ${escapeHtml(metadata.author)}
+                        </span>
+                    ` : ''}
+                    <span class="preview-meta-item">
+                        📁 ${escapeHtml(metadata.type)}
+                    </span>
+                </div>
+            `;
+            
+            showUrlPreview();
+        }
+
+        function populateFormFromMetadata(metadata) {
+            if (metadata.title && !document.getElementById('sourceTitle').value) {
+                document.getElementById('sourceTitle').value = metadata.title;
+            }
+            
+            if (metadata.description && !document.getElementById('sourceDescription').value) {
+                document.getElementById('sourceDescription').value = metadata.description;
+            }
+            
+            if (metadata.type) {
+                const typeSelect = document.getElementById('sourceType');
+                if ([...typeSelect.options].some(opt => opt.value === metadata.type)) {
+                    typeSelect.value = metadata.type;
+                }
+            }
+            
+            if (metadata.publishDate && !document.getElementById('sourceDate').value) {
+                try {
+                    const date = new Date(metadata.publishDate);
+                    document.getElementById('sourceDate').value = date.toISOString().split('T')[0];
+                } catch (e) {
+                    // Invalid date format
+                }
+            }
+
+            // Don't auto-suggest tags - let user add them manually
+        }
+
+        function showUrlPreview() {
+            urlPreview.classList.add('show');
+        }
+
+        function hideUrlPreview() {
+            urlPreview.classList.remove('show');
+        }
+
+        function showMetadataLoading() {
+            metadataLoading.classList.add('show');
+        }
+
+        function hideMetadataLoading() {
+            metadataLoading.classList.remove('show');
+        }
+
+        function showUrlError(message) {
+            urlError.textContent = message;
+            urlError.classList.add('show');
+        }
+
+        function hideUrlError() {
+            urlError.classList.remove('show');
+        }
+
+        // Auto-fetch metadata when URL changes
+        let urlFetchTimeout;
+        function setupUrlAutoFetch() {
+            urlInput.addEventListener('input', () => {
+                hideUrlError();
+                hideUrlPreview();
+                
+                clearTimeout(urlFetchTimeout);
+                const url = urlInput.value.trim();
+                
+                if (url && isValidUrl(url)) {
+                    urlFetchTimeout = setTimeout(() => {
+                        fetchUrlMetadata();
+                    }, 1000); // Auto-fetch after 1 second of no typing
+                }
+            });
+        }
+
+        // Tab management
+        function switchTab(tabName) {
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelector(`.nav-tab[data-tab="${tabName}"]`).classList.add('active');
+
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tabName + 'Tab').classList.add('active');
+
+            if (tabName === 'quotes') {
+                cancelSourceEdit();
+            } else if (tabName === 'sources') {
+                cancelQuoteEdit();
+            }
+        }
 
         // Database connection
         async function initializeDatabase() {
@@ -799,13 +1571,23 @@
 
         // Setup event listeners
         function setupEventListeners() {
-            quoteForm.addEventListener('submit', handleSubmit);
-            searchBox.addEventListener('input', handleSearch);
-            tagInput.addEventListener('keydown', handleTagInput);
+            quoteForm.addEventListener('submit', handleQuoteSubmit);
+            sourceForm.addEventListener('submit', handleSourceSubmit);
+            
+            searchBox.addEventListener('input', handleQuoteSearch);
+            sourceSearchBox.addEventListener('input', handleSourceSearch);
+            
+            tagInput.addEventListener('keydown', (e) => handleTagInput(e, quoteTags, renderQuoteTags));
+            sourceTagInput.addEventListener('keydown', (e) => handleTagInput(e, sourceTags, renderSourceTags));
 
-            // Keyboard shortcuts with proper handling
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabName = tab.getAttribute('data-tab');
+                    switchTab(tabName);
+                });
+            });
+
             document.addEventListener('keydown', (e) => {
-                // Check for Cmd+K or Ctrl+K
                 if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
                     e.preventDefault();
                     if (activeEditor) {
@@ -813,18 +1595,18 @@
                     }
                 }
 
-                // Escape key handling
                 if (e.key === 'Escape') {
                     closeLinkModal();
-                    closeAddSourceModal();
-                    closeDeleteSourceModal();
+                    closeDeleteModal();
                     if (editingQuoteId) {
-                        cancelEdit();
+                        cancelQuoteEdit();
+                    }
+                    if (editingSourceId) {
+                        cancelSourceEdit();
                     }
                 }
             });
 
-            // Track active editor
             quoteTextEditor.addEventListener('focus', () => activeEditor = quoteTextEditor);
             speakerEditor.addEventListener('focus', () => activeEditor = speakerEditor);
             
@@ -844,7 +1626,6 @@
                 }, 100);
             });
 
-            // Modal events
             document.querySelectorAll('.modal').forEach(modal => {
                 modal.addEventListener('click', (e) => {
                     if (e.target === modal) {
@@ -852,14 +1633,317 @@
                     }
                 });
             });
+
+            setupUrlAutoFetch();
         }
 
         // Load data
         async function loadData() {
             await Promise.all([
                 loadSources(),
-                loadQuotes()
+                loadQuotes(),
+                loadGlobalTags()
             ]);
+        }
+
+        // Global tag management
+        async function loadGlobalTags() {
+            const quoteTagsSet = new Set();
+            const sourceTagsSet = new Set();
+            
+            quotes.forEach(quote => {
+                if (quote.tags) {
+                    quote.tags.forEach(tag => quoteTagsSet.add(tag));
+                }
+            });
+            
+            sources.forEach(source => {
+                if (source.tags) {
+                    source.tags.forEach(tag => sourceTagsSet.add(tag));
+                }
+            });
+            
+            globalQuoteTags = [...quoteTagsSet].sort();
+            globalSourceTags = [...sourceTagsSet].sort();
+            
+            updateTagDataLists();
+            updateExistingTagsDisplay();
+        }
+
+        function updateTagDataLists() {
+            const quoteDataList = document.getElementById('availableQuoteTags');
+            quoteDataList.innerHTML = globalQuoteTags.map(tag => 
+                `<option value="${escapeHtml(tag)}">`
+            ).join('');
+            
+            const sourceDataList = document.getElementById('availableSourceTags');
+            sourceDataList.innerHTML = globalSourceTags.map(tag => 
+                `<option value="${escapeHtml(tag)}">`
+            ).join('');
+        }
+
+        function updateExistingTagsDisplay() {
+            const existingTagsContainer = document.getElementById('existingTags');
+            if (!existingTagsContainer) return;
+            
+            existingTagsContainer.innerHTML = globalSourceTags.map(tag => 
+                `<span class="existing-tag ${sourceTags.includes(tag) ? 'selected' : ''}" onclick="toggleExistingTag('${escapeHtml(tag)}')">${escapeHtml(tag)}</span>`
+            ).join('');
+        }
+
+        function toggleExistingTag(tagName) {
+            if (sourceTags.includes(tagName)) {
+                const index = sourceTags.indexOf(tagName);
+                removeTag(index, sourceTags, renderSourceTags);
+            } else {
+                addTag(tagName, sourceTags, renderSourceTags);
+            }
+            updateExistingTagsDisplay();
+        }
+
+        function showTagManager() {
+            renderTagManagerList();
+            document.getElementById('tagManagerModal').classList.add('show');
+        }
+
+        function closeTagManager() {
+            document.getElementById('tagManagerModal').classList.remove('show');
+        }
+
+        function renderTagManagerList() {
+            const container = document.getElementById('tagManagerList');
+            const allTags = [...new Set([...globalQuoteTags, ...globalSourceTags])].sort();
+            
+            container.innerHTML = allTags.map(tag => {
+                const quoteUsage = quotes.filter(q => q.tags && q.tags.includes(tag)).length;
+                const sourceUsage = sources.filter(s => s.tags && s.tags.includes(tag)).length;
+                
+                return `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px; border: 1px solid #eee; margin-bottom: 5px; border-radius: 4px;">
+                        <div>
+                            <strong>${escapeHtml(tag)}</strong>
+                            <div style="font-size: 0.8rem; color: #666;">
+                                ${quoteUsage} quotes, ${sourceUsage} sources
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button onclick="editGlobalTag('${escapeHtml(tag)}')" style="background: #f0f0f0; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 0.8rem;">Rename</button>
+                            <button onclick="deleteGlobalTag('${escapeHtml(tag)}')" style="background: #ff4444; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 0.8rem;">Delete</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addGlobalTag() {
+            const newTagInput = document.getElementById('newTagInput');
+            const tagName = newTagInput.value.trim();
+            
+            if (!tagName) return;
+            
+            if (!globalSourceTags.includes(tagName)) {
+                globalSourceTags.push(tagName);
+                globalSourceTags.sort();
+                updateTagDataLists();
+                updateExistingTagsDisplay();
+                renderTagManagerList();
+            }
+            
+            newTagInput.value = '';
+        }
+
+        async function editGlobalTag(oldTag) {
+            const newTag = prompt(`Rename tag "${oldTag}" to:`, oldTag);
+            if (!newTag || newTag === oldTag) return;
+            
+            try {
+                quotes.forEach(quote => {
+                    if (quote.tags && quote.tags.includes(oldTag)) {
+                        const index = quote.tags.indexOf(oldTag);
+                        quote.tags[index] = newTag;
+                    }
+                });
+                
+                sources.forEach(source => {
+                    if (source.tags && source.tags.includes(oldTag)) {
+                        const index = source.tags.indexOf(oldTag);
+                        source.tags[index] = newTag;
+                    }
+                });
+                
+                if (globalQuoteTags.includes(oldTag)) {
+                    const index = globalQuoteTags.indexOf(oldTag);
+                    globalQuoteTags[index] = newTag;
+                    globalQuoteTags.sort();
+                }
+                
+                if (globalSourceTags.includes(oldTag)) {
+                    const index = globalSourceTags.indexOf(oldTag);
+                    globalSourceTags[index] = newTag;
+                    globalSourceTags.sort();
+                }
+                
+                if (quoteTags.includes(oldTag)) {
+                    const index = quoteTags.indexOf(oldTag);
+                    quoteTags[index] = newTag;
+                    renderQuoteTags();
+                }
+                
+                if (sourceTags.includes(oldTag)) {
+                    const index = sourceTags.indexOf(oldTag);
+                    sourceTags[index] = newTag;
+                    renderSourceTags();
+                }
+                
+                if (isConnected) {
+                    await updateTagInDatabase(oldTag, newTag);
+                } else {
+                    updateTagInLocalStorage(oldTag, newTag);
+                }
+                
+                updateTagDataLists();
+                updateExistingTagsDisplay();
+                renderTagManagerList();
+                renderQuotes(quotes);
+                renderSources(sources);
+                
+                showSourceMessage(`✅ Tag renamed from "${oldTag}" to "${newTag}"`, 'success');
+                
+            } catch (error) {
+                console.error('Error updating tag:', error);
+                showSourceMessage('❌ Error updating tag', 'error');
+            }
+        }
+
+        async function deleteGlobalTag(tagName) {
+            const quoteUsage = quotes.filter(q => q.tags && q.tags.includes(tagName)).length;
+            const sourceUsage = sources.filter(s => s.tags && s.tags.includes(tagName)).length;
+            
+            if (!confirm(`Delete tag "${tagName}"?\n\nThis will remove it from ${quoteUsage} quotes and ${sourceUsage} sources.`)) {
+                return;
+            }
+            
+            try {
+                quotes.forEach(quote => {
+                    if (quote.tags) {
+                        quote.tags = quote.tags.filter(tag => tag !== tagName);
+                    }
+                });
+                
+                sources.forEach(source => {
+                    if (source.tags) {
+                        source.tags = source.tags.filter(tag => tag !== tagName);
+                    }
+                });
+                
+                globalQuoteTags = globalQuoteTags.filter(tag => tag !== tagName);
+                globalSourceTags = globalSourceTags.filter(tag => tag !== tagName);
+                
+                quoteTags = quoteTags.filter(tag => tag !== tagName);
+                sourceTags = sourceTags.filter(tag => tag !== tagName);
+                
+                if (isConnected) {
+                    await deleteTagFromDatabase(tagName);
+                } else {
+                    deleteTagFromLocalStorage(tagName);
+                }
+                
+                renderQuoteTags();
+                renderSourceTags();
+                updateTagDataLists();
+                updateExistingTagsDisplay();
+                renderTagManagerList();
+                renderQuotes(quotes);
+                renderSources(sources);
+                
+                showSourceMessage(`✅ Tag "${tagName}" deleted`, 'success');
+                
+            } catch (error) {
+                console.error('Error deleting tag:', error);
+                showSourceMessage('❌ Error deleting tag', 'error');
+            }
+        }
+
+        async function updateTagInDatabase(oldTag, newTag) {
+            if (!isConnected) return;
+            
+            const session = driver.session();
+            try {
+                await session.run(`
+                    MATCH (q:Quote)
+                    WHERE $oldTag IN q.tags
+                    SET q.tags = [tag IN q.tags | CASE WHEN tag = $oldTag THEN $newTag ELSE tag END]
+                `, { oldTag, newTag });
+                
+                await session.run(`
+                    MATCH (s:Source)
+                    WHERE $oldTag IN s.tags
+                    SET s.tags = [tag IN s.tags | CASE WHEN tag = $oldTag THEN $newTag ELSE tag END]
+                `, { oldTag, newTag });
+                
+            } finally {
+                await session.close();
+            }
+        }
+
+        async function deleteTagFromDatabase(tagName) {
+            if (!isConnected) return;
+            
+            const session = driver.session();
+            try {
+                await session.run(`
+                    MATCH (q:Quote)
+                    WHERE $tagName IN q.tags
+                    SET q.tags = [tag IN q.tags WHERE tag <> $tagName]
+                `, { tagName });
+                
+                await session.run(`
+                    MATCH (s:Source)
+                    WHERE $tagName IN s.tags
+                    SET s.tags = [tag IN s.tags WHERE tag <> $tagName]
+                `, { tagName });
+                
+            } finally {
+                await session.close();
+            }
+        }
+
+        function updateTagInLocalStorage(oldTag, newTag) {
+            let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
+            savedQuotes.forEach(quote => {
+                if (quote.tags && quote.tags.includes(oldTag)) {
+                    const index = quote.tags.indexOf(oldTag);
+                    quote.tags[index] = newTag;
+                }
+            });
+            localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
+            
+            let savedSources = JSON.parse(localStorage.getItem('rsrch_sources') || '[]');
+            savedSources.forEach(source => {
+                if (source.tags && source.tags.includes(oldTag)) {
+                    const index = source.tags.indexOf(oldTag);
+                    source.tags[index] = newTag;
+                }
+            });
+            localStorage.setItem('rsrch_sources', JSON.stringify(savedSources));
+        }
+
+        function deleteTagFromLocalStorage(tagName) {
+            let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
+            savedQuotes.forEach(quote => {
+                if (quote.tags) {
+                    quote.tags = quote.tags.filter(tag => tag !== tagName);
+                }
+            });
+            localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
+            
+            let savedSources = JSON.parse(localStorage.getItem('rsrch_sources') || '[]');
+            savedSources.forEach(source => {
+                if (source.tags) {
+                    source.tags = source.tags.filter(tag => tag !== tagName);
+                }
+            });
+            localStorage.setItem('rsrch_sources', JSON.stringify(savedSources));
         }
 
         // Sources management
@@ -872,12 +1956,26 @@
             try {
                 const result = await session.run(`
                     MATCH (s:Source)
-                    RETURN s {.id, .title, .url, .type}
-                    ORDER BY s.title ASC
+                    RETURN s {
+                        .id, .title, .url, .type, .date, .dateNote, .note, .description, .favicon, .tags, .createdAt
+                    }
+                    ORDER BY s.createdAt DESC
                 `);
                 
-                sources = result.records.map(record => record.get('s'));
+                sources = result.records.map(record => {
+                    const s = record.get('s');
+                    return {
+                        ...s,
+                        tags: s.tags || [],
+                        dateNote: s.dateNote || '',
+                        note: s.note || '',
+                        description: s.description || '',
+                        favicon: s.favicon || ''
+                    };
+                });
                 renderSourceOptions();
+                renderSources(sources);
+                updateSourcesCount();
                 
             } catch (error) {
                 console.error('Error loading sources:', error);
@@ -890,6 +1988,8 @@
         function loadSourcesLocally() {
             sources = JSON.parse(localStorage.getItem('rsrch_sources') || '[]');
             renderSourceOptions();
+            renderSources(sources);
+            updateSourcesCount();
         }
 
         function renderSourceOptions() {
@@ -906,31 +2006,76 @@
             if (currentValue) {
                 sourceSelect.value = currentValue;
             }
-            
-            // Also render the sources list with delete buttons
-            renderSourcesList();
         }
 
-        function renderSourcesList() {
-            const sourcesList = document.getElementById('sourcesList');
-            if (!sourcesList) return;
-            
-            if (sources.length === 0) {
-                sourcesList.innerHTML = '';
+        function renderSources(sourcesToRender) {
+            if (sourcesToRender.length === 0) {
+                sourcesList.innerHTML = `
+                    <div class="empty-state">
+                        <p>📚 No sources yet</p>
+                        <p>Add your first source</p>
+                    </div>
+                `;
                 return;
             }
-            
-            sourcesList.innerHTML = `
-                <div style="font-size: 0.85rem; color: #666; margin-bottom: 8px;">Manage Sources:</div>
-                <div style="max-height: 150px; overflow-y: auto; border: 1px solid #e5e5e5; border-radius: 4px; padding: 8px;">
-                    ${sources.map(source => `
-                        <div class="source-option">
-                            <span style="font-size: 0.9rem;">${escapeHtml(source.title)}</span>
-                            <button class="delete-source-btn" onclick="showDeleteSourceModal('${source.id}')">Delete</button>
+
+            sourcesList.innerHTML = sourcesToRender.map(source => {
+                const sourceId = escapeHtml(source.id);
+                const quoteCount = quotes.filter(q => q.sourceId === source.id).length;
+                const favicon = source.favicon || '🌐';
+                const isEmojiIcon = favicon.length <= 2;
+
+                const metaItems = [];
+                if (source.type) metaItems.push(`<span class="source-meta-item">📁 ${escapeHtml(source.type)}</span>`);
+                if (source.date) metaItems.push(`<span class="source-meta-item">📅 ${formatDate(source.date)}</span>`);
+                
+                return `
+                    <div class="source-card ${editingSourceId === source.id ? 'editing' : ''}">
+                        <div class="quote-actions">
+                            <button class="action-btn" onclick="editSource('${sourceId}')" title="Edit">✏️</button>
+                            <button class="action-btn" onclick="deleteSource('${sourceId}')" title="Delete">🗑️</button>
                         </div>
-                    `).join('')}
-                </div>
-            `;
+                        <div class="source-quote-count">${quoteCount} quotes</div>
+                        
+                        <div class="source-header">
+                            ${isEmojiIcon ? 
+                                `<span style="font-size: 24px; margin-top: 2px;">${favicon}</span>` :
+                                `<img src="${favicon}" alt="favicon" class="source-favicon" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'">
+                                 <span style="display: none; font-size: 24px; margin-top: 2px;">🌐</span>`
+                            }
+                            <div class="source-title" onclick="editSource('${sourceId}')">${escapeHtml(source.title)}</div>
+                        </div>
+                        
+                        ${source.url ? `
+                            <div style="margin-bottom: 8px;">
+                                <a href="${escapeHtml(source.url)}" target="_blank" rel="noopener noreferrer" class="source-url">
+                                    🔗 ${escapeHtml(source.url)}
+                                </a>
+                            </div>
+                        ` : ''}
+                        
+                        ${metaItems.length > 0 ? `<div class="source-meta">${metaItems.join('')}</div>` : ''}
+                        
+                        ${source.description ? `
+                            <div class="source-description">📄 ${escapeHtml(source.description)}</div>
+                        ` : ''}
+                        
+                        ${source.dateNote ? `
+                            <div class="source-note">📝 ${escapeHtml(source.dateNote)}</div>
+                        ` : ''}
+                        
+                        ${source.note ? `
+                            <div class="source-note">💭 ${escapeHtml(source.note)}</div>
+                        ` : ''}
+                        
+                        ${source.tags && source.tags.length > 0 ? `
+                            <div class="source-tags">
+                                ${source.tags.map(tag => `<span class="source-tag">${escapeHtml(tag)}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
         }
 
         async function saveSource(sourceData) {
@@ -940,24 +2085,51 @@
 
             const session = driver.session();
             try {
-                const result = await session.run(`
+                const query = editingSourceId ? `
+                    MATCH (s:Source {id: $id})
+                    SET s.title = $title,
+                        s.url = $url,
+                        s.type = $type,
+                        s.date = $date,
+                        s.dateNote = $dateNote,
+                        s.note = $note,
+                        s.description = $description,
+                        s.favicon = $favicon,
+                        s.tags = $tags,
+                        s.lastModified = datetime()
+                ` : `
                     CREATE (s:Source {
                         id: randomUUID(),
                         title: $title,
                         url: $url,
                         type: $type,
+                        date: $date,
+                        dateNote: $dateNote,
+                        note: $note,
+                        description: $description,
+                        favicon: $favicon,
+                        tags: $tags,
                         createdBy: $createdBy,
                         createdAt: datetime()
                     })
                     RETURN s.id as id
-                `, {
+                `;
+
+                const result = await session.run(query, {
+                    id: editingSourceId,
                     title: sourceData.title,
                     url: sourceData.url || '',
-                    type: sourceData.type || 'document',
+                    type: sourceData.type || 'web',
+                    date: sourceData.date || '',
+                    dateNote: sourceData.dateNote || '',
+                    note: sourceData.note || '',
+                    description: sourceData.description || '',
+                    favicon: sourceData.favicon || '',
+                    tags: sourceData.tags,
                     createdBy: currentUser
                 });
 
-                return result.records[0].get('id');
+                return editingSourceId || result.records[0].get('id');
                 
             } catch (error) {
                 throw new Error('Error saving source: ' + error.message);
@@ -967,108 +2139,328 @@
         }
 
         function saveSourceLocally(sourceData) {
-            const newSource = {
-                id: 'source_' + Date.now(),
-                title: sourceData.title,
-                url: sourceData.url || '',
-                type: sourceData.type || 'document',
-                createdBy: currentUser,
-                createdAt: new Date().toISOString()
-            };
-            
-            sources.push(newSource);
-            localStorage.setItem('rsrch_sources', JSON.stringify(sources));
-            return newSource.id;
+            if (editingSourceId) {
+                const index = sources.findIndex(s => s.id === editingSourceId);
+                if (index !== -1) {
+                    sources[index] = {
+                        ...sources[index],
+                        ...sourceData,
+                        lastModified: new Date().toISOString()
+                    };
+                }
+                localStorage.setItem('rsrch_sources', JSON.stringify(sources));
+                return editingSourceId;
+            } else {
+                const newSource = {
+                    id: 'source_' + Date.now(),
+                    ...sourceData,
+                    createdBy: currentUser,
+                    createdAt: new Date().toISOString()
+                };
+                
+                sources.unshift(newSource);
+                localStorage.setItem('rsrch_sources', JSON.stringify(sources));
+                return newSource.id;
+            }
         }
 
-        // Source modal functions
-        function showAddSourceModal() {
+        // Source form handling
+        async function handleSourceSubmit(e) {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Saving...';
+
+            try {
+                const title = document.getElementById('sourceTitle').value.trim();
+                if (!title) {
+                    throw new Error('Title is required');
+                }
+
+                const sourceData = {
+                    title,
+                    url: document.getElementById('sourceUrl').value.trim(),
+                    type: document.getElementById('sourceType').value,
+                    date: document.getElementById('sourceDate').value,
+                    dateNote: document.getElementById('sourceDateNote').value.trim(),
+                    note: document.getElementById('sourceNote').value.trim(),
+                    description: document.getElementById('sourceDescription').value.trim(),
+                    favicon: lastFetchedMetadata?.favicon || '',
+                    tags: [...sourceTags]
+                };
+
+                const sourceId = await saveSource(sourceData);
+                
+                if (editingSourceId) {
+                    showSourceMessage('✅ Source updated', 'success');
+                    const index = sources.findIndex(s => s.id === editingSourceId);
+                    if (index !== -1) {
+                        sources[index] = { id: sourceId, ...sourceData };
+                    }
+                    cancelSourceEdit();
+                } else {
+                    showSourceMessage('✅ Source saved', 'success');
+                    sources.unshift({ id: sourceId, ...sourceData });
+                    clearSourceForm();
+                }
+                
+                renderSourceOptions();
+                renderSources(sources);
+                updateSourcesCount();
+                await loadGlobalTags();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showSourceMessage('❌ Error: ' + error.message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        }
+
+        function editSource(sourceId) {
+            if (editingSourceId === sourceId) return;
+
+            const source = sources.find(s => s.id === sourceId);
+            if (!source) return;
+
+            editingSourceId = sourceId;
+            
+            document.getElementById('sourceTitle').value = source.title || '';
+            document.getElementById('sourceUrl').value = source.url || '';
+            document.getElementById('sourceType').value = source.type || 'web';
+            document.getElementById('sourceDate').value = source.date || '';
+            document.getElementById('sourceDateNote').value = source.dateNote || '';
+            document.getElementById('sourceNote').value = source.note || '';
+            document.getElementById('sourceDescription').value = source.description || '';
+            
+            sourceTags = [...(source.tags || [])];
+            renderSourceTags();
+            updateExistingTagsDisplay();
+            
+            // Show preview if source has metadata
+            if (source.url && (source.favicon || source.description)) {
+                const metadata = {
+                    title: source.title,
+                    description: source.description,
+                    favicon: source.favicon,
+                    type: source.type,
+                    publishDate: source.date
+                };
+                displayUrlPreview(metadata);
+                lastFetchedMetadata = metadata;
+            }
+            
+            document.querySelector('#sourceForm .submit-btn').textContent = 'Update Source';
+            
+            document.querySelectorAll('.source-card').forEach(card => {
+                card.classList.remove('editing');
+            });
+            
+            const targetCard = Array.from(document.querySelectorAll('.source-card')).find(card => {
+                const editButton = card.querySelector('.action-btn[onclick*="editSource"]');
+                return editButton && editButton.getAttribute('onclick').includes(sourceId);
+            });
+            
+            if (targetCard) {
+                targetCard.classList.add('editing');
+            }
+            
+            document.querySelector('.sources-form-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function cancelSourceEdit() {
+            editingSourceId = null;
+            clearSourceForm();
+            document.querySelector('#sourceForm .submit-btn').textContent = 'Save Source';
+            document.querySelectorAll('.source-card').forEach(card => {
+                card.classList.remove('editing');
+            });
+        }
+
+        function clearSourceForm() {
             document.getElementById('sourceTitle').value = '';
             document.getElementById('sourceUrl').value = '';
             document.getElementById('sourceType').value = 'web';
-            document.getElementById('addSourceModal').classList.add('show');
-            
-            setTimeout(() => {
-                document.getElementById('sourceTitle').focus();
-            }, 100);
+            document.getElementById('sourceDate').value = '';
+            document.getElementById('sourceDateNote').value = '';
+            document.getElementById('sourceNote').value = '';
+            document.getElementById('sourceDescription').value = '';
+            sourceTags = [];
+            renderSourceTags();
+            updateExistingTagsDisplay();
+            hideUrlPreview();
+            hideUrlError();
+            lastFetchedMetadata = null;
         }
 
-        function closeAddSourceModal() {
-            document.getElementById('addSourceModal').classList.remove('show');
+        function deleteSource(sourceId) {
+            const source = sources.find(s => s.id === sourceId);
+            if (!source) return;
+            
+            const quotesUsingSource = quotes.filter(q => q.sourceId === sourceId).length;
+            
+            showDeleteModal(
+                'Delete Source',
+                `Are you sure you want to delete "${source.title}"?`,
+                quotesUsingSource > 0 ? `${quotesUsingSource} quotes are using this source. They will remain but won't be linked to any source.` : '',
+                async () => {
+                    try {
+                        if (isConnected) {
+                            const session = driver.session();
+                            try {
+                                await session.run(`
+                                    MATCH (q:Quote)-[r:CITES_SOURCE]->(s:Source {id: $sourceId})
+                                    DELETE r
+                                `, { sourceId });
+                                
+                                await session.run(`
+                                    MATCH (s:Source {id: $sourceId})
+                                    DELETE s
+                                `, { sourceId });
+                            } finally {
+                                await session.close();
+                            }
+                        } else {
+                            let savedSources = JSON.parse(localStorage.getItem('rsrch_sources') || '[]');
+                            savedSources = savedSources.filter(s => s.id !== sourceId);
+                            localStorage.setItem('rsrch_sources', JSON.stringify(savedSources));
+                            
+                            let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
+                            savedQuotes.forEach(quote => {
+                                if (quote.sourceId === sourceId) {
+                                    quote.sourceId = null;
+                                }
+                            });
+                            localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
+                        }
+                        
+                        sources = sources.filter(s => s.id !== sourceId);
+                        quotes.forEach(q => {
+                            if (q.sourceId === sourceId) {
+                                q.sourceId = null;
+                                q.sourceTitle = null;
+                            }
+                        });
+                        
+                        renderSourceOptions();
+                        renderSources(sources);
+                        renderQuotes(quotes);
+                        updateSourcesCount();
+                        showSourceMessage('✅ Source deleted', 'success');
+                        
+                    } catch (error) {
+                        console.error('Error deleting source:', error);
+                        showSourceMessage('❌ Error deleting source', 'error');
+                    }
+                }
+            );
         }
 
-        async function addNewSource() {
-            const title = document.getElementById('sourceTitle').value.trim();
-            const url = document.getElementById('sourceUrl').value.trim();
-            const type = document.getElementById('sourceType').value;
-            
-            if (!title) {
-                alert('Please enter a source title');
-                return;
-            }
-
-            try {
-                const sourceId = await saveSource({ title, url, type });
+        function handleSourceSearch(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredSources = sources.filter(source => {
+                const title = (source.title || '').toLowerCase();
+                const url = (source.url || '').toLowerCase();
+                const type = (source.type || '').toLowerCase();
+                const note = (source.note || '').toLowerCase();
+                const description = (source.description || '').toLowerCase();
+                const dateNote = (source.dateNote || '').toLowerCase();
+                const tagsText = (source.tags || []).join(' ').toLowerCase();
                 
-                const newSource = { id: sourceId, title, url, type };
-                sources.push(newSource);
-                
-                renderSourceOptions();
-                sourceSelect.value = sourceId;
-                
-                closeAddSourceModal();
-                showMessage('✅ Source added', 'success');
-                
-            } catch (error) {
-                console.error('Error adding source:', error);
-                showMessage('❌ Error adding source', 'error');
-            }
+                return title.includes(searchTerm) ||
+                       url.includes(searchTerm) ||
+                       type.includes(searchTerm) ||
+                       note.includes(searchTerm) ||
+                       description.includes(searchTerm) ||
+                       dateNote.includes(searchTerm) ||
+                       tagsText.includes(searchTerm);
+            });
+            renderSources(filteredSources);
         }
 
         // Tag management
-        function handleTagInput(e) {
-            if (e.key === 'Enter' && tagInput.value.trim()) {
+        function handleTagInput(e, tagsArray, renderFunction) {
+            if (e.key === 'Enter' && e.target.value.trim()) {
                 e.preventDefault();
-                addTag(tagInput.value.trim());
-                tagInput.value = '';
-            } else if (e.key === 'Backspace' && !tagInput.value && tags.length > 0) {
-                removeTag(tags.length - 1);
+                addTag(e.target.value.trim(), tagsArray, renderFunction);
+                e.target.value = '';
+            } else if (e.key === 'Backspace' && !e.target.value && tagsArray.length > 0) {
+                removeTag(tagsArray.length - 1, tagsArray, renderFunction);
             }
         }
 
-        function addTag(tagText) {
-            if (!tags.includes(tagText) && tagText.length > 0) {
-                tags.push(tagText);
-                renderTags();
+        function addTag(tagText, tagsArray, renderFunction) {
+            if (!tagsArray.includes(tagText) && tagText.length > 0) {
+                tagsArray.push(tagText);
+                renderFunction();
+                
+                if (tagsArray === quoteTags && !globalQuoteTags.includes(tagText)) {
+                    globalQuoteTags.push(tagText);
+                    globalQuoteTags.sort();
+                    updateTagDataLists();
+                } else if (tagsArray === sourceTags && !globalSourceTags.includes(tagText)) {
+                    globalSourceTags.push(tagText);
+                    globalSourceTags.sort();
+                    updateTagDataLists();
+                    updateExistingTagsDisplay();
+                }
             }
         }
 
-        function removeTag(index) {
-            tags.splice(index, 1);
-            renderTags();
+        function removeTag(index, tagsArray, renderFunction) {
+            tagsArray.splice(index, 1);
+            renderFunction();
+            if (tagsArray === sourceTags) {
+                updateExistingTagsDisplay();
+            }
         }
 
-        function renderTags() {
-            const existingTags = tagsContainer.querySelectorAll('.tag');
+        function renderQuoteTags() {
+            renderTagsInContainer(quoteTags, tagsContainer, tagInput, 'removeQuoteTag');
+        }
+
+        function renderSourceTags() {
+            renderTagsInContainer(sourceTags, sourceTagsContainer, sourceTagInput, 'removeSourceTag');
+            updateExistingTagsDisplay();
+        }
+
+        function renderTagsInContainer(tagsArray, container, input, removeFunction) {
+            const existingTags = container.querySelectorAll('.tag');
             existingTags.forEach(tag => tag.remove());
 
-            tags.forEach((tag, index) => {
+            tagsArray.forEach((tag, index) => {
                 const tagElement = document.createElement('div');
                 tagElement.className = 'tag';
                 tagElement.innerHTML = `
                     ${escapeHtml(tag)}
-                    <span class="tag-remove" onclick="removeTag(${index})">×</span>
+                    <span class="tag-remove" onclick="${removeFunction}(${index})">×</span>
                 `;
-                tagsContainer.insertBefore(tagElement, tagInput);
+                container.insertBefore(tagElement, input);
             });
+        }
+
+        function removeQuoteTag(index) {
+            removeTag(index, quoteTags, renderQuoteTags);
+        }
+
+        function removeSourceTag(index) {
+            removeTag(index, sourceTags, renderSourceTags);
         }
 
         function focusTagInput() {
             tagInput.focus();
         }
 
-        // Form submission
-        async function handleSubmit(e) {
+        function focusSourceTagInput() {
+            sourceTagInput.focus();
+        }
+
+        // Quote form submission
+        async function handleQuoteSubmit(e) {
             e.preventDefault();
             
             const submitBtn = e.target.querySelector('.submit-btn');
@@ -1090,21 +2482,22 @@
                     text: quoteText,
                     speaker: speakerText,
                     sourceId: sourceId,
-                    tags: [...tags],
+                    tags: [...quoteTags],
                     createdBy: currentUser
                 };
 
                 if (editingQuoteId) {
                     await updateQuote(editingQuoteId, quoteData);
                     showMessage('✅ Quote updated', 'success');
-                    cancelEdit();
+                    cancelQuoteEdit();
                 } else {
                     await saveQuote(quoteData);
                     showMessage('✅ Quote saved', 'success');
-                    clearForm();
+                    clearQuoteForm();
                 }
                 
                 await loadQuotes();
+                await loadGlobalTags();
                 
             } catch (error) {
                 console.error('Error:', error);
@@ -1115,18 +2508,18 @@
             }
         }
 
-        function clearForm() {
+        function clearQuoteForm() {
             quoteTextEditor.innerHTML = '';
             speakerEditor.innerHTML = '';
             sourceSelect.value = '';
-            tags = [];
-            renderTags();
+            quoteTags = [];
+            renderQuoteTags();
         }
 
-        function cancelEdit() {
+        function cancelQuoteEdit() {
             editingQuoteId = null;
-            clearForm();
-            document.querySelector('.submit-btn').textContent = 'Save Quote';
+            clearQuoteForm();
+            document.querySelector('#quoteForm .submit-btn').textContent = 'Save Quote';
             document.querySelectorAll('.quote-card').forEach(card => {
                 card.classList.remove('editing');
             });
@@ -1245,23 +2638,36 @@
             }
         }
 
-        async function deleteQuote(quoteId) {
-            if (!confirm('Delete this quote?')) return;
-
-            if (!isConnected) {
-                return deleteQuoteLocally(quoteId);
-            }
-
-            const session = driver.session();
-            try {
-                await session.run('MATCH (q:Quote {id: $id}) DETACH DELETE q', { id: quoteId });
-                await loadQuotes();
-                showMessage('✅ Quote deleted', 'success');
-            } catch (error) {
-                showMessage('❌ Error deleting quote', 'error');
-            } finally {
-                await session.close();
-            }
+        function deleteQuote(quoteId) {
+            const quote = quotes.find(q => q.id === quoteId);
+            if (!quote) return;
+            
+            showDeleteModal(
+                'Delete Quote',
+                'Are you sure you want to delete this quote?',
+                '',
+                async () => {
+                    try {
+                        if (isConnected) {
+                            const session = driver.session();
+                            try {
+                                await session.run('MATCH (q:Quote {id: $id}) DETACH DELETE q', { id: quoteId });
+                            } finally {
+                                await session.close();
+                            }
+                        } else {
+                            let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
+                            savedQuotes = savedQuotes.filter(q => q.id !== quoteId);
+                            localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
+                        }
+                        
+                        await loadQuotes();
+                        showMessage('✅ Quote deleted', 'success');
+                    } catch (error) {
+                        showMessage('❌ Error deleting quote', 'error');
+                    }
+                }
+            );
         }
 
         // Local storage fallbacks
@@ -1299,14 +2705,6 @@
                 };
                 localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
             }
-        }
-
-        function deleteQuoteLocally(quoteId) {
-            let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
-            savedQuotes = savedQuotes.filter(q => q.id !== quoteId);
-            localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
-            loadQuotesLocally();
-            showMessage('✅ Quote deleted', 'success');
         }
 
         // Load quotes
@@ -1435,6 +2833,10 @@
             const quote = quotes.find(q => q.id === quoteId);
             if (!quote) return;
 
+            if (!document.getElementById('quotesTab').classList.contains('active')) {
+                switchTab('quotes');
+            }
+
             editingQuoteId = quoteId;
             
             const textHtml = quote.textHtml || quote.text || '';
@@ -1443,10 +2845,10 @@
             quoteTextEditor.innerHTML = textHtml;
             speakerEditor.innerHTML = speakerHtml;
             sourceSelect.value = quote.sourceId || '';
-            tags = [...(quote.tags || [])];
-            renderTags();
+            quoteTags = [...(quote.tags || [])];
+            renderQuoteTags();
             
-            document.querySelector('.submit-btn').textContent = 'Update Quote';
+            document.querySelector('#quoteForm .submit-btn').textContent = 'Update Quote';
             
             document.querySelectorAll('.quote-card').forEach(card => {
                 card.classList.remove('editing');
@@ -1464,7 +2866,7 @@
             document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function handleSearch(e) {
+        function handleQuoteSearch(e) {
             const searchTerm = e.target.value.toLowerCase();
             const filteredQuotes = quotes.filter(quote => {
                 const quoteText = (quote.text || '').toLowerCase();
@@ -1480,90 +2882,6 @@
                        tagsText.includes(searchTerm);
             });
             renderQuotes(filteredQuotes);
-        }
-
-        // Delete source functions
-        function showDeleteSourceModal(sourceId) {
-            const source = sources.find(s => s.id === sourceId);
-            if (!source) return;
-            
-            deletingSourceId = sourceId;
-            
-            // Count quotes using this source
-            const quotesUsingSource = quotes.filter(q => q.sourceId === sourceId).length;
-            
-            document.getElementById('deleteSourceName').textContent = source.title;
-            document.getElementById('deleteSourceQuoteCount').textContent = quotesUsingSource;
-            document.getElementById('deleteSourceModal').classList.add('show');
-        }
-
-        function closeDeleteSourceModal() {
-            document.getElementById('deleteSourceModal').classList.remove('show');
-            deletingSourceId = null;
-        }
-
-        async function confirmDeleteSource() {
-            if (!deletingSourceId) return;
-            
-            try {
-                await deleteSource(deletingSourceId);
-                
-                // Remove from local array
-                sources = sources.filter(s => s.id !== deletingSourceId);
-                
-                // Update UI
-                renderSourceOptions();
-                await loadQuotes(); // Reload quotes to update their source display
-                
-                closeDeleteSourceModal();
-                showMessage('✅ Source deleted', 'success');
-                
-            } catch (error) {
-                console.error('Error deleting source:', error);
-                showMessage('❌ Error deleting source', 'error');
-            }
-        }
-
-        async function deleteSource(sourceId) {
-            if (!isConnected) {
-                return deleteSourceLocally(sourceId);
-            }
-
-            const session = driver.session();
-            try {
-                // First remove all relationships to this source
-                await session.run(`
-                    MATCH (q:Quote)-[r:CITES_SOURCE]->(s:Source {id: $sourceId})
-                    DELETE r
-                `, { sourceId });
-                
-                // Then delete the source
-                await session.run(`
-                    MATCH (s:Source {id: $sourceId})
-                    DELETE s
-                `, { sourceId });
-                
-            } catch (error) {
-                throw new Error('Error deleting source from database: ' + error.message);
-            } finally {
-                await session.close();
-            }
-        }
-
-        function deleteSourceLocally(sourceId) {
-            // Update localStorage
-            let savedSources = JSON.parse(localStorage.getItem('rsrch_sources') || '[]');
-            savedSources = savedSources.filter(s => s.id !== sourceId);
-            localStorage.setItem('rsrch_sources', JSON.stringify(savedSources));
-            
-            // Also update quotes to remove source references
-            let savedQuotes = JSON.parse(localStorage.getItem('rsrch_quotes') || '[]');
-            savedQuotes.forEach(quote => {
-                if (quote.sourceId === sourceId) {
-                    quote.sourceId = null;
-                }
-            });
-            localStorage.setItem('rsrch_quotes', JSON.stringify(savedQuotes));
         }
 
         // Link modal functions
@@ -1623,13 +2941,45 @@
             closeLinkModal();
         }
 
+        // Delete modal functions
+        function showDeleteModal(title, message, details, callback) {
+            document.getElementById('deleteModalTitle').textContent = title;
+            document.getElementById('deleteModalMessage').textContent = message;
+            document.getElementById('deleteModalDetails').textContent = details;
+            document.getElementById('deleteModalDetails').style.display = details ? 'block' : 'none';
+            deleteCallback = callback;
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('show');
+            deleteCallback = null;
+        }
+
+        function confirmDelete() {
+            if (deleteCallback) {
+                deleteCallback();
+            }
+            closeDeleteModal();
+        }
+
+        // Utility functions
         function updateQuotesCount() {
             quotesCount.textContent = quotes.length;
+        }
+
+        function updateSourcesCount() {
+            sourcesCount.textContent = sources.length;
         }
 
         function showMessage(message, type) {
             statusMessage.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
             setTimeout(() => statusMessage.innerHTML = '', 5000);
+        }
+
+        function showSourceMessage(message, type) {
+            sourceStatusMessage.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
+            setTimeout(() => sourceStatusMessage.innerHTML = '', 5000);
         }
 
         function escapeHtml(text) {
@@ -1646,20 +2996,38 @@
             return div.textContent || div.innerText || '';
         }
 
-        // Global functions
-        window.removeTag = removeTag;
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString();
+            } catch (e) {
+                return dateString;
+            }
+        }
+
+        // Global functions for onclick handlers
+        window.switchTab = switchTab;
+        window.removeQuoteTag = removeQuoteTag;
+        window.removeSourceTag = removeSourceTag;
         window.focusTagInput = focusTagInput;
+        window.focusSourceTagInput = focusSourceTagInput;
         window.editQuote = editQuote;
         window.deleteQuote = deleteQuote;
+        window.editSource = editSource;
+        window.deleteSource = deleteSource;
         window.handleTextClick = handleTextClick;
-        window.showAddSourceModal = showAddSourceModal;
-        window.closeAddSourceModal = closeAddSourceModal;
-        window.addNewSource = addNewSource;
         window.closeLinkModal = closeLinkModal;
         window.insertLink = insertLink;
-        window.showDeleteSourceModal = showDeleteSourceModal;
-        window.closeDeleteSourceModal = closeDeleteSourceModal;
-        window.confirmDeleteSource = confirmDeleteSource;
+        window.closeDeleteModal = closeDeleteModal;
+        window.confirmDelete = confirmDelete;
+        window.toggleExistingTag = toggleExistingTag;
+        window.showTagManager = showTagManager;
+        window.closeTagManager = closeTagManager;
+        window.addGlobalTag = addGlobalTag;
+        window.editGlobalTag = editGlobalTag;
+        window.deleteGlobalTag = deleteGlobalTag;
+        window.fetchUrlMetadata = fetchUrlMetadata;
     </script>
 </body>
 </html>
